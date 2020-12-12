@@ -83,7 +83,7 @@ namespace SysBot.Pokemon
 
         public static bool CanBeTraded(this PKM pkm)
         {
-            return !AltFormInfo.IsFusedForm(pkm.Species, pkm.AltForm, pkm.Format);
+            return !FormInfo.IsFusedForm(pkm.Species, pkm.Form, pkm.Format);
         }
 
         public static ITrainerInfo GetTrainerInfo(int gen) => TrainerSettings.GetSavedTrainerData(gen);
