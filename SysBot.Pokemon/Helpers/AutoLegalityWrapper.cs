@@ -75,8 +75,8 @@ namespace SysBot.Pokemon
         private static void InitializeCoreStrings()
         {
             var lang = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Substring(0, 2);
-            Util.SetLocalization(typeof(LegalityCheckStrings), lang);
-            Util.SetLocalization(typeof(MessageStrings), lang);
+            LocalizationUtil.SetLocalization(typeof(LegalityCheckStrings), lang);
+            LocalizationUtil.SetLocalization(typeof(MessageStrings), lang);
             RibbonStrings.ResetDictionary(GameInfo.Strings.ribbons);
             ParseSettings.ChangeLocalizationStrings(GameInfo.Strings.movelist, GameInfo.Strings.specieslist);
         }
