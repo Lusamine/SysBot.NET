@@ -39,6 +39,11 @@ public sealed class EncounterBotResetSWSH(PokeBotState Config, PokeTradeHub<PK8>
     {
         switch (mode)
         {
+            case EncounterMode.Eldegoss:
+                await SetStick(LEFT, 30_000, 0, 1_000, token).ConfigureAwait(false);
+                await ResetStick(token).ConfigureAwait(false);
+                await Task.Delay(4_600, token).ConfigureAwait(false);
+                break;
             case EncounterMode.Eternatus or EncounterMode.MotostokeGym:
                 await SetStick(LEFT, 0, 20_000, 0_500, token).ConfigureAwait(false);
                 await ResetStick(token).ConfigureAwait(false);
@@ -51,7 +56,7 @@ public sealed class EncounterBotResetSWSH(PokeBotState Config, PokeTradeHub<PK8>
 
     private static uint GetResetOffset(EncounterMode mode) => mode switch
     {
-        EncounterMode.Gift                                 => BoxStartOffset,
+        EncounterMode.Gift => BoxStartOffset,
         EncounterMode.Regigigas or EncounterMode.Eternatus => RaidPokemonOffset,
         EncounterMode.MotostokeGym                         => LegendaryPokemonOffset,
         _                                                  => WildPokemonOffset,

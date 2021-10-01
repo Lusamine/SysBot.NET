@@ -56,7 +56,7 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
         return SwitchConnection.WriteBytesAbsoluteAsync(pkm.EncryptedPartyData, offset, token);
     }
 
-    public async Task<SAV8BS> IdentifyTrainer(CancellationToken token)
+    public async Task<SAV8BS> IdentifyTrainer(bool verify, CancellationToken token)
     {
         // Check if botbase is on the correct version or later.
         await VerifyBotbaseVersion(token).ConfigureAwait(false);
@@ -78,14 +78,17 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
         var sav = await GetFakeTrainerSAV(token).ConfigureAwait(false);
         InitSaveData(sav);
 
-        if (!IsValidTrainerData())
+        if (verify)
         {
-            await CheckForRAMShiftingApps(token).ConfigureAwait(false);
-            throw new Exception("Refer to the SysBot.NET wiki (https://github.com/kwsch/SysBot.NET/wiki/Troubleshooting) for more information.");
-        }
+            if (!IsValidTrainerData())
+            {
+                await CheckForRAMShiftingApps(token).ConfigureAwait(false);
+                throw new Exception("Refer to the SysBot.NET wiki (https://github.com/kwsch/SysBot.NET/wiki/Troubleshooting) for more information.");
+            }
 
-        if (await GetTextSpeed(token).ConfigureAwait(false) < TextSpeedOption.Fast)
-            throw new Exception("Text speed should be set to FAST. Fix this for correct operation.");
+            if (await GetTextSpeed(token).ConfigureAwait(false) < TextSpeedOption.Fast)
+                throw new Exception("Text speed should be set to FAST. Fix this for correct operation.");
+        }
 
         return sav;
     }
@@ -150,7 +153,7 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
     {
         Log("Error detected, restarting the game!!");
         await CloseGame(config, token).ConfigureAwait(false);
-        await StartGame(config, token).ConfigureAwait(false);
+        await StartGame(false, config, token).ConfigureAwait(false);
     }
 
     public Task UnSoftBan(CancellationToken token)
@@ -177,7 +180,7 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
         Log("Closed out of the game!");
     }
 
-    public async Task StartGame(PokeTradeHubConfig config, CancellationToken token)
+    public async Task StartGame(bool newGame, PokeTradeHubConfig config, CancellationToken token)
     {
         var timing = config.Timings;
         // Open game.
@@ -196,30 +199,46 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
 
         Log("Restarting the game!");
 
-        // Switch Logo lag, skip cutscene, game load screen
-        await Task.Delay(22_000 + timing.ExtraTimeLoadGame, token).ConfigureAwait(false);
-
-        for (int i = 0; i < 10; i++)
-            await Click(A, 1_000, token).ConfigureAwait(false);
-
-        var timer = 60_000;
-        while (!await IsSceneID(SceneID_Field, token).ConfigureAwait(false))
+        if (newGame)
         {
-            await Task.Delay(1_000, token).ConfigureAwait(false);
-            timer -= 1_000;
-            // We haven't made it back to overworld after a minute, so press A every 6 seconds hoping to restart the game.
-            // Don't risk it if hub is set to avoid updates.
-            if (timer <= 0 && !timing.AvoidSystemUpdate)
-            {
-                Log("Still not in the game, initiating rescue protocol!");
-                while (!await IsSceneID(SceneID_Field, token).ConfigureAwait(false))
-                    await Click(A, 6_000, token).ConfigureAwait(false);
-                break;
-            }
+            // For new games, it goes to the language selection screen.
+            await Task.Delay(20_000 + timing.ExtraTimeLoadGame, token).ConfigureAwait(false);
+            Log("Reached language selection screen!");
         }
+        else
+        {
+            // Switch Logo lag, skip cutscene, game load screen
+            await Task.Delay(22_000 + timing.ExtraTimeLoadGame, token).ConfigureAwait(false);
 
-        await Task.Delay(2_000 + timing.ExtraTimeLoadOverworld, token).ConfigureAwait(false);
-        Log("Back in the overworld!");
+            for (int i = 0; i < 10; i++)
+                await Click(A, 1_000, token).ConfigureAwait(false);
+
+            var timer = 60_000;
+            while (!await IsSceneID(SceneID_Field, token).ConfigureAwait(false))
+            {
+                await Task.Delay(1_000, token).ConfigureAwait(false);
+                timer -= 1_000;
+                // We haven't made it back to overworld after a minute, so press A every 6 seconds hoping to restart the game.
+                // Don't risk it if hub is set to avoid updates.
+                if (timer <= 0 && !timing.AvoidSystemUpdate)
+                {
+                    Log("Still not in the game, initiating rescue protocol!");
+                    while (!await IsSceneID(SceneID_Field, token).ConfigureAwait(false))
+                        await Click(A, 6_000, token).ConfigureAwait(false);
+                    break;
+                }
+            }
+
+            await Task.Delay(2_000 + timing.ExtraTimeLoadOverworld, token).ConfigureAwait(false);
+            Log("Back in the overworld!");
+        }
+    }
+
+    private async Task<uint> GetSceneID(CancellationToken token)
+    {
+        var xVal = await SwitchConnection.PointerPeek(1, Offsets.SceneIDPointer, token).ConfigureAwait(false);
+        var xParsed = BitConverter.ToUInt32(xVal, 0);
+        return xParsed;
     }
 
     private async Task<bool> IsSceneID(uint expected, CancellationToken token)
@@ -248,5 +267,46 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
     {
         var data = await SwitchConnection.PointerPeek(1, Offsets.ConfigTextSpeedPointer, token).ConfigureAwait(false);
         return (TextSpeedOption)data[0];
+    }
+
+    public string GetTIDFromRNGState(XorShift128 rng, bool log, out XorShift128 newrng)
+    {
+        var (s0, s1) = rng.GetState64();
+        var output = $"RNG state: {s0:x16}, {s1:x16}, ";
+
+        var SIDTID = rng.NextUInt();
+        var TID7 = $"{SIDTID % 1_000_000:000000}";
+        output += TID7;
+
+        if (log)
+            Log(output);
+
+        newrng = rng;
+        return TID7;
+    }
+
+    public async Task<(ulong s0, ulong s1)> GetGlobalRNGState(ulong offset, bool log, CancellationToken token)
+    {
+        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 16, token).ConfigureAwait(false);
+        var s0 = BitConverter.ToUInt64(data, 0);
+        var s1 = BitConverter.ToUInt64(data, 8);
+        if (log)
+            Log($"RNG state: {s0:x16}, {s1:x16}");
+        return (s0, s1);
+    }
+
+    public static int GetAdvancesPassed(ulong prevs0, ulong prevs1, ulong news0, ulong news1)
+    {
+        if (prevs0 == news0 && prevs1 == news1)
+            return 0;
+
+        var rng = new XorShift128(prevs0, prevs1);
+        for (int i = 0; ; i++)
+        {
+            rng.Next();
+            var (s0, s1) = rng.GetState64();
+            if (s0 == news0 && s1 == news1)
+                return i + 1;
+        }
     }
 }
