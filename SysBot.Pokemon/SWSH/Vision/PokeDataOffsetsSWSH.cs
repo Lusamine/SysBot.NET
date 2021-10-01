@@ -42,6 +42,12 @@ public class PokeDataOffsetsSWSH
     public const uint WildPokemonOffset = 0x8FEA3648;
     public const uint RaidPokemonOffset = 0x886A95B8;
     public const uint LegendaryPokemonOffset = 0x886BC348;
+    public const uint LastSpeciesSpawned = 0x800AA58;
+    public const uint LastFormSpawned = 0x800AA5A;
+
+    // Fishing offset - arbitrary offsets, there may be better ones.
+    public const uint FishingOffsetSH = 0x08073330;
+    public const uint FishingOffsetSW = 0x01D62BBD;
 
     // Link Trade Offsets
     public const uint LinkTradePartnerPokemonOffset = 0xAF286078;
@@ -66,6 +72,19 @@ public class PokeDataOffsetsSWSH
     /* Route 5 Daycare */
     public const uint DayCare_Route5_Step_Counter = 0x4511F99C;
     public const uint DayCare_Route5_Egg_Is_Ready = 0x4511F9A8;
+
+    // Main RNG Offset
+    public const uint SWSHMainRNGOffset = 0x4C2AAC18;
+
+    // Max Lair Offsets
+    public static IReadOnlyList<long> MaxLairPokemonRNGPointer { get; } = [0x28F4060, 0x238, 0x2AB8];
+    public const uint MaxLairPenaltyWarnOffset = 0x50B06FC0;
+    public const uint MaxLairPenaltyCountOffset = 0x50B12710;
+
+    // Curry Offsets
+    public static IReadOnlyList<long> CurrySpawnPointer { get; } = [0x296C030, 0x60, 0x40, 0xB0, 0x98, 0x10, 0x0];
+    // advances for party size. Optimized for party size of 2 -- do the rest yourself.
+    public static readonly int[] CurryAdvances = [0, 1167, 1169, 1171, 1173, 1175, 1177];
 
     public const int BoxFormatSlotSize = 0x158;
     public const int TrainerDataLength = 0x110;
