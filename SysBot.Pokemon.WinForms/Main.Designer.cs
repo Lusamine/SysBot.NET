@@ -206,6 +206,7 @@ namespace SysBot.Pokemon.WinForms
             // RTB_Logs
             // 
             RTB_Logs.Dock = System.Windows.Forms.DockStyle.Fill;
+            RTB_Logs.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             RTB_Logs.HideSelection = false;
             RTB_Logs.Location = new System.Drawing.Point(0, 0);
             RTB_Logs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
