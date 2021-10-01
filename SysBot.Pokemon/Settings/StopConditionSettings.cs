@@ -38,6 +38,12 @@ public class StopConditionSettings
     [Category(StopConditions), Description("List of marks to ignore separated by commas. Use the full name, e.g. \"Uncommon Mark, Dawn Mark, Prideful Mark\".")]
     public string UnwantedMarks { get; set; } = "";
 
+    [Category(StopConditions), Description("List of TIDs to look for separated by commas. Use the full 6-digit G8TID, e.g. \"010101, 000666, 987354\".")]
+    public string TargetTIDBS { get; set; } = "";
+
+    [Category(StopConditions), Description("Sets whether to pause the LGPE bot on all legendary bird encounters. This is in addition to the StopOnSpecies if set to true.")]
+    public bool StopOnAllBirdsLGPE { get; set; } = true;
+
     [Category(StopConditions), Description("Holds Capture button to record a 30 second clip when a matching Pokémon is found by EncounterBot or Fossilbot.")]
     public bool CaptureVideoClip { get; set; }
 
@@ -220,6 +226,13 @@ public class StopConditionSettings
         }
         return "";
     }
+
+    private static readonly char[] separator = [','];
+
+    public static void ReadTargetTIDBS(StopConditionSettings settings, out IReadOnlyList<string> targetTIDBS) =>
+        targetTIDBS = settings.TargetTIDBS.Split(separator, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
+
+    public virtual bool IsTargetTIDBS(string TID, IReadOnlyList<string> targetTIDBS) => targetTIDBS.Count == 0 || targetTIDBS.Contains(TID);
 }
 
 public enum TargetShinyType

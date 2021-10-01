@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
@@ -44,6 +44,18 @@ public sealed class PokeTradeHubConfig : BaseConfig
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public EncounterSettings EncounterSWSH { get; set; } = new();
+
+    [Category(BotEncounter)]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public EncounterRNGBSSettings EncounterRNGBS { get; set; } = new();
+
+    [Category(BotEncounter)]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public EncounterLASettings EncounterLA { get; set; } = new();
+
+    [Category(BotEncounter)]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public EncounterLGPESettings EncounterLGPE { get; set; } = new();
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]

@@ -18,6 +18,7 @@ public abstract class EncounterBotSWSH : PokeRoutineExecutor8SWSH, IEncounterBot
     private readonly int[] DesiredMaxIVs;
     public ICountSettings Counts => Settings;
     public readonly IReadOnlyList<string> UnwantedMarks;
+    public readonly IReadOnlyList<(int, int)> TargetSlots;
 
     protected EncounterBotSWSH(PokeBotState Config, PokeTradeHub<PK8> hub) : base(Config)
     {
@@ -26,6 +27,7 @@ public abstract class EncounterBotSWSH : PokeRoutineExecutor8SWSH, IEncounterBot
         DumpSetting = Hub.Config.Folder;
         StopConditionSettings.InitializeTargetIVs(Hub.Config, out DesiredMinIVs, out DesiredMaxIVs);
         StopConditionSettings.ReadUnwantedMarks(Hub.Config.StopConditions, out UnwantedMarks);
+        EncounterSettings.ReadTargetSlots(Hub.Config, out TargetSlots);
     }
 
     // Cached offsets that stay the same per session.
@@ -87,9 +89,19 @@ public abstract class EncounterBotSWSH : PokeRoutineExecutor8SWSH, IEncounterBot
             await Task.Delay(Hub.Config.StopConditions.ExtraTimeWaitCaptureVideo, token).ConfigureAwait(false);
             await PressAndHold(CAPTURE, 2_000, 0, token).ConfigureAwait(false);
         }
+        return await HandleEncounterMatchAction(print, token).ConfigureAwait(false);
+    }
 
+    protected async Task<bool> HandleEncounterMatchAction(string print, CancellationToken token)
+    {
         var mode = Settings.ContinueAfterMatch;
-        var msg = $"Result found!\n{print}\n" + GetModeMessage(mode);
+        var msg = $"Result found!{Environment.NewLine}{print}{Environment.NewLine}" + mode switch
+        {
+            ContinueAfterMatch.Continue => "Continuing...",
+            ContinueAfterMatch.PauseWaitAcknowledge => "Waiting for instructions to continue.",
+            ContinueAfterMatch.StopExit => "Stopping routine execution; restart the bot to search again.",
+            _ => throw new ArgumentOutOfRangeException("Match result type was invalid.", nameof(ContinueAfterMatch)),
+        };
 
         if (!string.IsNullOrWhiteSpace(Hub.Config.StopConditions.MatchFoundEchoMention))
             msg = $"{Hub.Config.StopConditions.MatchFoundEchoMention} {msg}";
@@ -105,14 +117,6 @@ public abstract class EncounterBotSWSH : PokeRoutineExecutor8SWSH, IEncounterBot
             await Task.Delay(1_000, token).ConfigureAwait(false);
         return false;
     }
-
-    private static string GetModeMessage(ContinueAfterMatch mode) => mode switch
-    {
-        ContinueAfterMatch.Continue             => "Continuing...",
-        ContinueAfterMatch.PauseWaitAcknowledge => "Waiting for instructions to continue.",
-        ContinueAfterMatch.StopExit             => "Stopping routine execution; restart the bot to search again.",
-        _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, "Match result type was invalid."),
-    };
 
     private string IncrementAndGetDumpFolder(PK8 pk)
     {
