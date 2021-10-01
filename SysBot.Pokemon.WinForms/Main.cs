@@ -58,6 +58,7 @@ public sealed partial class Main : Form
         ProgramMode.BDSP => new PokeBotRunnerImpl<PB8>(cfg.Hub, new BotFactory8BS()),
         ProgramMode.LA => new PokeBotRunnerImpl<PA8>(cfg.Hub, new BotFactory8LA()),
         ProgramMode.SV => new PokeBotRunnerImpl<PK9>(cfg.Hub, new BotFactory9SV()),
+        ProgramMode.LGPE => new PokeBotRunnerImpl<PB7>(cfg.Hub, new BotFactory7LGPE()),
         _ => throw new IndexOutOfRangeException("Unsupported mode."),
     };
 
@@ -203,7 +204,15 @@ public sealed partial class Main : Form
         if (!cfg.IsValid())
             return false;
 
-        if (Bots.Any(z => z.Connection.Equals(cfg.Connection)))
+        // Monitor Tool bots can be added without conflicts.
+        if (!cfg.NextRoutineType.IsMonitorTool())
+        {
+            if (Bots.Any(z => z.Connection.Equals(cfg.Connection) && !z.NextRoutineType.IsMonitorTool()))
+                return false;
+        }
+
+        // Disallow duplicate routines.
+        if (Bots.Any(z => z.Connection.Equals(cfg.Connection) && cfg.NextRoutineType == z.NextRoutineType))
             return false;
 
         PokeRoutineExecutorBase newBot;
