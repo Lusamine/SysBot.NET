@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 
 namespace SysBot.Pokemon;
@@ -16,11 +16,18 @@ public sealed class BotFactory8SWSH : BotFactory<PK8>
             => new PokeTradeBotSWSH(Hub, cfg),
 
         PokeRoutineType.RaidBot => new RaidBotSWSH(cfg, Hub),
-        PokeRoutineType.EncounterLine => new EncounterBotLineSWSH(cfg, Hub),
-        PokeRoutineType.EggFetch => new EncounterBotEggSWSH(cfg, Hub),
-        PokeRoutineType.FossilBot => new EncounterBotFossilSWSH(cfg, Hub),
-        PokeRoutineType.Reset => new EncounterBotResetSWSH(cfg, Hub),
-        PokeRoutineType.DogBot => new EncounterBotDogSWSH(cfg, Hub),
+        PokeRoutineType.EncBotLine => new EncounterBotLineSWSH(cfg, Hub),
+        PokeRoutineType.EncBotEgg => new EncounterBotEggSWSH(cfg, Hub),
+        PokeRoutineType.EncBotFossil => new EncounterBotFossilSWSH(cfg, Hub),
+        PokeRoutineType.EncBotReset => new EncounterBotResetSWSH(cfg, Hub),
+        PokeRoutineType.EncBotDog => new EncounterBotDogSWSH(cfg, Hub),
+        PokeRoutineType.EncBotCamp => new EncounterBotCampSWSH(cfg, Hub),
+        PokeRoutineType.EncBotFishing => new EncounterBotFishSWSH(cfg, Hub),
+        PokeRoutineType.EncBotTeaSmash => new EncounterBotTeaSmashSWSH(cfg, Hub),
+        PokeRoutineType.EncBotLairStatReset => new EncounterBotMaxLairStatResetSWSH(cfg, Hub),
+        PokeRoutineType.EncBotCurryRNG => new EncounterBotCurryRNGSWSH(cfg, Hub),
+        PokeRoutineType.EncBotCopySeed => new EncounterBotCopySeedSWSH(cfg, Hub),
+        PokeRoutineType.EncBotRNGMonitor => new EncounterBotRNGMonitorSWSH(cfg, Hub),
 
         PokeRoutineType.RemoteControl => new RemoteControlBotSWSH(cfg),
         _ => throw new ArgumentException(nameof(cfg.NextRoutineType)),
@@ -37,11 +44,18 @@ public sealed class BotFactory8SWSH : BotFactory<PK8>
             => true,
 
         PokeRoutineType.RaidBot => true,
-        PokeRoutineType.EncounterLine => true,
-        PokeRoutineType.EggFetch => true,
-        PokeRoutineType.FossilBot => true,
-        PokeRoutineType.Reset => true,
-        PokeRoutineType.DogBot => true,
+        PokeRoutineType.EncBotEgg => true,
+        PokeRoutineType.EncBotFossil => true,
+        PokeRoutineType.EncBotLine => true,
+        PokeRoutineType.EncBotReset => true,
+        PokeRoutineType.EncBotDog => true,
+        PokeRoutineType.EncBotCamp => true,
+        PokeRoutineType.EncBotFishing => true,
+        PokeRoutineType.EncBotTeaSmash => true,
+        PokeRoutineType.EncBotLairStatReset => true,
+        PokeRoutineType.EncBotCurryRNG => true,
+        PokeRoutineType.EncBotCopySeed => true,
+        PokeRoutineType.EncBotRNGMonitor => true,
 
         PokeRoutineType.RemoteControl => true,
 

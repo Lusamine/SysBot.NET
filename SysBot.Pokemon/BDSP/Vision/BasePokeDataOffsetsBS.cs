@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SysBot.Pokemon;
 
@@ -24,6 +24,10 @@ public abstract class BasePokeDataOffsetsBS : IPokeDataOffsetsBS
     public abstract IReadOnlyList<long> MyStatusTIDPointer { get; }
     public abstract IReadOnlyList<long> ConfigTextSpeedPointer { get; }
     public abstract IReadOnlyList<long> ConfigLanguagePointer { get; }
+
+    // Main RNG state
+    public abstract IReadOnlyList<long> MainRNGPointer { get; }
+    public abstract IReadOnlyList<long> ZoneIDPointer { get; }
 
     // SceneID enums
     public const byte SceneID_Field = 0;
