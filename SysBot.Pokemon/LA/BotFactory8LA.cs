@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 
 namespace SysBot.Pokemon;
@@ -13,6 +13,9 @@ public sealed class BotFactory8LA : BotFactory<PA8>
             or PokeRoutineType.Dump
             => new PokeTradeBotLA(Hub, cfg),
 
+        PokeRoutineType.EncBotCopySeedLA => new EncounterBotCopySeedLA(cfg, Hub),
+        PokeRoutineType.EncBotRNGMonitorLA => new EncounterBotRNGMonitorLA(cfg, Hub),
+
         PokeRoutineType.RemoteControl => new RemoteControlBotLA(cfg),
 
         _ => throw new ArgumentException(nameof(cfg.NextRoutineType)),
@@ -25,6 +28,9 @@ public sealed class BotFactory8LA : BotFactory<PA8>
             or PokeRoutineType.Clone
             or PokeRoutineType.Dump
             => true,
+
+        PokeRoutineType.EncBotCopySeedLA => true,
+        PokeRoutineType.EncBotRNGMonitorLA => true,
 
         PokeRoutineType.RemoteControl => true,
 

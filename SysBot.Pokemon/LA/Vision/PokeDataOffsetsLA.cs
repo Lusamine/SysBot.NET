@@ -20,6 +20,7 @@ public class PokeDataOffsetsLA
     public IReadOnlyList<long> CurrentBoxPointer              { get; } = [0x42BA6B0, 0x1F8, 0x4A9];
     public IReadOnlyList<long> SoftbanPointer                 { get; } = [0x42BA6B0, 0x268, 0x70];
     public IReadOnlyList<long> OverworldPointer               { get; } = [0x42C30E8, 0x1A9];
+    public IReadOnlyList<long> MainRNGPointer                 { get; } = [0x42A7000, 0xD8, 0x0];
 
     public const int BoxFormatSlotSize = 0x168;
 }
