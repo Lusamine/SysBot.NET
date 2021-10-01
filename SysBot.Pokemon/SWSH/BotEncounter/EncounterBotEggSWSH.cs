@@ -57,7 +57,7 @@ public class EncounterBotEggSWSH : EncounterBotSWSH
     {
         Log("Walking around until an egg is ready...");
         int attempts = 0;
-        while (!token.IsCancellationRequested && Config.NextRoutineType == PokeRoutineType.EggFetch)
+        while (!token.IsCancellationRequested && Config.NextRoutineType == PokeRoutineType.EncBotEgg)
         {
             await SetEggStepCounter(token).ConfigureAwait(false);
 

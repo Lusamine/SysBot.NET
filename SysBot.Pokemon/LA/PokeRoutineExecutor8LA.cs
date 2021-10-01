@@ -239,4 +239,29 @@ public abstract class PokeRoutineExecutor8LA(PokeBotState Config) : PokeRoutineE
         var data = await SwitchConnection.PointerPeek(1, Offsets.TextSpeedPointer, token).ConfigureAwait(false);
         return (TextSpeedOption)data[0];
     }
+
+    public async Task<(ulong s0, ulong s1)> GetGlobalRNGState(ulong offset, bool log, CancellationToken token)
+    {
+        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 16, token).ConfigureAwait(false);
+        var s0 = BitConverter.ToUInt64(data, 0);
+        var s1 = BitConverter.ToUInt64(data, 8);
+        if (log)
+            Log($"RNG state: {s0:x16}, {s1:x16}");
+        return (s0, s1);
+    }
+
+    public static int GetAdvancesPassed(ulong prevs0, ulong prevs1, ulong news0, ulong news1)
+    {
+        if (prevs0 == news0 && prevs1 == news1)
+            return 0;
+
+        var rng = new Xoroshiro128Plus(prevs0, prevs1);
+        for (int i = 0; ; i++)
+        {
+            rng.Next();
+            var (s0, s1) = rng.GetState();
+            if (s0 == news0 && s1 == news1)
+                return i + 1;
+        }
+    }
 }

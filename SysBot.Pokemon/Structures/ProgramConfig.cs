@@ -20,6 +20,7 @@ public enum ProgramMode
     LA = 3,
     SV = 4,
     LZA = 5,
+    LGPE = 100,
 }
 
 [JsonSerializable(typeof(ProgramConfig))]

@@ -12,8 +12,7 @@ public class RemoteControlBotBS(PokeBotState Config) : PokeRoutineExecutor8BS(Co
         try
         {
             Log("Identifying trainer data of the host console.");
-            await IdentifyTrainer(token).ConfigureAwait(false);
-
+            await IdentifyTrainer(true, token).ConfigureAwait(false);
             Log("Starting main loop, then waiting for commands.");
             Config.IterateNextRoutine();
             while (!token.IsCancellationRequested)

@@ -52,7 +52,7 @@ public class PokeTradeBotBS(PokeTradeHub<PB8> Hub, PokeBotState Config) : PokeRo
             await InitializeHardware(Hub.Config.Trade, token).ConfigureAwait(false);
 
             Log("Identifying trainer data of the host console.");
-            var sav = await IdentifyTrainer(token).ConfigureAwait(false);
+            var sav = await IdentifyTrainer(true, token).ConfigureAwait(false);
             RecentTrainerCache.SetRecentTrainer(sav);
 
             await RestartGameIfCantLeaveUnionRoom(token).ConfigureAwait(false);

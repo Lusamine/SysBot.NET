@@ -27,12 +27,18 @@ public abstract class PokeRoutineExecutor8SWSH(PokeBotState Config) : PokeRoutin
         return new PK8(data);
     }
 
+    public async Task<PK8> ReadPokemonAbsolute(ulong offset, int size, CancellationToken token)
+    {
+        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, size, token).ConfigureAwait(false);
+        return new PK8(data);
+    }
+
     public override async Task<PK8> ReadPokemonPointer(IEnumerable<long> jumps, int size, CancellationToken token)
     {
         var (valid, offset) = await ValidatePointerAll(jumps, token).ConfigureAwait(false);
         if (!valid)
             return new PK8();
-        return await ReadPokemon(offset, token).ConfigureAwait(false);
+        return await ReadPokemonAbsolute(offset, size, token).ConfigureAwait(false);
     }
 
     public async Task<PK8> ReadSurpriseTradePokemon(CancellationToken token)
@@ -350,5 +356,30 @@ public abstract class PokeRoutineExecutor8SWSH(PokeBotState Config) : PokeRoutin
         Log("Clearing destination slot to start the bot.");
         PK8 blank = new();
         await SetBoxPokemon(blank, 0, 0, token).ConfigureAwait(false);
+    }
+
+    public async Task<(ulong s0, ulong s1)> GetGlobalRNGState(uint offset, bool log, CancellationToken token)
+    {
+        var data = await SwitchConnection.ReadBytesAsync(offset, 16, token).ConfigureAwait(false);
+        var s0 = BitConverter.ToUInt64(data, 0);
+        var s1 = BitConverter.ToUInt64(data, 8);
+        if (log)
+            Log($"RNG state: {s0:x16}, {s1:x16}");
+        return (s0, s1);
+    }
+
+    public static int GetAdvancesPassed(ulong prevs0, ulong prevs1, ulong news0, ulong news1)
+    {
+        if (prevs0 == news0 && prevs1 == news1)
+            return 0;
+
+        var rng = new Xoroshiro128Plus(prevs0, prevs1);
+        for (int i = 0; ; i++)
+        {
+            rng.Next();
+            var (s0, s1) = rng.GetState();
+            if (s0 == news0 && s1 == news1)
+                return i + 1;
+        }
     }
 }
