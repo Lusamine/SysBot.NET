@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using SysBot.Base;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,9 +14,6 @@ namespace SysBot.Pokemon
 
         [Category(EncounterLGPE), Description("The method by which the bot will encounter Pokémon. Use only \"LGPE\" options.")]
         public EncounterMode EncounteringType { get; set; } = EncounterMode.StaticLGPE;
-
-        [Category(EncounterLGPE), Description("The style to display the global RNG state.")]
-        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
 
         [Category(EncounterLGPE), Description("When enabled, the bot will continue after finding a suitable match.")]
         public ContinueAfterMatch ContinueAfterMatch { get; set; } = ContinueAfterMatch.StopExit;
@@ -50,6 +47,15 @@ namespace SysBot.Pokemon
 
         [Category(EncounterLGPE), Description("Sets the number of gift or trade Pokémon to check before resetting the game.")]
         public int GiftTradePokemonCount { get; set; } = 1;
+
+        [Category(EncounterLGPE), Description("The style to display the global RNG state.")]
+        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
+
+        [Category(EncounterLGPE), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
+        public int MonitorRefreshRate { get; set; } = 500;
+
+        [Category(EncounterLGPE), Description("Maximum total advances before the RNG monitor pauses the game by clicking X. Set to 0 to disable.")]
+        public int MaxTotalAdvances { get; set; }
 
         [Category(EncounterLGPE), Description("When enabled, the screen will be turned off during normal bot loop operation to save power.")]
         public bool ScreenOff { get; set; }

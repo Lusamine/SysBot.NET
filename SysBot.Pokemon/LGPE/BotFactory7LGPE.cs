@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 
 namespace SysBot.Pokemon
@@ -13,6 +13,8 @@ namespace SysBot.Pokemon
             PokeRoutineType.EncBotBirdWatchLGPE => new EncounterBotBirdWatchLGPE(cfg, Hub),
             PokeRoutineType.RemoteControl => new RemoteControlBotLGPE(cfg),
             PokeRoutineType.EncBotCoordinatesLGPE => new EncounterBotCoordinatesLGPE(cfg, Hub),
+            PokeRoutineType.EncBotCopySeedLGPE => new EncounterBotCopySeedLGPE(cfg, Hub),
+            PokeRoutineType.EncBotRNGMonitorLGPE => new EncounterBotRNGMonitorLGPE(cfg, Hub),
 
             _ => throw new ArgumentException(nameof(cfg.NextRoutineType)),
         };
@@ -24,6 +26,9 @@ namespace SysBot.Pokemon
                 or PokeRoutineType.EncBotBirdWatchLGPE
                 or PokeRoutineType.EncBotCoordinatesLGPE
                 => true,
+
+            PokeRoutineType.EncBotCopySeedLGPE => true,
+            PokeRoutineType.EncBotRNGMonitorLGPE => true,
 
             PokeRoutineType.RemoteControl => true,
 
