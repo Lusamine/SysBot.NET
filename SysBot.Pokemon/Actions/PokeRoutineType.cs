@@ -104,6 +104,12 @@ public enum PokeRoutineType
 
     /// <summary> Resets gifts and in-game trades. </summary>
     EncBotGiftLGPE = 10_004,
+
+    /// <summary> Copies out the current global RNG state in the specified format. </summary>
+    EncBotCopySeedLGPE = 10_005,
+
+    /// <summary> Watch general RNG state. </summary>
+    EncBotRNGMonitorLGPE = 10_006,
 }
 
 public static class PokeRoutineTypeExtensions
@@ -111,5 +117,6 @@ public static class PokeRoutineTypeExtensions
     public static bool IsTradeBot(this PokeRoutineType type) => type is >= PokeRoutineType.FlexTrade and <= PokeRoutineType.Dump;
     public static bool IsMonitorTool(this PokeRoutineType type) =>
         type is PokeRoutineType.EncBotCopySeed or PokeRoutineType.EncBotRNGMonitor
+        or PokeRoutineType.EncBotCopySeedLGPE or PokeRoutineType.EncBotRNGMonitorLGPE
         or (>= PokeRoutineType.EncBotZoneIDBS and <= PokeRoutineType.EncBotRNGMonitorLA);
 }
