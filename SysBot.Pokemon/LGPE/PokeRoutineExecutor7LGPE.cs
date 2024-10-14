@@ -128,7 +128,7 @@ namespace SysBot.Pokemon
             await Click(A, 1_000, token).ConfigureAwait(false);
 
             Log("Restarting the game!");
-            await Task.Delay(5_000 + timing.ExtraTimeLoadGame, token).ConfigureAwait(false);
+            await Task.Delay(6_000 + timing.ExtraTimeLoadGame, token).ConfigureAwait(false);
             await DetachController(token).ConfigureAwait(false);
 
             // Rush past controller selection because this can be detected as on overworld.
