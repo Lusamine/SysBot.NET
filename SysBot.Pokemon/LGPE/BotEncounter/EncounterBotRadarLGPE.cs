@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using PKHeX.Core.Searching;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,12 +6,8 @@ using static SysBot.Pokemon.PokeDataOffsetsLGPE;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotRadarLGPE : EncounterBotLGPE
+    public sealed class EncounterBotRadarLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : EncounterBotLGPE(cfg, hub)
     {
-        public EncounterBotRadarLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : base(cfg, hub)
-        {
-        }
-
         int natureCount;
 
         protected override async Task EncounterLoop(SAV7b sav, CancellationToken token)
