@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,16 +7,12 @@ using static SysBot.Pokemon.PokeDataOffsetsLGPE;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotBirdWatchLGPE : EncounterBotLGPE
+    public sealed class EncounterBotBirdWatchLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : EncounterBotLGPE(cfg, hub)
     {
-        public EncounterBotBirdWatchLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : base(cfg, hub)
-        {
-        }
-
         private readonly int threshold = 4;
         private ulong BirdRNGOffset;
 
-        bool IsLegendaryBird(int species) => species is (144 or 145 or 146);
+        private static bool IsLegendaryBird(int species) => species is (144 or 145 or 146);
 
         protected override async Task EncounterLoop(SAV7b sav, CancellationToken token)
         {
@@ -147,13 +143,15 @@ namespace SysBot.Pokemon
                         continue;
 
                     Log($"{GetBirdName(bird)} will be generated in {advances} advances!");
+                    // We'll set the catch combo species to match the upcoming bird.
+                    Hub.Config.EncounterLGPE.CatchComboSpecies = (Species)((int)Species.Moltres - bird);
                     return (true, advances);
                 }
             }
             return (false, maxAdvances);
         }
 
-        private string GetBirdName(uint index)
+        private static string GetBirdName(uint index)
         {
             return index switch
             {
