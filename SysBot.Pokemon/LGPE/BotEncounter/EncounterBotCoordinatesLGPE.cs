@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,11 +6,8 @@ using static SysBot.Pokemon.PokeDataOffsetsLGPE;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotCoordinatesLGPE : EncounterBotLGPE
+    public sealed class EncounterBotCoordinatesLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : EncounterBotLGPE(cfg, hub)
     {
-        public EncounterBotCoordinatesLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : base(cfg, hub)
-        {
-        }
 
         // Cached offset to reduce pointer evaluation.
         private ulong CoordinatesOffset;
