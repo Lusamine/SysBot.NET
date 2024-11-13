@@ -9,12 +9,8 @@ namespace SysBot.Pokemon
     // This is for a specific RNG state that controls item spawning on the ground and other less useful
     // random processes like battle animations, follower Pokémon interactions, and field Pokémon movement.
     // If other RNG states need monitoring, this may be renamed in the future.
-    public sealed class EncounterBotRNGMonitorLGPE : EncounterBotLGPE
+    public sealed class EncounterBotRNGMonitorLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : EncounterBotLGPE(cfg, hub)
     {
-        public EncounterBotRNGMonitorLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : base(cfg, hub)
-        {
-        }
-
         private int TotalAdvances;
         private ulong GeneralRNGOffset;
 
