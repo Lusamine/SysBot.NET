@@ -1,16 +1,12 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using static SysBot.Base.SwitchButton;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotGiftLGPE : EncounterBotLGPE
+    public sealed class EncounterBotGiftLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : EncounterBotLGPE(cfg, hub)
     {
-        public EncounterBotGiftLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : base(cfg, hub)
-        {
-        }
-
         protected override async Task EncounterLoop(SAV7b sav, CancellationToken token)
         {
             while (!token.IsCancellationRequested)
