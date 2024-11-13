@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using PKHeX.Core.Searching;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,12 +7,8 @@ using static SysBot.Pokemon.PokeDataOffsetsLGPE;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotResetLGPE : EncounterBotLGPE
+    public sealed class EncounterBotResetLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : EncounterBotLGPE(cfg, hub)
     {
-        public EncounterBotResetLGPE(PokeBotState cfg, PokeTradeHub<PB7> hub) : base(cfg, hub)
-        {
-        }
-
         protected override async Task EncounterLoop(SAV7b sav, CancellationToken token)
         {
             var monoffset = GetResetOffset(Hub.Config.EncounterLGPE.EncounteringType);
@@ -28,7 +24,7 @@ namespace SysBot.Pokemon
                 Log("Going through menus...");
                 do
                 {
-                    await DoExtraCommands(token, Hub.Config.EncounterLGPE.EncounteringType).ConfigureAwait(false);
+                    await DoExtraCommands(Hub.Config.EncounterLGPE.EncounteringType, token).ConfigureAwait(false);
                     pknew = await ReadUntilPresent(monoffset, 0_050, 0_050, token).ConfigureAwait(false);
                 } while (pknew == null || SearchUtil.HashByDetails(pkprev) == SearchUtil.HashByDetails(pknew));
 
@@ -53,7 +49,7 @@ namespace SysBot.Pokemon
             }
         }
 
-        private async Task DoExtraCommands(CancellationToken token, EncounterMode mode)
+        private async Task DoExtraCommands(EncounterMode mode, CancellationToken token)
         {
             switch (mode)
             {
@@ -69,7 +65,7 @@ namespace SysBot.Pokemon
             }
         }
 
-        private uint GetResetOffset(EncounterMode mode)
+        private static uint GetResetOffset(EncounterMode mode)
         {
             return mode switch
             {
