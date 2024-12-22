@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,12 +8,8 @@ using static SysBot.Pokemon.PokeDataOffsetsSWSH;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotTeaSmashSWSH : EncounterBotSWSH
+    public sealed class EncounterBotTeaSmashSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : EncounterBotSWSH(cfg, hub)
     {
-        public EncounterBotTeaSmashSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : base(cfg, hub)
-        {
-        }
-
         protected override async Task EncounterLoop(SAV8SWSH sav, CancellationToken token)
         {
             while (!token.IsCancellationRequested)
