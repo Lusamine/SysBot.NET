@@ -26,6 +26,7 @@ public sealed class BotFactory8SWSH : BotFactory<PK8>
         PokeRoutineType.EncBotTeaSmash => new EncounterBotTeaSmashSWSH(cfg, Hub),
         PokeRoutineType.EncBotLairStatReset => new EncounterBotMaxLairStatResetSWSH(cfg, Hub),
         PokeRoutineType.EncBotCurryRNG => new EncounterBotCurryRNGSWSH(cfg, Hub),
+        PokeRoutineType.EncBotTreeRNG => new EncounterBotTreeRNGSWSH(cfg, Hub),
         PokeRoutineType.EncBotCopySeed => new EncounterBotCopySeedSWSH(cfg, Hub),
         PokeRoutineType.EncBotRNGMonitor => new EncounterBotRNGMonitorSWSH(cfg, Hub),
 
@@ -54,6 +55,7 @@ public sealed class BotFactory8SWSH : BotFactory<PK8>
         PokeRoutineType.EncBotTeaSmash => true,
         PokeRoutineType.EncBotLairStatReset => true,
         PokeRoutineType.EncBotCurryRNG => true,
+        PokeRoutineType.EncBotTreeRNG => true,
         PokeRoutineType.EncBotCopySeed => true,
         PokeRoutineType.EncBotRNGMonitor => true,
 
