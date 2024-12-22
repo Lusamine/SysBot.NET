@@ -76,6 +76,9 @@ public class PokeDataOffsetsSWSH
     // Main RNG Offset
     public const uint SWSHMainRNGOffset = 0x4C2AAC18;
 
+    // Dex Recommendation Block
+    public const uint DexRecOffset = 0x45072B18;
+
     // Max Lair Offsets
     public static IReadOnlyList<long> MaxLairPokemonRNGPointer { get; } = [0x28F4060, 0x238, 0x2AB8];
     public const uint MaxLairPenaltyWarnOffset = 0x50B06FC0;
