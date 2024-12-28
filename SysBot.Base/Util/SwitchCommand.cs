@@ -132,6 +132,8 @@ public static class SwitchCommand
     public static byte[] TypeMultipleKeys(IEnumerable<HidKeyboardKey> keys, bool crlf = true)
         => Encode($"key{string.Concat(keys.Select(z => $" {(int)z}"))}", crlf);
 
+    public static byte[] Touch(int x, int y, int hold, bool crlf = true) => Encode($"touchHold {x} {y} {hold}", crlf);
+
     /*
      *
      * Memory I/O Commands

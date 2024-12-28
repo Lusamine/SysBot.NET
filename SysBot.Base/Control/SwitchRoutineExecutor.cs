@@ -51,6 +51,12 @@ public abstract class SwitchRoutineExecutor<T> : RoutineExecutor<T> where T : cl
         await Task.Delay(delay, token).ConfigureAwait(false);
     }
 
+    public async Task Touch(int x, int y, int hold, int delay, CancellationToken token)
+    {
+        await Connection.SendAsync(SwitchCommand.Touch(x, y, hold, UseCRLF), token).ConfigureAwait(false);
+        await Task.Delay(delay, token).ConfigureAwait(false);
+    }
+
     public async Task DetachController(CancellationToken token)
     {
         await Connection.SendAsync(SwitchCommand.DetachController(UseCRLF), token).ConfigureAwait(false);
