@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 
 namespace SysBot.Pokemon;
@@ -13,6 +13,8 @@ public sealed class BotFactory9SV : BotFactory<PK9>
             or PokeRoutineType.Dump
             => new PokeTradeBotSV(Hub, cfg),
 
+        PokeRoutineType.EncBotOutbreakFinderSV => new EncounterBotOutbreakFinderSV(cfg, Hub),
+
         PokeRoutineType.RemoteControl => new RemoteControlBotSV(cfg),
 
         _ => throw new ArgumentException(nameof(cfg.NextRoutineType)),
@@ -25,6 +27,8 @@ public sealed class BotFactory9SV : BotFactory<PK9>
             or PokeRoutineType.Clone
             or PokeRoutineType.Dump
             => true,
+
+        PokeRoutineType.EncBotOutbreakFinderSV => true,
 
         PokeRoutineType.RemoteControl => true,
 
