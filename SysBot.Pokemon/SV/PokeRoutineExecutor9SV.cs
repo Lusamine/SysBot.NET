@@ -259,4 +259,65 @@ public abstract class PokeRoutineExecutor9SV(PokeBotState Config) : PokeRoutineE
         var data = await SwitchConnection.PointerPeek(1, Offsets.ConfigPointer, token).ConfigureAwait(false);
         return (TextSpeedOption)(data[0] & 3);
     }
+
+    public async Task<ulong> GetKeyOffset(ulong block_key_offset, uint key, CancellationToken token)
+    {
+        try
+        {
+            return await BinarySearchSaveKey(block_key_offset, key, KeyStructSize, token).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            Log(ex.Message);
+        }
+        return 0;
+    }
+
+    // Reads data from an absolute offset to the key data.
+    public async Task<(ulong Offset, int Length)> ReadKeyData(ulong offset, uint key, CancellationToken token)
+    {
+        var byteData = await SwitchConnection.ReadBytesAbsoluteAsync(offset + 8, 8, token).ConfigureAwait(false);
+        offset = BitConverter.ToUInt64(byteData);
+
+        var headerAfterKey = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 6, token).ConfigureAwait(false);
+        int size = SCBlock.GetTotalLength(headerAfterKey, key);
+        return (offset, size);
+    }
+
+    private async Task<ulong> BinarySearchSaveKey(ulong block_key_offset, uint key, ulong size, CancellationToken token)
+    {
+        var data = await SwitchConnection.ReadBytesAbsoluteAsync(block_key_offset + 8, 16, token).ConfigureAwait(false);
+        var start = BitConverter.ToUInt64(data.AsSpan()[..8]);
+        var end = BitConverter.ToUInt64(data.AsSpan()[8..]);
+
+        while (start <= end)
+        {
+            var block_count = (end - start) / size;
+            var middle_block = block_count / 2; // ulong division in case of odd # of blocks
+            var middleOffset = start + (middle_block * size);
+
+            // read 4 bytes from the remote connection object at the current middle offset
+            var byteData = await SwitchConnection.ReadBytesAbsoluteAsync(middleOffset, 4, token).ConfigureAwait(false);
+
+            // convert the 4 bytes to a uint key for comparison
+            uint middleKey = BitConverter.ToUInt32(byteData, 0);
+
+            if (middleKey == key)
+                return middleOffset;
+            else if (middleKey < key)
+                start = middleOffset + size;
+            else
+                end = middleOffset - size;
+        }
+
+        throw new Exception($"Block key 0x{key:x8} was not found.");
+    }
+
+    public async Task<byte[]> GetValueFromBlockKeyOffset(ulong address, int size, uint keyval, CancellationToken token)
+    {
+        var header = 0;
+        var result = await SwitchConnection.ReadBytesAbsoluteAsync(address, size, token).ConfigureAwait(false);
+        var block = SCBlock.ReadFromOffset(result, keyval, ref header);
+        return block.Type.IsBoolean() ? BitConverter.GetBytes(block.Type == SCTypeCode.Bool2) : block.Data;
+    }
 }
