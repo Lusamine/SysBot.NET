@@ -110,6 +110,9 @@ public enum PokeRoutineType
 
     /// <summary> Watch general RNG state. </summary>
     EncBotRNGMonitorLGPE = 10_006,
+
+    /// <summary> Rolls dates and searches for outbreaks. </summary>
+    EncBotOutbreakFinderSV = 10_007,
 }
 
 public static class PokeRoutineTypeExtensions

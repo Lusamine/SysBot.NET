@@ -22,6 +22,9 @@ public class PokeDataOffsetsSV
     public IReadOnlyList<long> IsConnectedPointer             { get; } = [0x4739648, 0x30];
     public IReadOnlyList<long> OverworldPointer               { get; } = [0x473ADE0, 0x160, 0xE8, 0x28];
 
+    public IReadOnlyList<long> BlockKeyStructPointer { get; } = new long[] { 0x47350D8, 0xD8, 0x0, 0x0, 0x30, 0x0 };
+    public const int KeyStructSize = 0x30;
+
     public const int BoxFormatSlotSize = 0x158;
     public const ulong LibAppletWeID = 0x010000000000100a; // One of the process IDs for the news.
 }
