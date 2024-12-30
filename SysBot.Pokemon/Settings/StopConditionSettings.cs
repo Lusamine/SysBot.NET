@@ -155,6 +155,17 @@ public class StopConditionSettings
         return targetIVs;
     }
 
+    public static bool CheckIVsDesired(Span<int> ivs, int[] DesiredMinIVs, int[] DesiredMaxIVs)
+    {
+        // Compare if any of the IVs are different from DesiredMinIVs and DesiredMaxIVs
+        for (int i = 0; i < 6; i++)
+        {
+            if (ivs[i] < DesiredMinIVs[i] || ivs[i] > DesiredMaxIVs[i])
+                return false;
+        }
+        return true;
+    }
+
     private static bool HasMark(IRibbonIndex pk)
     {
         for (var mark = RibbonIndex.MarkLunchtime; mark <= RibbonIndex.MarkSlump; mark++)
