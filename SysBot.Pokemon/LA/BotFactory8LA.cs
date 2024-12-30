@@ -13,6 +13,7 @@ public sealed class BotFactory8LA : BotFactory<PA8>
             or PokeRoutineType.Dump
             => new PokeTradeBotLA(Hub, cfg),
 
+        PokeRoutineType.EncBotOWLCheckRNGLA => new EncounterBotOWLCheckRNGLA(cfg, Hub),
         PokeRoutineType.EncBotCopySeedLA => new EncounterBotCopySeedLA(cfg, Hub),
         PokeRoutineType.EncBotRNGMonitorLA => new EncounterBotRNGMonitorLA(cfg, Hub),
 
@@ -29,6 +30,7 @@ public sealed class BotFactory8LA : BotFactory<PA8>
             or PokeRoutineType.Dump
             => true,
 
+        PokeRoutineType.EncBotOWLCheckRNGLA => true,
         PokeRoutineType.EncBotCopySeedLA => true,
         PokeRoutineType.EncBotRNGMonitorLA => true,
 
