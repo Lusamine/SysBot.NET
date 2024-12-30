@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,12 +10,15 @@ namespace SysBot.Pokemon
     {
         protected readonly PokeTradeHub<PA8> Hub;
         private readonly EncounterRNGBSSettings Settings;
+        public readonly int[] DesiredMinIVs;
+        public readonly int[] DesiredMaxIVs;
         public ICountSettings Counts => Settings;
 
         protected EncounterBotLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : base(cfg)
         {
             Hub = hub;
             Settings = Hub.Config.EncounterRNGBS;
+            StopConditionSettings.InitializeTargetIVs(Hub.Config, out DesiredMinIVs, out DesiredMaxIVs);
         }
 
         public override async Task MainLoop(CancellationToken token)
