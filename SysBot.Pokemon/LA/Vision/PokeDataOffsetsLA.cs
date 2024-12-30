@@ -21,6 +21,8 @@ public class PokeDataOffsetsLA
     public IReadOnlyList<long> SoftbanPointer                 { get; } = [0x42BA6B0, 0x268, 0x70];
     public IReadOnlyList<long> OverworldPointer               { get; } = [0x42C30E8, 0x1A9];
     public IReadOnlyList<long> MainRNGPointer                 { get; } = [0x42A7000, 0xD8, 0x0];
+    public IReadOnlyList<long> SpawnersPointer                { get; } = [0x42BA6B0, 0x2E0, 0x70];
+    public IReadOnlyList<long> MapLocationPointerOffline      { get; } = [0x42F18C0, 0x90, 0x58, 0xD8, 0x278, 0x1B8, 0xF8, 0x0];
 
     public const int BoxFormatSlotSize = 0x168;
 }
