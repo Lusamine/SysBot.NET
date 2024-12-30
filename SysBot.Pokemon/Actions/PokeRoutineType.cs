@@ -76,7 +76,7 @@ public enum PokeRoutineType
     /// <summary> Prints out the global RNG state and information on advances passed. </summary>
     EncBotRNGMonitorBS = 2_003,
 
-    /// <summary> Prints out the global RNG state and information on advances passed. </summary>
+    /// <summary> Flips the Poké Dex to advance the RNG state. </summary>
     EncBotDexFlipBS = 2_004,
 
     /// <summary> Copies out the current global RNG state in the specified format. </summary>
@@ -84,6 +84,9 @@ public enum PokeRoutineType
 
     /// <summary> Prints out the global RNG state and information on advances passed. </summary>
     EncBotRNGMonitorLA = 3_001,
+
+    /// <summary> Checks for overworld legend seeds for RNG manipulation. </summary>
+    EncBotOWLCheckRNGLA = 3_002,
 
     /// <summary> Similar to idle, but identifies the bot as available for Remote input (Twitch Plays, etc.). </summary>
     RemoteControl = 6_000,
