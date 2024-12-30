@@ -244,9 +244,9 @@ namespace SysBot.Pokemon
 
         public static readonly EncounterTableEntry[] InsularSea =
         [
-            new((int)Species.Skwovet,  0, 59, false),
-            new((int)Species.Applin,  60, 89, true),
-            new((int)Species.Skwovet, 90, 99, false),
+            new((uint)Species.Skwovet,  0, 59, false),
+            new((uint)Species.Applin,  60, 89, true),
+            new((uint)Species.Skwovet, 90, 99, false),
         ];
     }
 }
