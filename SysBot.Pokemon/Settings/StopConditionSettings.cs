@@ -157,7 +157,7 @@ public class StopConditionSettings
         return targetIVs;
     }
 
-    private static bool MatchesTargetIVs(ReadOnlySpan<int> ivs, ReadOnlySpan<int> min, ReadOnlySpan<int> max)
+    public static bool MatchesTargetIVs(ReadOnlySpan<int> ivs, ReadOnlySpan<int> min, ReadOnlySpan<int> max)
     {
         for (int i = 0; i < 6; i++)
         {
