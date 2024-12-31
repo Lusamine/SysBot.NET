@@ -1,16 +1,12 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using static SysBot.Base.SwitchButton;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotRNGMonitorLA : EncounterBotLA
+    public sealed class EncounterBotRNGMonitorLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : EncounterBotLA(cfg, hub)
     {
-        public EncounterBotRNGMonitorLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : base(cfg, hub)
-        {
-        }
-
         private ulong MainRNGOffset;
         private int TotalAdvances;
 

@@ -9,12 +9,8 @@ using static SysBot.Pokemon.PokeDataOffsetsSWSH;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotTreeRNGSWSH : EncounterBotSWSH
+    public sealed class EncounterBotTreeRNGSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : EncounterBotSWSH(cfg, hub)
     {
-        public EncounterBotTreeRNGSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : base(cfg, hub)
-        {
-        }
-
         readonly ushort[] DexRecs = new ushort[4];
 
         protected override async Task EncounterLoop(SAV8SWSH sav, CancellationToken token)
@@ -222,6 +218,8 @@ namespace SysBot.Pokemon
                 var data = await SwitchConnection.ReadBytesAbsoluteAsync(DexRecOffset + (0x20 * i), 2, token).ConfigureAwait(false);
                 DexRecs[i] = BitConverter.ToUInt16(data, 0);
             }
+            var dexrecs = string.Join(", ", DexRecs.Select(i => GameInfo.GetStrings(1).Species[i]));
+            Log($"Dex Recs: {dexrecs}");
         }
 
         public class EncounterTableEntry(uint species, uint min, uint max, bool can_harvest)
