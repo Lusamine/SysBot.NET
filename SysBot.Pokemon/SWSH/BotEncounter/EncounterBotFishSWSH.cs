@@ -6,12 +6,8 @@ using static SysBot.Pokemon.PokeDataOffsetsSWSH;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotFishSWSH : EncounterBotSWSH
+    public sealed class EncounterBotFishSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : EncounterBotSWSH(cfg, hub)
     {
-        public EncounterBotFishSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : base(cfg, hub)
-        {
-        }
-
         protected override async Task EncounterLoop(SAV8SWSH sav, CancellationToken token)
         {
             while (!token.IsCancellationRequested)
