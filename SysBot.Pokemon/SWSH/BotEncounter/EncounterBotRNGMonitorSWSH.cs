@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using static SysBot.Base.SwitchButton;
@@ -6,12 +6,8 @@ using static SysBot.Pokemon.PokeDataOffsetsSWSH;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotRNGMonitorSWSH : EncounterBotSWSH
+    public sealed class EncounterBotRNGMonitorSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : EncounterBotSWSH(cfg, hub)
     {
-        public EncounterBotRNGMonitorSWSH(PokeBotState cfg, PokeTradeHub<PK8> hub) : base(cfg, hub)
-        {
-        }
-
         private int TotalAdvances;
 
         protected override async Task EncounterLoop(SAV8SWSH sav, CancellationToken token)
