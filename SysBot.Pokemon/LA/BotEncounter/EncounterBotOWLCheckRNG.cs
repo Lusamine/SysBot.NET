@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PKHeX.Core;
-using SysBot.Base;
 using static SysBot.Base.SwitchButton;
 using static SysBot.Base.SwitchStick;
 using static SysBot.Pokemon.LegendEncounterInfo;
@@ -169,8 +168,8 @@ namespace SysBot.Pokemon
         private async Task<bool> CycleCaveLegends(OWLegendary species, ulong spawner, CancellationToken token)
         {
             // Click A to enter the subarea.
-            while (!await IsOnOverworld(OverworldOffset, token).ConfigureAwait(false))
-                await Click(A, 0_100, token).ConfigureAwait(false);
+            Log("Entering the cave...");
+            await Click(A, 1_000, token).ConfigureAwait(false);
 
             // Check the spawners.
             if (await CheckLegendarySeed(species, spawner, token).ConfigureAwait(false))
@@ -183,6 +182,7 @@ namespace SysBot.Pokemon
             Log("No match, resetting the game...");
             await CloseGame(Hub.Config, token).ConfigureAwait(false);
             await StartGame(Hub.Config, token).ConfigureAwait(false);
+            await InitializeSessionOffsets(token).ConfigureAwait(false);
             return false;
         }
 
@@ -222,9 +222,9 @@ namespace SysBot.Pokemon
 
                 // Generator seed generates the slot, mon seed, and level.
                 var slotrng = new Xoroshiro128Plus(genseed);
-                var slot = slotrng.Next();
-
+                _ = slotrng.Next(); // Slot, not used in this case.
                 var mon_seed = slotrng.Next();
+                // Level is ignored since everything has fixed level.
 
                 if (GenerateAndCheck(species, mon_seed, i))
                     return true;
@@ -248,7 +248,7 @@ namespace SysBot.Pokemon
             // PID - these are all never shiny
             uint pid = (uint)rng.NextInt();
 
-            string? ivstring = "IVs: ";
+            string ivstring = string.Empty;
             Span<int> ivs = [-1, -1, -1, -1, -1, -1];
             const int MAX = 31;
             for (int i = 0; i < FlawlessIVs; i++)
@@ -285,13 +285,15 @@ namespace SysBot.Pokemon
             }
 
             int nature = (int)rng.NextInt(25);
-            if (nature != (int)Hub.Config.StopConditions.TargetNature)
+            var target_nature = Hub.Config.StopConditions.TargetNature;
+            if (target_nature != Nature.Random && nature != (int)target_nature)
                 return false;
 
             // If we get to here, then everything matches.
-            Log($"Result found!\n{GameInfo.GetStrings(1).Species[species]}{gender} in {advances} advance(s)!");
+            Log("Result found!");
+            Log($"{GameInfo.GetStrings(1).Species[species]}{gender} in {advances} advance(s)!");
             Log($"IVs: {ivstring}, Nature: {GameInfo.GetStrings(1).Natures[nature]}");
-            Log($"PID: {pid:x8}, EC: {ec:x8}");
+            Log($"PID: 0x{pid:x8}, EC: 0x{ec:x8}");
             return true;
         }
 
