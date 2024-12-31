@@ -1,16 +1,12 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SysBot.Pokemon
 {
-    public sealed class EncounterBotCopySeedLA : EncounterBotLA
+    public sealed class EncounterBotCopySeedLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : EncounterBotLA(cfg, hub)
     {
-        public EncounterBotCopySeedLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : base(cfg, hub)
-        {
-        }
-
         private ulong MainRNGOffset;
 
         protected override async Task EncounterLoop(SAV8LA sav, CancellationToken token)
