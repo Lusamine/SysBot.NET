@@ -103,12 +103,12 @@ namespace SysBot.Pokemon
             // Extra wait in case of loading screen.
             await Task.Delay(1_000, token).ConfigureAwait(false);
 
-            // Walk over to Laventon.
-            await LeaveArea(area, token).ConfigureAwait(false);
-
             // Check the spawners.
             if (await CheckLegendarySeed(species, spawner, token).ConfigureAwait(false))
                 return true;
+
+            // Walk over to Laventon.
+            await LeaveArea(area, token).ConfigureAwait(false);
 
             Log("Talking to Laventon...");
             await Click(A, 0_500, token).ConfigureAwait(false);
@@ -196,7 +196,7 @@ namespace SysBot.Pokemon
                 if (spawnerhash != spawner)
                     continue;
 
-                data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x20, 8, token).ConfigureAwait(false);
+                data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x408, 8, token).ConfigureAwait(false);
                 ulong seed = BitConverter.ToUInt64(data, 0);
                 Log($"Checking spawner #{i}, hash 0x{spawnerhash:x16}, seed 0x{seed:x16}. Attempt #{++SpawnCounter}");
                 Settings.AddCompletedLegends();
