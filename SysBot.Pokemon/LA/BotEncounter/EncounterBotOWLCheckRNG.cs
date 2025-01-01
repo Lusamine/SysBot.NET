@@ -46,8 +46,8 @@ namespace SysBot.Pokemon
                     if (first_time)
                     {
                         // Start in Jubilife in front of the guard.
+                        await Click(A, 0_800, token).ConfigureAwait(false);
                         await Click(A, 0_500, token).ConfigureAwait(false);
-                        await Click(A, 1_000, token).ConfigureAwait(false);
 
                         await AdjustMap(area, token).ConfigureAwait(false);
                         first_time = false;
@@ -84,7 +84,7 @@ namespace SysBot.Pokemon
         {
             Log("Adjusting the map...");
             while (!await IsHoveringMap((uint)area, token).ConfigureAwait(false))
-                await Click(DRIGHT, 0_500, token).ConfigureAwait(false);
+                await Click(DRIGHT, 0_300, token).ConfigureAwait(false);
         }
 
         private async Task<bool> IsHoveringMap(uint mapValue, CancellationToken token)
@@ -95,13 +95,12 @@ namespace SysBot.Pokemon
 
         private async Task<bool> CycleWanderingLegends(OWLegendary species, AreaID area, ulong spawner, CancellationToken token)
         {
-            // Click once to engage the guard.
-            await Click(A, 0_500, token).ConfigureAwait(false);
+            // Should be hovered over the correct map location now.
             while (!await IsOnOverworld(OverworldOffset, token).ConfigureAwait(false))
                 await Click(A, 0_100, token).ConfigureAwait(false);
 
             // Extra wait in case of loading screen.
-            await Task.Delay(1_000, token).ConfigureAwait(false);
+            await Task.Delay(0_800, token).ConfigureAwait(false);
 
             // Check the spawners.
             if (await CheckLegendarySeed(species, spawner, token).ConfigureAwait(false))
@@ -111,9 +110,9 @@ namespace SysBot.Pokemon
             await LeaveArea(area, token).ConfigureAwait(false);
 
             Log("Talking to Laventon...");
+            await Click(A, 1_000, token).ConfigureAwait(false);
+            await Click(A, 0_800, token).ConfigureAwait(false);
             await Click(A, 0_500, token).ConfigureAwait(false);
-            await Click(A, 0_700, token).ConfigureAwait(false);
-            await Click(A, 0_600, token).ConfigureAwait(false);
             await Click(DDOWN, 0_050, token).ConfigureAwait(false);
 
             // Click A until we get back to Jubilife.
@@ -191,7 +190,7 @@ namespace SysBot.Pokemon
             // Count backwards because our legendary is closer to the end.
             for (ulong i = 400; i >= 0; i--)
             {
-                byte[]? data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x410, 8, token).ConfigureAwait(false);
+                byte[] data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x410, 8, token).ConfigureAwait(false);
                 ulong spawnerhash = BitConverter.ToUInt64(data, 0);
                 if (spawnerhash != spawner)
                     continue;
