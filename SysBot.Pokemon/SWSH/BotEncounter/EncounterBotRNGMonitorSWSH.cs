@@ -23,7 +23,21 @@ namespace SysBot.Pokemon
 
             while (!token.IsCancellationRequested)
             {
-                await Task.Delay(Hub.Config.EncounterSWSH.MonitorRefreshRate, token).ConfigureAwait(false);
+                var wait = Hub.Config.EncounterSWSH.MonitorRefreshRate;
+                if (Hub.Config.EncounterSWSH.BellsAndWhistles)
+                {
+                    // We need to ring the bell until the wait is over.
+                    while (wait >= 0)
+                    {
+                        await Click(LSTICK, 0_100, token).ConfigureAwait(false);
+                        wait -= 0_100;
+                    }
+                }
+                else
+                {
+                    // If we aren't ringing the bell, we can just wait the time out.
+                    await Task.Delay(wait, token).ConfigureAwait(false);
+                }
 
                 var (_s0, _s1) = await GetGlobalRNGState(SWSHMainRNGOffset, false, token).ConfigureAwait(false);
 
