@@ -169,6 +169,8 @@ namespace SysBot.Pokemon
             // Click A to enter the subarea.
             Log("Entering the cave...");
             await Click(A, 1_000, token).ConfigureAwait(false);
+            if (species == OWLegendary.Manaphy)
+                await Task.Delay(0_800, token).ConfigureAwait(false);
 
             // Check the spawners.
             if (await CheckLegendarySeed(species, spawner, token).ConfigureAwait(false))
@@ -188,7 +190,7 @@ namespace SysBot.Pokemon
         private async Task<bool> CheckLegendarySeed(OWLegendary species, ulong spawner, CancellationToken token)
         {
             // Count backwards because our legendary is closer to the end.
-            for (ulong i = 400; i >= 0; i--)
+            for (ulong i = 420; i >= 0; i--)
             {
                 byte[] data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x410, 8, token).ConfigureAwait(false);
                 ulong spawnerhash = BitConverter.ToUInt64(data, 0);
