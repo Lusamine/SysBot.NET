@@ -54,6 +54,9 @@ public class EncounterSettings : IBotStateSettings, ICountSettings
     [Category(Encounter), Description("Maximum total advances before the RNG monitor pauses the game by clicking X. Set to 0 to disable.")]
     public int MaxTotalAdvances { get; set; }
 
+    [Category(Encounter), Description("If enabled, bot will continuously press L-stick to ring the bell or whistle to advance the RNG.")]
+    public bool BellsAndWhistles { get; set; }
+
     [Category(Encounter), Description("When enabled, the screen will be turned off during normal bot loop operation to save power.")]
     public bool ScreenOff { get; set; }
 
