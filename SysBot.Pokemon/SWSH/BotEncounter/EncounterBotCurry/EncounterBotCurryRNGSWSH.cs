@@ -110,7 +110,7 @@ namespace SysBot.Pokemon
                 else if (await HandleEncounter(pk, token).ConfigureAwait(false))
                     return;
 
-                if (++CurriesMade % Hub.Config.EncounterSWSH.CurryTimesToCook == 0)
+                if (++CurriesMade % Hub.Config.EncounterSWSH.Curry.CurryTimesToCook == 0)
                 {
                     Log("Resetting the game to restore ingredients...");
                     await ResetGameCurry(token).ConfigureAwait(false);
@@ -164,7 +164,7 @@ namespace SysBot.Pokemon
 
             Log("Adding Berries.");
             await Click(A, 0_300, token).ConfigureAwait(false);
-            var berry_count = Hub.Config.EncounterSWSH.CurryBerriesToUse;
+            var berry_count = Hub.Config.EncounterSWSH.Curry.CurryBerriesToUse;
             var clicks = berry_count - 1;
             if (berry_count > 6)
                 clicks = 11 - berry_count;
@@ -177,7 +177,7 @@ namespace SysBot.Pokemon
             }
             await Click(A, 2_000, token).ConfigureAwait(false);
 
-            if (Hub.Config.EncounterSWSH.CurryBerriesToUse != 10)
+            if (Hub.Config.EncounterSWSH.Curry.CurryBerriesToUse != 10)
                 await Click(PLUS, 0_500, token).ConfigureAwait(false);
             await Task.Delay(1_000, token).ConfigureAwait(false);
             // End on the "Would you like to start cooking with your current Berry selection?" menu.
@@ -191,8 +191,8 @@ namespace SysBot.Pokemon
             // If you want to use a different party size, update the rest of the routine yourself.
             var advances = CurryAdvances[2];
 
-            var spawn_chance = Hub.Config.EncounterSWSH.CurryTargetChance;
-            var slot_total = (ulong)Hub.Config.EncounterSWSH.CurrySlotTotal;
+            var spawn_chance = Hub.Config.EncounterSWSH.Curry.CurryTargetChance;
+            var slot_total = (ulong)Hub.Config.EncounterSWSH.Curry.CurrySlotTotal;
 
             for (var i = 0; i < advances; i++)
                 rng.Next();
