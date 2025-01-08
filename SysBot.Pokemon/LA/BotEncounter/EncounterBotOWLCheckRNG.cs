@@ -46,7 +46,7 @@ namespace SysBot.Pokemon
                     if (first_time)
                     {
                         // Start in Jubilife in front of the guard.
-                        await Click(A, 0_800, token).ConfigureAwait(false);
+                        await Click(A, 1_000, token).ConfigureAwait(false);
                         await Click(A, 0_500, token).ConfigureAwait(false);
 
                         await AdjustMap(area, token).ConfigureAwait(false);
