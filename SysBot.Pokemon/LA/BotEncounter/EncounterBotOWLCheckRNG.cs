@@ -29,7 +29,7 @@ namespace SysBot.Pokemon
         private readonly int FlawlessIVs = 3;
 
         // Tracks whether this is the first time we are going to an area after a reset.
-        bool first_time = true;
+        bool first_time;
 
         protected override async Task EncounterLoop(SAV8LA sav, CancellationToken token)
         {
@@ -38,6 +38,8 @@ namespace SysBot.Pokemon
             var mode = GetLegendaryMode(species);
             var area = GetLegendaryArea(species);
             var spawner = GetLegendarySpawnerHash(species);
+            var start = GetStartIndex(species);
+            first_time = true;
 
             while (!token.IsCancellationRequested)
             {
@@ -54,13 +56,13 @@ namespace SysBot.Pokemon
                     }
 
                     // Returns true if we found a matching seed.
-                    if (await CycleWanderingLegends(species, area, spawner, token).ConfigureAwait(false))
+                    if (await CycleWanderingLegends(species, area, spawner, start, token).ConfigureAwait(false))
                         return;
                 }
                 else if (mode is LegendResetMode.Cave)
                 {
                     // Returns true if we found a matching seed.
-                    if (await CycleCaveLegends(species, spawner, token).ConfigureAwait(false))
+                    if (await CycleCaveLegends(species, spawner, start, token).ConfigureAwait(false))
                         return;
                 }
                 else
@@ -93,7 +95,7 @@ namespace SysBot.Pokemon
             return data[0] == mapValue;
         }
 
-        private async Task<bool> CycleWanderingLegends(OWLegendary species, AreaID area, ulong spawner, CancellationToken token)
+        private async Task<bool> CycleWanderingLegends(OWLegendary species, AreaID area, ulong spawner, uint start, CancellationToken token)
         {
             // Should be hovered over the correct map location now.
             while (!await IsOnOverworld(OverworldOffset, token).ConfigureAwait(false))
@@ -103,7 +105,7 @@ namespace SysBot.Pokemon
             await Task.Delay(0_800, token).ConfigureAwait(false);
 
             // Check the spawners.
-            if (await CheckLegendarySeed(species, spawner, token).ConfigureAwait(false))
+            if (await CheckLegendarySeed(species, spawner, start, token).ConfigureAwait(false))
                 return true;
 
             // Walk over to Laventon.
@@ -164,7 +166,7 @@ namespace SysBot.Pokemon
             await ResetStick(token).ConfigureAwait(false);
         }
 
-        private async Task<bool> CycleCaveLegends(OWLegendary species, ulong spawner, CancellationToken token)
+        private async Task<bool> CycleCaveLegends(OWLegendary species, ulong spawner, uint start, CancellationToken token)
         {
             // Click A to enter the subarea.
             Log("Entering the cave...");
@@ -173,7 +175,7 @@ namespace SysBot.Pokemon
                 await Task.Delay(0_800, token).ConfigureAwait(false);
 
             // Check the spawners.
-            if (await CheckLegendarySeed(species, spawner, token).ConfigureAwait(false))
+            if (await CheckLegendarySeed(species, spawner, start, token).ConfigureAwait(false))
             {
                 // Minimize the game if we find a match because we might be with some aggressive Pokémon.
                 await Click(HOME, 1_600, token).ConfigureAwait(false);
@@ -187,10 +189,11 @@ namespace SysBot.Pokemon
             return false;
         }
 
-        private async Task<bool> CheckLegendarySeed(OWLegendary species, ulong spawner, CancellationToken token)
+        private async Task<bool> CheckLegendarySeed(OWLegendary species, ulong spawner, uint start, CancellationToken token)
         {
             // Count backwards because our legendary is closer to the end.
-            for (ulong i = 420; i >= 0; i--)
+            // It's faster to read this way than to dump the entire block.
+            for (ulong i = start; i >= 0; i--)
             {
                 byte[] data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x410, 8, token).ConfigureAwait(false);
                 ulong spawnerhash = BitConverter.ToUInt64(data, 0);
