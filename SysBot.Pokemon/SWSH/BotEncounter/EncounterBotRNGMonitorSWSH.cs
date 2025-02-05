@@ -24,18 +24,22 @@ namespace SysBot.Pokemon
             while (!token.IsCancellationRequested)
             {
                 var wait = Hub.Config.EncounterSWSH.MonitorRefreshRate;
-                if (Hub.Config.EncounterSWSH.BellsAndWhistles)
+                var advanceType = Hub.Config.EncounterSWSH.AdvancementType;
+                if (advanceType != MonitorAdvancementType.None)
                 {
                     // We need to ring the bell until the wait is over.
                     while (wait >= 0)
                     {
-                        await Click(LSTICK, 0_100, token).ConfigureAwait(false);
+                        if (advanceType == MonitorAdvancementType.BellsAndWhistles)
+                            await Click(LSTICK, 0_100, token).ConfigureAwait(false);
+                        else if (advanceType == MonitorAdvancementType.AButtonSpam)
+                            await Click(A, 0_100, token).ConfigureAwait(false);
                         wait -= 0_100;
                     }
                 }
                 else
                 {
-                    // If we aren't ringing the bell, we can just wait the time out.
+                    // If we aren't clicking extra buttons, we can just wait the time out.
                     await Task.Delay(wait, token).ConfigureAwait(false);
                 }
 
@@ -57,11 +61,27 @@ namespace SysBot.Pokemon
                 var maxAdvance = Hub.Config.EncounterSWSH.MaxTotalAdvances;
                 if (maxAdvance != 0 && TotalAdvances >= maxAdvance)
                 {
-                    Log($"Hitting X to pause the game. Max total advances is {maxAdvance} and {TotalAdvances} advances have passed.");
-                    await Click(X, 2_000, token).ConfigureAwait(false);
+                    if (advanceType == MonitorAdvancementType.AButtonSpam)
+                    {
+                        // We should be in a menu already so there's no need for additional button presses.
+                        Log($"Routine completed. Max total advances is {maxAdvance} and {TotalAdvances} advances have passed.");
+                    }
+                    else
+                    {
+                        // Should work even if they are using this to spam attack animations.
+                        Log($"Hitting X to pause the game. Max total advances is {maxAdvance} and {TotalAdvances} advances have passed.");
+                        await Click(X, 2_000, token).ConfigureAwait(false);
+                    }
                     return;
                 }
             }
         }
     }
+}
+
+public enum MonitorAdvancementType
+{
+    None,
+    BellsAndWhistles,
+    AButtonSpam,
 }
