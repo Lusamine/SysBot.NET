@@ -1,4 +1,4 @@
-﻿using SysBot.Base;
+using SysBot.Base;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
@@ -16,6 +16,9 @@ namespace SysBot.Pokemon
 
         [Category(EncounterRNGBS), Description("Number of advances the bot will make for TID RNG in BDSP.")]
         public int MaxTIDAdvances { get; set; }
+
+        [Category(EncounterRNGBS), Description("Set this to \"True\" if you already have a target, and advancing was previously interrupted.")]
+        public bool TIDAdvanceOnly { get; set; } = false;
 
         [Category(EncounterRNGBS), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
         public int MonitorRefreshRate { get; set; } = 500;
