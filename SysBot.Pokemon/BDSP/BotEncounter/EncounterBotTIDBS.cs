@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -42,25 +42,36 @@ namespace SysBot.Pokemon
                 var (found, advances) = CheckForTID(s0, s1);
                 if (!found)
                 {
+                    // If they told it to advance only but don't let it reset, tell them so.
+                    if (Hub.Config.EncounterRNGBS.TIDAdvanceOnly)
+                    {
+                        Log("Target was not found, and bot is configured for advances only.");
+                        return;
+                    }
+
                     Log($"No match after {advances} advances, resetting the game...");
                     await CloseGame(Hub.Config, token).ConfigureAwait(false);
                     await StartGame(true, Hub.Config, token).ConfigureAwait(false);
                     continue;
                 }
 
-                // If you want it to select a different language, change the keypresses here.
-                // It will pick the first option by default.
-                Log("Accepting language.");
-                await Click(A, 0_050, token).ConfigureAwait(false);
-                await PressAndHold(A, 1_000, 0, token).ConfigureAwait(false);
-                await Click(A, 0_500, token).ConfigureAwait(false);
-
-                // This should get us to the name entry, and B's are free to press.
-                Log("Going through Rowan's introduction.");
-                for (int i = 0; i < 40; i++)
+                // Only go through the introduction if it's not set to advance only.
+                if (!Hub.Config.EncounterRNGBS.TIDAdvanceOnly)
                 {
-                    await Click(B, 0_100, token).ConfigureAwait(false);
-                    await PressAndHold(B, 0_500, 0, token).ConfigureAwait(false);
+                    // If you want it to select a different language, change the keypresses here.
+                    // It will pick the first option by default.
+                    Log("Accepting language.");
+                    await Click(A, 0_050, token).ConfigureAwait(false);
+                    await PressAndHold(A, 1_000, 0, token).ConfigureAwait(false);
+                    await Click(A, 0_500, token).ConfigureAwait(false);
+
+                    // This should get us to the name entry, and B's are free to press.
+                    Log("Going through Rowan's introduction.");
+                    for (int i = 0; i < 40; i++)
+                    {
+                        await Click(B, 0_100, token).ConfigureAwait(false);
+                        await PressAndHold(B, 0_500, 0, token).ConfigureAwait(false);
+                    }
                 }
 
                 // If we found a match, advances should be the number of times we need to advance the game.
