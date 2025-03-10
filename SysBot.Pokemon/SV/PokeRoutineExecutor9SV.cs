@@ -318,6 +318,6 @@ public abstract class PokeRoutineExecutor9SV(PokeBotState Config) : PokeRoutineE
         var header = 0;
         var result = await SwitchConnection.ReadBytesAbsoluteAsync(address, size, token).ConfigureAwait(false);
         var block = SCBlock.ReadFromOffset(result, keyval, ref header);
-        return block.Type.IsBoolean() ? BitConverter.GetBytes(block.Type == SCTypeCode.Bool2) : block.Data;
+        return block.Type.IsBoolean() ? BitConverter.GetBytes(block.Type == SCTypeCode.Bool2) : block.Data.ToArray();
     }
 }
