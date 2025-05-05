@@ -118,7 +118,7 @@ namespace SysBot.Pokemon
             await Click(A, 1_000 + timing.ExtraTimeLoadProfile, token).ConfigureAwait(false);
 
             // Menus here can go in the order: Update Prompt -> Profile -> DLC check -> Unable to use DLC.
-            //  The user can optionally turn on the setting if they know of a breaking system update incoming.
+            // The user can optionally turn on the setting if they know of a breaking system update incoming.
             if (timing.AvoidSystemUpdate)
             {
                 await Click(DUP, 0_600, token).ConfigureAwait(false);
