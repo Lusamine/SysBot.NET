@@ -255,7 +255,7 @@ namespace SysBot.Pokemon
             await Click(HOME, 0_800, token).ConfigureAwait(false);
 
             // Navigate to Settings
-            await Touch(840, 0_550, 0_050, 0, token).ConfigureAwait(false);
+            await Touch(0_909, 0_550, 0_050, 0, token).ConfigureAwait(false);
             await Click(A, 1_000, token).ConfigureAwait(false);
 
             // Scroll to bottom
