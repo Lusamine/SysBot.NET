@@ -295,8 +295,8 @@ namespace SysBot.Pokemon
 
             // If we get to here, then everything matches.
             Log("Result found!");
-            Log($"{GameInfo.GetStrings(1).Species[species]}{gender} in {advances} advance(s)!");
-            Log($"IVs: {ivstring}, Nature: {GameInfo.GetStrings(1).Natures[nature]}");
+            Log($"{GameInfo.GetStrings("en").Species[species]}{gender} in {advances} advance(s)!");
+            Log($"IVs: {ivstring}, Nature: {GameInfo.GetStrings("en").Natures[nature]}");
             Log($"PID: 0x{pid:x8}, EC: 0x{ec:x8}");
             return true;
         }
