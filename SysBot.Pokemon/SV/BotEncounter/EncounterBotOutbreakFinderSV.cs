@@ -124,7 +124,7 @@ namespace SysBot.Pokemon
                         }
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
-                        var output = $"P | {outbreak_counter} | {species} | {GameInfo.GetStrings(1).Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
+                        var output = $"P | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
                         Log(output);
 
                         if (species == target_species && (target_form == null || form == target_form))
@@ -160,7 +160,7 @@ namespace SysBot.Pokemon
                             Log($"K | {outbreak_counter} | {active_cnt} active outbreaks");
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
-                        var output = $"K | {outbreak_counter} | {species} | {GameInfo.GetStrings(1).Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
+                        var output = $"K | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
                         Log(output);
 
                         if (species == target_species && (target_form == null || form == target_form))
@@ -196,7 +196,7 @@ namespace SysBot.Pokemon
                             Log($"B | {outbreak_counter} | {active_cnt} active outbreaks");
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
-                        var output = $"B | {outbreak_counter} | {species} | {GameInfo.GetStrings(1).Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
+                        var output = $"B | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
                         Log(output);
 
                         if (species == target_species && (target_form == null || form == target_form))

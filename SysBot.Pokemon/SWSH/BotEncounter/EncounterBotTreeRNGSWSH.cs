@@ -138,7 +138,7 @@ namespace SysBot.Pokemon
                     }
                     else
                     {
-                        Log($"Dex Recommendation activates for slot {dexrec_slot}: {GameInfo.GetStrings(1).Species[species_dexrec]}.");
+                        Log($"Dex Recommendation activates for slot {dexrec_slot}: {GameInfo.GetStrings("en").Species[species_dexrec]}.");
                         // Check if the chosen species from dexrec is any of the species in InsularSea table.
                         if (InsularSea.Any(e => e.Species == species_dexrec))
                         {
@@ -159,7 +159,7 @@ namespace SysBot.Pokemon
             {
                 var slot_rand = (int)rng.NextInt(100);
                 species_final = FindSlotInTable((uint)slot_rand, InsularSea);
-                Log($"Regular slot rand: {slot_rand}, {GameInfo.GetStrings(1).Species[(int)species_final]}.");
+                Log($"Regular slot rand: {slot_rand}, {GameInfo.GetStrings("en").Species[(int)species_final]}.");
                 if (target_species != (int)Species.None && target_species != species_final)
                     return false;
             }
@@ -218,7 +218,7 @@ namespace SysBot.Pokemon
                 var data = await SwitchConnection.ReadBytesAbsoluteAsync(DexRecOffset + (0x20 * i), 2, token).ConfigureAwait(false);
                 DexRecs[i] = BitConverter.ToUInt16(data, 0);
             }
-            var dexrecs = string.Join(", ", DexRecs.Select(i => GameInfo.GetStrings(1).Species[i]));
+            var dexrecs = string.Join(", ", DexRecs.Select(i => GameInfo.GetStrings("en").Species[i]));
             Log($"Dex Recs: {dexrecs}");
         }
 

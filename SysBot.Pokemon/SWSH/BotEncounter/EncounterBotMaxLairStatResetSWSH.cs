@@ -172,11 +172,11 @@ namespace SysBot.Pokemon
             int nature = (int)rng.NextInt(25);
             if (Hub.Config.StopConditions.TargetNature != Nature.Random && nature != (int)Hub.Config.StopConditions.TargetNature)
             {
-                Log($"Nature is {GameInfo.GetStrings(1).Natures[nature]} and target is {GameInfo.GetStrings(1).Natures[(int)Hub.Config.StopConditions.TargetNature]}.");
+                Log($"Nature is {GameInfo.GetStrings("en").Natures[nature]} and target is {GameInfo.GetStrings("en").Natures[(int)Hub.Config.StopConditions.TargetNature]}.");
                 return (false, null);
             }
 
-            var msg = $"IVs: {ivs[0]}/{ivs[1]}/{ivs[2]}/{ivs[3]}/{ivs[4]}/{ivs[5]}, Nature: {GameInfo.GetStrings(1).Natures[nature]}";
+            var msg = $"IVs: {ivs[0]}/{ivs[1]}/{ivs[2]}/{ivs[3]}/{ivs[4]}/{ivs[5]}, Nature: {GameInfo.GetStrings("en").Natures[nature]}";
             return (true, msg);
         }
     }
