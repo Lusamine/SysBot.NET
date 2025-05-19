@@ -14,6 +14,7 @@ public sealed class BotFactory9SV : BotFactory<PK9>
             => new PokeTradeBotSV(Hub, cfg),
 
         PokeRoutineType.EncBotOutbreakFinderSV => new EncounterBotOutbreakFinderSV(cfg, Hub),
+        PokeRoutineType.EncBotOWDumpSV => new EncounterBotOWDumpSV(cfg, Hub),
 
         PokeRoutineType.RemoteControl => new RemoteControlBotSV(cfg),
 
@@ -29,6 +30,7 @@ public sealed class BotFactory9SV : BotFactory<PK9>
             => true,
 
         PokeRoutineType.EncBotOutbreakFinderSV => true,
+        PokeRoutineType.EncBotOWDumpSV => true,
 
         PokeRoutineType.RemoteControl => true,
 

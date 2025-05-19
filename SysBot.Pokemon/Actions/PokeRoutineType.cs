@@ -116,6 +116,9 @@ public enum PokeRoutineType
 
     /// <summary> Rolls dates and searches for outbreaks. </summary>
     EncBotOutbreakFinderSV = 10_007,
+
+    /// <summary> Exports overworld blocks named as current coordinates. </summary>
+    EncBotOWDumpSV = 10_008,
 }
 
 public static class PokeRoutineTypeExtensions
