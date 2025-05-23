@@ -33,6 +33,7 @@ namespace SysBot.Pokemon
                     {
                         Log("Unable to find an appropriate RNG state to start the curry. Resetting the game!");
                         await ResetGameCurry(token).ConfigureAwait(false);
+                        await SetUpCurry(token).ConfigureAwait(false);
                         start_timer = 100_000;
                         continue;
                     }
@@ -66,6 +67,7 @@ namespace SysBot.Pokemon
                             {
                                 Log("Unable to find an appropriate RNG state to start the curry. Resetting the game!");
                                 await ResetGameCurry(token).ConfigureAwait(false);
+                                await SetUpCurry(token).ConfigureAwait(false);
                                 start_timer = 100_000;
                             }
                             (s0, s1) = (_s0, _s1);
