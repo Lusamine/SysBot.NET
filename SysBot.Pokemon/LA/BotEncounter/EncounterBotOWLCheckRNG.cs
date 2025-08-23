@@ -1,7 +1,8 @@
+using PKHeX.Core;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using PKHeX.Core;
 using static SysBot.Base.SwitchButton;
 using static SysBot.Base.SwitchStick;
 using static SysBot.Pokemon.LegendEncounterInfo;
@@ -37,7 +38,21 @@ namespace SysBot.Pokemon
             var species = Settings.OWLegendary;
             var mode = GetLegendaryMode(species);
             var area = GetLegendaryArea(species);
+
             var spawner = GetLegendarySpawnerHash(species);
+            if (species == OWLegendary.Phione)
+            {
+                bool manaphy_caught = await CheckManaphyCaught(token).ConfigureAwait(false);
+                int phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
+                bool include_all_layers = Settings.CheckAllPhioneLayers;
+                spawner = GetPhioneSpawnerHashes(manaphy_caught, phione_caught, include_all_layers);
+                if (spawner is null || spawner.Count == 0)
+                {
+                    Log("No Phione spawners available to check.");
+                    return;
+                }
+            }
+
             var start = GetStartIndex(species);
             first_time = true;
 
@@ -82,6 +97,18 @@ namespace SysBot.Pokemon
             SpawnersOffset = await SwitchConnection.PointerAll(Offsets.SpawnersPointer, token).ConfigureAwait(false);
         }
 
+        private async Task<bool> CheckManaphyCaught(CancellationToken token)
+        {
+            var data = await SwitchConnection.PointerPeek(1, Offsets.SaveBlockManaphySubeventProgress, token).ConfigureAwait(false);
+            return data[0] >= 40;
+        }
+
+        private async Task<int> CheckNumberPhioneCaught(CancellationToken token)
+        {
+            var data = await SwitchConnection.PointerPeek(1, Offsets.SaveBlockPhioneCaptureCount, token).ConfigureAwait(false);
+            return data[0];
+        }
+
         private async Task AdjustMap(AreaID area, CancellationToken token)
         {
             Log("Adjusting the map...");
@@ -95,7 +122,7 @@ namespace SysBot.Pokemon
             return data[0] == mapValue;
         }
 
-        private async Task<bool> CycleWanderingLegends(OWLegendary species, AreaID area, ulong spawner, uint start, CancellationToken token)
+        private async Task<bool> CycleWanderingLegends(OWLegendary species, AreaID area, List<ulong> spawners, uint start, CancellationToken token)
         {
             // Should be hovered over the correct map location now.
             while (!await IsOnOverworld(OverworldOffset, token).ConfigureAwait(false))
@@ -105,7 +132,7 @@ namespace SysBot.Pokemon
             await Task.Delay(0_800, token).ConfigureAwait(false);
 
             // Check the spawners.
-            if (await CheckLegendarySeed(species, spawner, start, token).ConfigureAwait(false))
+            if (await CheckLegendarySeed(species, spawners, start, token).ConfigureAwait(false))
                 return true;
 
             // Walk over to Laventon.
@@ -166,16 +193,16 @@ namespace SysBot.Pokemon
             await ResetStick(token).ConfigureAwait(false);
         }
 
-        private async Task<bool> CycleCaveLegends(OWLegendary species, ulong spawner, uint start, CancellationToken token)
+        private async Task<bool> CycleCaveLegends(OWLegendary species, List<ulong> spawners, uint start, CancellationToken token)
         {
             // Click A to enter the subarea.
             Log("Entering the cave...");
             await Click(A, 1_000, token).ConfigureAwait(false);
-            if (species == OWLegendary.Manaphy)
+            if (species == OWLegendary.Manaphy || species == OWLegendary.Phione)
                 await Task.Delay(0_800, token).ConfigureAwait(false);
 
             // Check the spawners.
-            if (await CheckLegendarySeed(species, spawner, start, token).ConfigureAwait(false))
+            if (await CheckLegendarySeed(species, spawners, start, token).ConfigureAwait(false))
             {
                 // Minimize the game if we find a match because we might be with some aggressive Pokémon.
                 await Click(HOME, 1_600, token).ConfigureAwait(false);
@@ -189,15 +216,16 @@ namespace SysBot.Pokemon
             return false;
         }
 
-        private async Task<bool> CheckLegendarySeed(OWLegendary species, ulong spawner, uint start, CancellationToken token)
+        private async Task<bool> CheckLegendarySeed(OWLegendary species, List<ulong> spawners, uint start, CancellationToken token)
         {
             // Count backwards because our legendary is closer to the end.
             // It's faster to read this way than to dump the entire block.
+            var spawners_found = 0;
             for (ulong i = start; i >= 0; i--)
             {
                 byte[] data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x410, 8, token).ConfigureAwait(false);
                 ulong spawnerhash = BitConverter.ToUInt64(data, 0);
-                if (spawnerhash != spawner)
+                if (!spawners.Contains(spawnerhash))
                     continue;
 
                 data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x408, 8, token).ConfigureAwait(false);
@@ -206,8 +234,22 @@ namespace SysBot.Pokemon
                 Settings.AddCompletedLegends();
 
                 if (IsMatch((int)species, seed))
+                {
+                    // If we matched a Phione, we need to let them know how many Phione need to be caught.
+                    if (species == OWLegendary.Phione)
+                    {
+                        var phione_needed = GetNumberPhioneToCatch(spawnerhash);
+                        if (phione_needed == 0)
+                            Log("This target is available as long as no Phione have been caught.");
+                        else
+                            Log($"This target is available after catching exactly {phione_needed} Phione.");
+                    }
                     return true;
-                break;
+                }
+
+                // Make sure we've seen as many spawners as we were looking for before exiting.
+                if (++spawners_found >= spawners.Count)
+                    break;
             }
             return false;
         }

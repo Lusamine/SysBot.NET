@@ -2,7 +2,6 @@ using SysBot.Base;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
-using static SysBot.Pokemon.EncounterBotOWLCheckRNGLA;
 
 namespace SysBot.Pokemon
 {
@@ -17,6 +16,9 @@ namespace SysBot.Pokemon
 
         [Category(EncounterLA), Description("The number of advances to search for RNG-based seed checks.")]
         public int SearchDepth { get; set; } = 100;
+
+        [Category(EncounterLA), Description("Enable this to check Phione spawners that are exposed after catching at least 1 Phione.")]
+        public bool CheckAllPhioneLayers { get; set; } = true;
 
         [Category(EncounterLA), Description("The style to export the global RNG state.")]
         public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit32;
