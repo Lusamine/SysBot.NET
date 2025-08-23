@@ -27,7 +27,7 @@ namespace SysBot.Pokemon
         private int SpawnCounter;
 
         // Everything this scans for has 3 flawless IVs.
-        private readonly int FlawlessIVs = 3;
+        private int FlawlessIVs = 3;
 
         // Tracks whether this is the first time we are going to an area after a reset.
         bool first_time;
@@ -42,6 +42,7 @@ namespace SysBot.Pokemon
             var spawner = GetLegendarySpawnerHash(species);
             if (species == OWLegendary.Phione)
             {
+                FlawlessIVs = 0; // Phione has no guaranteed flawless IVs.
                 bool manaphy_caught = await CheckManaphyCaught(token).ConfigureAwait(false);
                 int phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
                 bool include_all_layers = Settings.CheckAllPhioneLayers;
@@ -334,6 +335,23 @@ namespace SysBot.Pokemon
             var target_nature = Hub.Config.StopConditions.TargetNature;
             if (target_nature != Nature.Random && nature != (int)target_nature)
                 return false;
+
+            if (species == (int)Species.Phione && Hub.Config.StopConditions.HeightTarget != TargetHeightType.DisableOption)
+            {
+                var height = (int)rng.NextInt(0x81) + (int)rng.NextInt(0x80);
+                var target = Hub.Config.StopConditions.HeightTarget;
+
+                bool heightmatch = target switch
+                {
+                    TargetHeightType.MinOnly => height is 0,
+                    TargetHeightType.MaxOnly => height is 255,
+                    TargetHeightType.MinOrMax => height is 0 or 255,
+                    _ => throw new ArgumentException(nameof(TargetHeightType)),
+                };
+
+                if (!heightmatch)
+                    return false;
+            }
 
             // If we get to here, then everything matches.
             Log("Result found!");
