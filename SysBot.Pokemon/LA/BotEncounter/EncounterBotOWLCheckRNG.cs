@@ -26,8 +26,7 @@ namespace SysBot.Pokemon
         // Tracks how many times we've tried.
         private int SpawnCounter;
 
-        // Everything this scans for has 3 flawless IVs.
-        private int FlawlessIVs = 3;
+        private int FlawlessIVs;
 
         // Tracks whether this is the first time we are going to an area after a reset.
         bool first_time;
@@ -39,13 +38,15 @@ namespace SysBot.Pokemon
             var mode = GetLegendaryMode(species);
             var area = GetLegendaryArea(species);
 
+            FlawlessIVs = species == OWLegendary.Phione ? 0 : 3; // Putting this here allows it to be corrected each run.
+
             var spawner = GetLegendarySpawnerHash(species);
             if (species == OWLegendary.Phione)
             {
-                FlawlessIVs = 0; // Phione has no guaranteed flawless IVs.
-                bool manaphy_caught = await CheckManaphyCaught(token).ConfigureAwait(false);
-                int phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
-                bool include_all_layers = Settings.CheckAllPhioneLayers;
+                var manaphy_caught = await CheckManaphyCaught(token).ConfigureAwait(false);
+                var phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
+                var include_all_layers = Settings.CheckAllPhioneLayers;
+
                 spawner = GetPhioneSpawnerHashes(manaphy_caught, phione_caught, include_all_layers);
                 if (spawner is null || spawner.Count == 0)
                 {
@@ -240,10 +241,12 @@ namespace SysBot.Pokemon
                     if (species == OWLegendary.Phione)
                     {
                         var phione_needed = GetNumberPhioneToCatch(spawnerhash);
+                        var phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
+
                         if (phione_needed == 0)
-                            Log("This target is available as long as no Phione have been caught.");
+                            Log("This target spawner is available as long as no Phione have been caught.");
                         else
-                            Log($"This target is available after catching exactly {phione_needed} Phione.");
+                            Log($" You have caught {phione_caught} Phione. This target spawner is activated after exactly {phione_needed} Phione have been caught.");
                     }
                     return true;
                 }
