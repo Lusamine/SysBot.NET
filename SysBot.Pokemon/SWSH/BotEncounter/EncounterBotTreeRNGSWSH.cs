@@ -196,7 +196,7 @@ namespace SysBot.Pokemon
                 {
                     var specific_personality = 70 + rng.NextInt(28);
                     var ribbon = (RibbonIndex)specific_personality;
-                    return (true, RibbonStrings.GetName($"Ribbon{ribbon}"));
+                    return (true, GameInfo.Strings.Ribbons.GetName($"Ribbon{ribbon}"));
                 }
                 if (uncommon_mark == 0)
                     return (true, "Uncommon Mark");
