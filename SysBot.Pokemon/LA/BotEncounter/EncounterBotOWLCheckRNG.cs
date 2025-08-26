@@ -241,12 +241,17 @@ namespace SysBot.Pokemon
                     if (species == OWLegendary.Phione)
                     {
                         var phione_needed = GetNumberPhioneToCatch(spawnerhash);
-                        var phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
 
                         if (phione_needed == 0)
+                        {
                             Log("This target spawner is available as long as no Phione have been caught.");
+                        }
                         else
-                            Log($" You have caught {phione_caught} Phione. This target spawner is activated after exactly {phione_needed} Phione have been caught.");
+                        {
+                            var phione_caught = await CheckNumberPhioneCaught(token).ConfigureAwait(false);
+                            var havehas = phione_needed == 1 ? "has" : "have";
+                            Log($"You have caught {phione_caught} Phione. This target spawner is activated after exactly {phione_needed} Phione {havehas} been caught.");
+                        }
                     }
                     return true;
                 }
@@ -264,11 +269,15 @@ namespace SysBot.Pokemon
             ulong init = unchecked(seed);  // Generator seed
             Xoroshiro128Plus rng = new(init);
 
-            for (var i = 0; i < Settings.SearchDepth; i++)
+            // We get the seed for cave legendaries after the first advance has already happened, so start at 1.
+            var mode = GetLegendaryMode((OWLegendary)species);
+            var start = mode is LegendResetMode.Wandering ? 0 : 1;
+
+            for (var i = start; i < Settings.SearchDepth; i++)
             {
                 // Group seed generates the generator seed and alpha move seed.
                 var genseed = rng.Next();
-                var alphamoveseed = rng.Next();
+                _ = rng.Next(); // Alpha move seed, not used in this case.
 
                 // Generator seed generates the slot, mon seed, and level.
                 var slotrng = new Xoroshiro128Plus(genseed);
