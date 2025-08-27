@@ -348,9 +348,10 @@ namespace SysBot.Pokemon
             if (target_nature != Nature.Random && nature != (int)target_nature)
                 return false;
 
+            var height = (int)rng.NextInt(0x81) + (int)rng.NextInt(0x80);
+
             if (species == (int)Species.Phione && Hub.Config.StopConditions.HeightTarget != TargetHeightType.DisableOption)
             {
-                var height = (int)rng.NextInt(0x81) + (int)rng.NextInt(0x80);
                 var target = Hub.Config.StopConditions.HeightTarget;
 
                 bool heightmatch = target switch
@@ -370,6 +371,8 @@ namespace SysBot.Pokemon
             Log($"{GameInfo.GetStrings("en").Species[species]}{gender} in {advances} advance(s)!");
             Log($"IVs: {ivstring}, Nature: {GameInfo.GetStrings("en").Natures[nature]}");
             Log($"PID: 0x{pid:x8}, EC: 0x{ec:x8}");
+            if (species == (int)Species.Phione)
+                Log($"Height: {height}");
             return true;
         }
 
