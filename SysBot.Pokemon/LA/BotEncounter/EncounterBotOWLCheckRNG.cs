@@ -221,6 +221,7 @@ namespace SysBot.Pokemon
             // Count backwards because our legendary is closer to the end.
             // It's faster to read this way than to dump the entire block.
             var spawners_found = 0;
+            var result_found = false; // In case of multiple hits for Phione.
             for (ulong i = start; i >= 0; i--)
             {
                 byte[] data = await SwitchConnection.ReadBytesAbsoluteAsync(SpawnersOffset + (i * 0x440) + 0x410, 8, token).ConfigureAwait(false);
@@ -251,14 +252,14 @@ namespace SysBot.Pokemon
                             Log($"You have caught {phione_caught} Phione. This target spawner is activated after exactly {phione_needed} Phione {havehas} been caught.");
                         }
                     }
-                    return true;
+                    result_found = true;
                 }
 
                 // Make sure we've seen as many spawners as we were looking for before exiting.
                 if (++spawners_found >= spawners.Count)
                     break;
             }
-            return false;
+            return result_found;
         }
 
         // Generates the Pokémon so we can see if it matches the specifications.
