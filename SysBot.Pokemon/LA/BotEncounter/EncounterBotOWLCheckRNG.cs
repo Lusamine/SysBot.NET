@@ -268,11 +268,7 @@ namespace SysBot.Pokemon
             ulong init = unchecked(seed);  // Generator seed
             Xoroshiro128Plus rng = new(init);
 
-            // We get the seed for cave legendaries after the first advance has already happened, so start at 1.
-            var mode = GetLegendaryMode((OWLegendary)species);
-            var start = mode is LegendResetMode.Wandering ? 0 : 1;
-
-            for (var i = start; i < Settings.SearchDepth; i++)
+            for (var i = 1; i < Settings.SearchDepth; i++)
             {
                 // Group seed generates the generator seed and alpha move seed.
                 var genseed = rng.Next();
