@@ -41,14 +41,4 @@ public enum EncounterMode
     /// Bot checks the Route 5 Eldegoss static encounter
     /// </summary>
     Eldegoss,
-
-    /// <summary>
-    /// Bot will soft reset Legendary Birds, Mewtwo, or Snorlax
-    /// </summary>
-    StaticLGPE,
-
-    /// <summary>
-    /// Bot resets a Go Park encounter.
-    /// </summary>
-    GOParkLGPE,
 }
