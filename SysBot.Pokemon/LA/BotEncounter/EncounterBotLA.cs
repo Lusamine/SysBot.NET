@@ -9,7 +9,7 @@ namespace SysBot.Pokemon
     public abstract class EncounterBotLA : PokeRoutineExecutor8LA, IEncounterBot
     {
         protected readonly PokeTradeHub<PA8> Hub;
-        private readonly EncounterRNGBSSettings Settings;
+        private readonly EncounterSettingsLA Settings;
         public readonly int[] DesiredMinIVs;
         public readonly int[] DesiredMaxIVs;
         public ICountSettings Counts => Settings;
@@ -17,13 +17,13 @@ namespace SysBot.Pokemon
         protected EncounterBotLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : base(cfg)
         {
             Hub = hub;
-            Settings = Hub.Config.EncounterRNGBS;
+            Settings = Hub.Config.EncounterLA;
             StopConditionSettings.InitializeTargetIVs(Hub.Config, out DesiredMinIVs, out DesiredMaxIVs);
         }
 
         public override async Task MainLoop(CancellationToken token)
         {
-            var settings = Hub.Config.EncounterRNGBS;
+            var settings = Hub.Config.EncounterLA;
             Log("Identifying trainer data of the host console.");
             var sav = await IdentifyTrainer(token).ConfigureAwait(false);
             await InitializeHardware(settings, token).ConfigureAwait(false);

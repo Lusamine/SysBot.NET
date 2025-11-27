@@ -47,11 +47,11 @@ public sealed class PokeTradeHubConfig : BaseConfig
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public EncounterRNGBSSettings EncounterRNGBS { get; set; } = new();
+    public EncounterSettingsRNGBS EncounterRNGBS { get; set; } = new();
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public EncounterLASettings EncounterLA { get; set; } = new();
+    public EncounterSettingsLA EncounterLA { get; set; } = new();
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -59,7 +59,11 @@ public sealed class PokeTradeHubConfig : BaseConfig
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public EncounterLGPESettings EncounterLGPE { get; set; } = new();
+    public EncounterSettingsLGPE EncounterLGPE { get; set; } = new();
+
+    [Category(BotEncounter)]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public EncounterSettingsLZA EncounterLZA { get; set; } = new();
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]

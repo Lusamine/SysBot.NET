@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace SysBot.Pokemon
 {
-    public class EncounterRNGBSSettings : IBotStateSettings, ICountSettings
+    public class EncounterSettingsRNGBS : IBotStateSettings, ICountSettings
     {
         private const string Counts = nameof(Counts);
         private const string EncounterRNGBS = nameof(EncounterRNGBS);

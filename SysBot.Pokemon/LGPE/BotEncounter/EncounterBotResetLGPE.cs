@@ -33,7 +33,7 @@ namespace SysBot.Pokemon
 
                 pkprev = pknew;
 
-                if (Hub.Config.EncounterLGPE.EncounteringType is EncounterMode.GOParkLGPE)
+                if (Hub.Config.EncounterLGPE.EncounteringType is EncounterModeLGPE.GOParkLGPE)
                 {
                     // GO Park encounter takes a while to load, and if we check too soon, we're still on the overworld.
                     await Task.Delay(6_000, token).ConfigureAwait(false);
@@ -49,11 +49,11 @@ namespace SysBot.Pokemon
             }
         }
 
-        private async Task DoExtraCommands(EncounterMode mode, CancellationToken token)
+        private async Task DoExtraCommands(EncounterModeLGPE mode, CancellationToken token)
         {
             switch (mode)
             {
-                case EncounterMode.StaticLGPE:
+                case EncounterModeLGPE.StaticLGPE:
                     for (int i = 0; i < 2; i++)
                         await Click(A, 0_200, token).ConfigureAwait(false);
                     await Click(PLUS, 0_200, token).ConfigureAwait(false);
@@ -65,12 +65,12 @@ namespace SysBot.Pokemon
             }
         }
 
-        private static uint GetResetOffset(EncounterMode mode)
+        private static uint GetResetOffset(EncounterModeLGPE mode)
         {
             return mode switch
             {
-                EncounterMode.GOParkLGPE => LGPEGoParkOffset,
-                EncounterMode.StaticLGPE => LGPEStaticOffset,
+                EncounterModeLGPE.GOParkLGPE => LGPEGoParkOffset,
+                EncounterModeLGPE.StaticLGPE => LGPEStaticOffset,
                 _ => LGPEWildOffset,
             };
         }

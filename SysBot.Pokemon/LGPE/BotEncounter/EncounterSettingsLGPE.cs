@@ -6,14 +6,14 @@ using System.Threading;
 
 namespace SysBot.Pokemon
 {
-    public class EncounterLGPESettings : IBotStateSettings, ICountSettings
+    public class EncounterSettingsLGPE : IBotStateSettings, ICountSettings
     {
         private const string Counts = nameof(Counts);
         private const string EncounterLGPE = nameof(EncounterLGPE);
         public override string ToString() => "Encounter LGPE Bot Settings";
 
-        [Category(EncounterLGPE), Description("The method by which the bot will encounter Pokémon. Use only \"LGPE\" options.")]
-        public EncounterMode EncounteringType { get; set; } = EncounterMode.StaticLGPE;
+        [Category(EncounterLGPE), Description("The method by which the bot will encounter Pokémon.")]
+        public EncounterModeLGPE EncounteringType { get; set; } = EncounterModeLGPE.StaticLGPE;
 
         [Category(EncounterLGPE), Description("When enabled, the bot will continue after finding a suitable match.")]
         public ContinueAfterMatch ContinueAfterMatch { get; set; } = ContinueAfterMatch.StopExit;
