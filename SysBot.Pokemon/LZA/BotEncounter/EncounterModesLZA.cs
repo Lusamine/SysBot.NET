@@ -3,6 +3,11 @@ namespace SysBot.Pokemon;
 public enum EncounterModeLZA
 {
     /// <summary>
+    /// Bot will repeatedly fly to Wild Zone 5's entrance to reset Froakie, alpha Ampharos, Flaaffy, Venipede, Falinks
+    /// </summary>
+    WildZone5LZA,
+
+    /// <summary>
     /// Bot will repeatedly fly to Wild Zone 10's entrance to reset Slowpoke and Carvanha
     /// </summary>
     WildZone10LZA,
