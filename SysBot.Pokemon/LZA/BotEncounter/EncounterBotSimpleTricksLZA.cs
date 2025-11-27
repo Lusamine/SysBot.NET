@@ -14,7 +14,21 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
 
         // Perform the action indefinitely based on the EncounteringType.
         while (!token.IsCancellationRequested)
+        {
+            Log("Checking if we're on the overworld...");
+            while (!await IsOnOverworld(token).ConfigureAwait(false))
+                await Click(B, 0_200, token).ConfigureAwait(false);
+            await Task.Delay(1_200, token).ConfigureAwait(false);
+
+            Log("Opening the map.");
+            await Click(PLUS, 0_800, token).ConfigureAwait(false);
+
             await PerformMacro(Hub.Config.EncounterLZA.EncounteringType, token).ConfigureAwait(false);
+
+            await ResetStick(token).ConfigureAwait(false);
+            for (var i = 0; i < 5; i++)
+                await Click(A, 0_200, token).ConfigureAwait(false);
+        }
     }
 
     private async Task PerformMacro(EncounterModeLZA mode, CancellationToken token)
@@ -22,32 +36,16 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
         // Expect them to be the most zoomed out on the map.
         switch (mode)
         {
-            case EncounterModeLZA.WildZone10LZA:
-                Log("Checking if we're on the overworld...");
-                while (!await IsOnOverworld(token).ConfigureAwait(false))
-                    await Click(B, 0_200, token).ConfigureAwait(false);
-                await Task.Delay(1_200, token).ConfigureAwait(false);
+            case EncounterModeLZA.WildZone5LZA:
+                await SetStick(LEFT, 0_300, 10000, 0_300, token).ConfigureAwait(false);
+                break;
 
-                Log("Opening the map.");
-                await Click(PLUS, 0_800, token).ConfigureAwait(false);
+            case EncounterModeLZA.WildZone10LZA:
                 await SetStick(LEFT, 10000, 1000, 0_400, token).ConfigureAwait(false);
-                await ResetStick(token).ConfigureAwait(false);
-                for (var i = 0; i < 5; i++)
-                    await Click(A, 0_200, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone16LZA:
-                Log("Checking if we're on the overworld...");
-                while (!await IsOnOverworld(token).ConfigureAwait(false))
-                    await Click(B, 0_200, token).ConfigureAwait(false);
-                await Task.Delay(1_000, token).ConfigureAwait(false);
-                await Click(Y, 1_000, token).ConfigureAwait(false);
-                Log("Opening the map.");
-                await Click(PLUS, 0_800, token).ConfigureAwait(false);
                 await SetStick(LEFT, 10000, 10000, 0_300, token).ConfigureAwait(false);
-                await ResetStick(token).ConfigureAwait(false);
-                for (var i = 0; i < 5; i++)
-                    await Click(A, 0_200, token).ConfigureAwait(false);
                 break;
 
                 // Feel free to submit more simple tricks here!
