@@ -119,6 +119,12 @@ public enum PokeRoutineType
 
     /// <summary> Exports overworld blocks named as current coordinates. </summary>
     EncBotOWDumpSV = 10_008,
+
+    /// <summary> Endlessly kills time at a bench. </summary>
+    EncBotBenchLZA = 10_009,
+
+    /// <summary> Assortment of simple macros for flying into Wild Zones. </summary>
+    EncBotSimpleTricksLZA = 10_010,
 }
 
 public static class PokeRoutineTypeExtensions
