@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ namespace SysBot.Pokemon
     public abstract class EncounterBotBS : PokeRoutineExecutor8BS, IEncounterBot
     {
         protected readonly PokeTradeHub<PB8> Hub;
-        private readonly EncounterRNGBSSettings Settings;
+        private readonly EncounterSettingsRNGBS Settings;
         public ICountSettings Counts => Settings;
 
         protected EncounterBotBS(PokeBotState cfg, PokeTradeHub<PB8> hub) : base(cfg)

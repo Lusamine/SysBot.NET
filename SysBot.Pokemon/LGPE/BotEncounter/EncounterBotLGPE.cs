@@ -12,7 +12,7 @@ namespace SysBot.Pokemon
     {
         protected readonly PokeTradeHub<PB7> Hub;
         private readonly IDumper DumpSetting;
-        private readonly EncounterLGPESettings Settings;
+        private readonly EncounterSettingsLGPE Settings;
         private readonly int[] DesiredMinIVs;
         private readonly int[] DesiredMaxIVs;
         public ICountSettings Counts => Settings;

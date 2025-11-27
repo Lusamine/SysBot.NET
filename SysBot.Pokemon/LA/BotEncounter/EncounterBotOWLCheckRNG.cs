@@ -11,7 +11,7 @@ namespace SysBot.Pokemon
 {
     public sealed class EncounterBotOWLCheckRNGLA : EncounterBotLA
     {
-        private readonly EncounterLASettings Settings;
+        private readonly EncounterSettingsLA Settings;
 
         public EncounterBotOWLCheckRNGLA(PokeBotState cfg, PokeTradeHub<PA8> hub) : base(cfg, hub)
         {
