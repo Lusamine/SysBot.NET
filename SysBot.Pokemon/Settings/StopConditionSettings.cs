@@ -200,7 +200,16 @@ public class StopConditionSettings
 
         // Since we can match on Min/Max Height for transfer to future games, display it.
         if (pk is IScaledSize p)
-            set += $"\nHeight: {p.HeightScalar}";
+        {
+            if (p is PK8)
+            {
+                set += $"\nHeight: {p.HeightScalar}";
+            }
+            else if (p is PA9 pa9)
+            {
+                set += $"\nScale: {pa9.Scale}";
+            }
+        }
 
         // Add the mark if it has one.
         if (pk is IRibbonIndex r)
