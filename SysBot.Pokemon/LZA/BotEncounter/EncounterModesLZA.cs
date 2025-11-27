@@ -16,4 +16,9 @@ public enum EncounterModeLZA
     /// Bot will repeatedly fly to Wild Zone 16's entrance to reset Falinks and Froakie
     /// </summary>
     WildZone16LZA,
+
+    /// <summary>
+    /// For use when raining. Bot will repeatedly enter the sewers to reset Goomy on the docks
+    /// </summary>
+    SewersRainLZA,
 }
