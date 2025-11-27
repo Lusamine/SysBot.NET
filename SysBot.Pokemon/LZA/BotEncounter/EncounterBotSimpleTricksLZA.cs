@@ -1,0 +1,42 @@
+using PKHeX.Core;
+using System.Threading;
+using System.Threading.Tasks;
+using static SysBot.Base.SwitchButton;
+using static SysBot.Base.SwitchStick;
+
+namespace SysBot.Pokemon;
+
+public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHub<PA9> Hub) : EncounterBotLZA(Config, Hub)
+{
+    protected override async Task EncounterLoop(SAV9ZA sav, CancellationToken token)
+    {
+        Log("Starting simple automation routine...");
+
+        // Perform the action indefinitely based on the EncounteringType.
+        while (!token.IsCancellationRequested)
+            await PerformMacro(Hub.Config.EncounterLZA.EncounteringType, token).ConfigureAwait(false);
+    }
+
+    private async Task PerformMacro(EncounterModeLZA mode, CancellationToken token)
+    {
+        switch (mode)
+        {
+            case EncounterModeLZA.WildZone10LZA:
+                // Expect them to be the most zoomed out on the map.
+                Log("Checking if we're on the overworld...");
+                while (!await IsOnOverworld(token).ConfigureAwait(false))
+                    await Click(B, 0_200, token).ConfigureAwait(false);
+                await Task.Delay(1_200, token).ConfigureAwait(false);
+
+                Log("Opening the map.");
+                await Click(PLUS, 0_800, token).ConfigureAwait(false);
+                await SetStick(LEFT, 10000, 1000, 0_400, token).ConfigureAwait(false);
+                await ResetStick(token).ConfigureAwait(false);
+                for (var i = 0; i < 5; i++)
+                    await Click(A, 0_200, token).ConfigureAwait(false);
+                break;
+
+            // Feel free to submit more simple tricks here!
+        }
+    }
+}
