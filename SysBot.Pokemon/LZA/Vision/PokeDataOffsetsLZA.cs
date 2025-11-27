@@ -35,5 +35,8 @@ public class PokeDataOffsetsLZA
     public const uint MenuOffset      = 0x612DA80;
     public const uint ConnectedOffset = 0x6133458;
 
+    public const uint InBattleOffset   = 0x5F0F640;
+    public const uint InWildZoneOffset = 0x5F35DD8;
+
     public const int BoxFormatSlotSize = 0x148;
 }

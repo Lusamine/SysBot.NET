@@ -128,6 +128,9 @@ public enum PokeRoutineType
 
     /// <summary> Presses A. </summary>
     EncBotASpamLZA = 10_011,
+
+    /// <summary> Cycles the Pumpkaboo in Wild Zone 15. </summary>
+    EncBotPumpkabooLZA = 10_012,
 }
 
 public static class PokeRoutineTypeExtensions

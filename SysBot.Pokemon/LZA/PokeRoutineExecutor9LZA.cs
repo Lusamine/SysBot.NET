@@ -265,4 +265,10 @@ public abstract class PokeRoutineExecutor9LZA(PokeBotState Config) : PokeRoutine
         LinkTrade = 3,
         InBox = 4,
     }
+
+    public async Task<bool> IsInBattle(CancellationToken token)
+    {
+        var data = await SwitchConnection.ReadBytesMainAsync(InBattleOffset, 1, token).ConfigureAwait(false);
+        return data[0] == 1;
+    }
 }
