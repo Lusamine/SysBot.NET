@@ -20,9 +20,6 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
                 await Click(B, 0_200, token).ConfigureAwait(false);
             await Task.Delay(1_200, token).ConfigureAwait(false);
 
-            Log("Opening the map.");
-            await Click(PLUS, 0_800, token).ConfigureAwait(false);
-
             await PerformMacro(Hub.Config.EncounterLZA.EncounteringType, token).ConfigureAwait(false);
 
             await ResetStick(token).ConfigureAwait(false);
@@ -37,15 +34,26 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
         switch (mode)
         {
             case EncounterModeLZA.WildZone5LZA:
+                Log("Opening the map.");
+                await Click(PLUS, 0_800, token).ConfigureAwait(false);
                 await SetStick(LEFT, 0_300, 10000, 0_300, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone10LZA:
+                Log("Opening the map.");
+                await Click(PLUS, 0_800, token).ConfigureAwait(false);
                 await SetStick(LEFT, 10000, 1000, 0_400, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone16LZA:
+                Log("Opening the map.");
+                await Click(PLUS, 0_800, token).ConfigureAwait(false);
                 await SetStick(LEFT, 10000, 10000, 0_300, token).ConfigureAwait(false);
+                break;
+
+            case EncounterModeLZA.SewersRainLZA:
+
+                await SetStick(LEFT, 0, -32768, 1_000, token).ConfigureAwait(false);
                 break;
 
                 // Feel free to submit more simple tricks here!

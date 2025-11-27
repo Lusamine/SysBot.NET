@@ -125,6 +125,9 @@ public enum PokeRoutineType
 
     /// <summary> Assortment of simple macros for flying into Wild Zones. </summary>
     EncBotSimpleTricksLZA = 10_010,
+
+    /// <summary> Presses A. </summary>
+    EncBotASpamLZA = 10_011,
 }
 
 public static class PokeRoutineTypeExtensions
