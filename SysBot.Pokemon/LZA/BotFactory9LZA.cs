@@ -13,6 +13,10 @@ public sealed class BotFactory9LZA : BotFactory<PA9>
             or PokeRoutineType.Dump
             => new PokeTradeBotLZA(Hub, cfg),
 
+        PokeRoutineType.EncBotSimpleTricksLZA => new EncounterBotSimpleTricksLZA(cfg, Hub),
+        PokeRoutineType.EncBotBenchLZA => new EncounterBotBenchLZA(cfg, Hub),
+        PokeRoutineType.EncBotReset => new EncounterBotResetLZA(cfg, Hub),
+
         PokeRoutineType.RemoteControl => new RemoteControlBotLZA(cfg),
 
         _ => throw new ArgumentException(nameof(cfg.NextRoutineType)),
@@ -25,6 +29,10 @@ public sealed class BotFactory9LZA : BotFactory<PA9>
             or PokeRoutineType.Clone
             or PokeRoutineType.Dump
             => true,
+
+        PokeRoutineType.EncBotSimpleTricksLZA => true,
+        PokeRoutineType.EncBotBenchLZA => true,
+        PokeRoutineType.EncBotReset => true,
 
         PokeRoutineType.RemoteControl => true,
 
