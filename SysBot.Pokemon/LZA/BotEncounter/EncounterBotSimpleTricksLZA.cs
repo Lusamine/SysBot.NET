@@ -62,6 +62,11 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
                 await SetStick(LEFT, 0, -32768, 1_000, token).ConfigureAwait(false);
                 break;
 
+            case EncounterModeLZA.BattleZone17LZA:
+                await OpenMap(token).ConfigureAwait(false);
+                await SetStick(LEFT, 10_000, 13_000, 0_400, token).ConfigureAwait(false);
+                break;
+
                 // Feel free to submit more simple tricks here!
         }
     }
