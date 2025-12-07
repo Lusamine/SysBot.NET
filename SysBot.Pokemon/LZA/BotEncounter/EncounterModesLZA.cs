@@ -31,4 +31,9 @@ public enum EncounterModeLZA
     /// For use when raining. Bot will repeatedly enter the sewers to reset Goomy on the docks
     /// </summary>
     SewersRainLZA,
+
+    /// <summary>
+    /// Bot will repeatedly fly to the Battle Zone by the top of Wild Zone 17 to reset Skarmory and Pyroar.
+    /// </summary>
+    BattleZone17LZA,
 }
