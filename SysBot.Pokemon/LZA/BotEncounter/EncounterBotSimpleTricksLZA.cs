@@ -33,24 +33,29 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
         // Expect them to be the most zoomed out on the map.
         switch (mode)
         {
+            case EncounterModeLZA.WildZone2LZA:
+                await OpenMap(token).ConfigureAwait(false);
+                await SetStick(LEFT, -1_000, 10_000, 0_300, token).ConfigureAwait(false);
+                break;
+
             case EncounterModeLZA.WildZone5LZA:
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, 0_300, 10000, 0_300, token).ConfigureAwait(false);
+                await SetStick(LEFT, 0_300, 10_000, 0_300, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone10LZA:
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, 10000, 1000, 0_400, token).ConfigureAwait(false);
+                await SetStick(LEFT, 10_000, 1_000, 0_400, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone16LZA:
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, 10000, 10000, 0_300, token).ConfigureAwait(false);
+                await SetStick(LEFT, 10_000, 10_000, 0_300, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone19LZA:
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, -8000, -10000, 0_300, token).ConfigureAwait(false);
+                await SetStick(LEFT, -8_000, -10_000, 0_300, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.SewersRainLZA:
