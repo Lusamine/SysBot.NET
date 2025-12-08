@@ -13,6 +13,11 @@ public enum EncounterModeLZA
     WildZone5LZA,
 
     /// <summary>
+    /// Bot will repeatedly fly to Wild Zone 8's entrance to Numel line, Gible, Sandile line, Machop, Drilbur
+    /// </summary>
+    WildZone8LZA,
+
+    /// <summary>
     /// Bot will repeatedly fly to Wild Zone 10's entrance to reset Slowpoke and Carvanha
     /// </summary>
     WildZone10LZA,

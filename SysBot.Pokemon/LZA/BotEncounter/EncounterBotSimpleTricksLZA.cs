@@ -43,12 +43,19 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
                 await SetStick(LEFT, 0_300, 10_000, 0_300, token).ConfigureAwait(false);
                 break;
 
+            case EncounterModeLZA.WildZone8LZA:
+                await Click(Y, 1_000, token).ConfigureAwait(false);
+                await OpenMap(token).ConfigureAwait(false);
+                await SetStick(LEFT, -10_000, -7_000, 0_300, token).ConfigureAwait(false);
+                break;
+
             case EncounterModeLZA.WildZone10LZA:
                 await OpenMap(token).ConfigureAwait(false);
                 await SetStick(LEFT, 10_000, 1_000, 0_400, token).ConfigureAwait(false);
                 break;
 
             case EncounterModeLZA.WildZone16LZA:
+                await Click(Y, 1_000, token).ConfigureAwait(false);
                 await OpenMap(token).ConfigureAwait(false);
                 await SetStick(LEFT, 10_000, 10_000, 0_300, token).ConfigureAwait(false);
                 break;
