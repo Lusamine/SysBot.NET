@@ -23,6 +23,11 @@ public enum EncounterModeLZA
     WildZone10LZA,
 
     /// <summary>
+    /// Bot will repeatedly fly to Wild Zone 14's entrance to reset Drilbur, Onix, Emolga, Aron, Lairon
+    /// </summary>
+    WildZone14LZA,
+
+    /// <summary>
     /// Bot will repeatedly fly to Wild Zone 16's entrance to reset Falinks and Froakie
     /// </summary>
     WildZone16LZA,
