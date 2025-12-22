@@ -8,6 +8,11 @@ public enum EncounterModeLZA
     WildZone2LZA,
 
     /// <summary>
+    /// Bot will repeatedly fly to Wild Zone 3's entrance to reset Pikachu and Skiddo
+    /// </summary>
+    WildZone3LZA,
+
+    /// <summary>
     /// Bot will repeatedly fly to Wild Zone 5's entrance to reset Froakie, alpha Ampharos, Flaaffy, Venipede, Falinks
     /// </summary>
     WildZone5LZA,
