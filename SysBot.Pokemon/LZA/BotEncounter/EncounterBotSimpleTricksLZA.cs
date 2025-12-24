@@ -33,6 +33,10 @@ public sealed class EncounterBotSimpleTricksLZA(PokeBotState Config, PokeTradeHu
         // Expect them to be the most zoomed out on the map.
         switch (mode)
         {
+            case EncounterModeLZA.HyperspaceFastTravelLZA:
+                await OpenMap(token).ConfigureAwait(false);
+                break;
+
             case EncounterModeLZA.WildZone2LZA:
                 await OpenMap(token).ConfigureAwait(false);
                 await SetStick(LEFT, -1_000, 10_000, 0_300, token).ConfigureAwait(false);
