@@ -3,6 +3,11 @@ namespace SysBot.Pokemon;
 public enum EncounterModeLZA
 {
     /// <summary>
+    /// Bot will repeatedly open the map and press A to fly back to the entrance.
+    /// </summary>
+    HyperspaceFastTravelLZA,
+
+    /// <summary>
     /// Bot will repeatedly fly to Wild Zone 2's entrance to reset Magikarp (daytime), Staryu (nighttime), Budew, Binacle.
     /// </summary>
     WildZone2LZA,
