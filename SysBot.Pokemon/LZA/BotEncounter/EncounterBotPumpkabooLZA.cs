@@ -8,11 +8,12 @@ namespace SysBot.Pokemon;
 
 public sealed class EncounterBotPumpkabooLZA(PokeBotState Config, PokeTradeHub<PA9> Hub) : EncounterBotLZA(Config, Hub)
 {
+    int counter = 1;
+
     protected override async Task EncounterLoop(SAV9ZA sav, CancellationToken token)
     {
         Log("Starting Pumpkaboo routine...");
 
-        var counter = 1;
         while (!token.IsCancellationRequested)
         {
             Log($"Attempt #{counter}");
@@ -25,26 +26,27 @@ public sealed class EncounterBotPumpkabooLZA(PokeBotState Config, PokeTradeHub<P
             if (await IsInBattle(token).ConfigureAwait(false))
             {
                 Log("Escaping from aggressive Pokémon...");
-                await SetStick(LEFT, 0, -10_000, 0_300, token).ConfigureAwait(false);
+                await SetStick(LEFT, 0, -30_000, 0_100, token).ConfigureAwait(false);
                 await ResetStick(token).ConfigureAwait(false);
+                await Click(LSTICK, 0_100, token).ConfigureAwait(false);
 
-                for (var i = 0; i < 3; i++)
-                {
-                    // Double click to make sure it registers.
+                // Mash Y to tumble 3 times.
+                for (var i = 0; i < 20; i++)
                     await Click(Y, 0_100, token).ConfigureAwait(false);
-                    await Click(Y, 1_000, token).ConfigureAwait(false);
-                }
-                await Click(A, 0_200, token).ConfigureAwait(false);
-                await Click(A, 0_800, token).ConfigureAwait(false);
 
+                // Mash A to get out the door.
+                for (var i = 0; i < 10; i++)
+                    await Click(A, 0_100, token).ConfigureAwait(false);
+
+                // Wait until we have control again.
                 while (!await IsOnOverworld(token).ConfigureAwait(false))
                     await Task.Delay(0_100, token).ConfigureAwait(false);
 
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, 15_000, -18_000, 0_100, token).ConfigureAwait(false);
+                await SetStick(LEFT, 11_000, -19_000, 0_100, token).ConfigureAwait(false);
                 await ResetStick(token).ConfigureAwait(false);
 
-                if (counter++ % 320 == 0) // Approx number that can be done at night, which is shorter than day.
+                if (counter++ % 300 == 0) // Approx number that can be done at night, which is shorter than day.
                 {
                     await ResetTimeOfDay(token).ConfigureAwait(false);
                     continue;
@@ -53,10 +55,10 @@ public sealed class EncounterBotPumpkabooLZA(PokeBotState Config, PokeTradeHub<P
             else
             {
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, -20_000, 4_000, 0_150, token).ConfigureAwait(false);
+                await SetStick(LEFT, -25_000, 8_000, 0_070, token).ConfigureAwait(false);
                 await ResetStick(token).ConfigureAwait(false);
 
-                if (counter++ % 320 == 0) // Approx number that can be done at night, which is shorter than day.
+                if (counter++ % 300 == 0) // Approx number that can be done at night, which is shorter than day.
                 {
                     await ResetTimeOfDay(token).ConfigureAwait(false);
                     continue;
@@ -89,8 +91,8 @@ public sealed class EncounterBotPumpkabooLZA(PokeBotState Config, PokeTradeHub<P
         await Task.Delay(1_200, token).ConfigureAwait(false);
 
         // Walk up to the bench
-        await SetStick(LEFT, -32768, 10_000, 0_100, token).ConfigureAwait(false);
-        for (var i = 0; i < 15; i++)
+        await SetStick(LEFT, -32768, 12_000, 0_150, token).ConfigureAwait(false);
+        for (var i = 0; i < 30; i++)
             await Click(A, 0_200, token).ConfigureAwait(false);
         await ResetStick(token).ConfigureAwait(false);
         while (!await IsOnOverworld(token).ConfigureAwait(false))
@@ -98,7 +100,7 @@ public sealed class EncounterBotPumpkabooLZA(PokeBotState Config, PokeTradeHub<P
 
         // Click the bench again to flip the time back
         await SetStick(LEFT, 0, -32768, 0_300, token).ConfigureAwait(false);
-        for (var i = 0; i < 15; i++)
+        for (var i = 0; i < 30; i++)
             await Click(A, 0_200, token).ConfigureAwait(false);
         await ResetStick(token).ConfigureAwait(false);
         while (!await IsOnOverworld(token).ConfigureAwait(false))
