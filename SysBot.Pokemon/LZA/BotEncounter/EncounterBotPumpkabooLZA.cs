@@ -43,7 +43,7 @@ public sealed class EncounterBotPumpkabooLZA(PokeBotState Config, PokeTradeHub<P
                     await Task.Delay(0_100, token).ConfigureAwait(false);
 
                 await OpenMap(token).ConfigureAwait(false);
-                await SetStick(LEFT, 11_000, -19_000, 0_100, token).ConfigureAwait(false);
+                await SetStick(LEFT, 11_000, -20_000, 0_080, token).ConfigureAwait(false);
                 await ResetStick(token).ConfigureAwait(false);
 
                 if (counter++ % 300 == 0) // Approx number that can be done at night, which is shorter than day.
