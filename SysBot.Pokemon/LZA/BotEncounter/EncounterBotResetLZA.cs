@@ -30,7 +30,7 @@ namespace SysBot.Pokemon
                         break;
                 } while (pknew is null || pknew.Species == 0);
 
-                /// Check for a match
+                // Check for a match
                 if (pknew is not null && await HandleEncounter(pknew, token).ConfigureAwait(false))
                     return;
 

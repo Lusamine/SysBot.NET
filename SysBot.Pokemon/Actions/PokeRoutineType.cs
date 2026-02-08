@@ -131,6 +131,9 @@ public enum PokeRoutineType
 
     /// <summary> Cycles the Pumpkaboo in Wild Zone 15. </summary>
     EncBotPumpkabooLZA = 10_012,
+
+    /// <summary> Walk cycle for Virizion Special Scan. </summary>
+    EncBotVirizionLZA = 10_013,
 }
 
 public static class PokeRoutineTypeExtensions
