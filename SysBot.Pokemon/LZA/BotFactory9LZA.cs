@@ -18,6 +18,7 @@ public sealed class BotFactory9LZA : BotFactory<PA9>
         PokeRoutineType.EncBotReset => new EncounterBotResetLZA(cfg, Hub),
         PokeRoutineType.EncBotASpamLZA => new EncounterBotASpamLZA(cfg, Hub),
         PokeRoutineType.EncBotPumpkabooLZA => new EncounterBotPumpkabooLZA(cfg, Hub),
+        PokeRoutineType.EncBotVirizionLZA => new EncounterBotVirizionLZA(cfg, Hub),
 
         PokeRoutineType.RemoteControl => new RemoteControlBotLZA(cfg),
 
@@ -37,6 +38,7 @@ public sealed class BotFactory9LZA : BotFactory<PA9>
         PokeRoutineType.EncBotReset => true,
         PokeRoutineType.EncBotASpamLZA => true,
         PokeRoutineType.EncBotPumpkabooLZA => true,
+        PokeRoutineType.EncBotVirizionLZA => true,
 
         PokeRoutineType.RemoteControl => true,
 
