@@ -108,10 +108,11 @@ namespace SysBot.Pokemon
 
         private string IncrementAndGetDumpFolder(PA9 pk)
         {
-            if (pk.Species is (int)Species.Tyrunt or (int)Species.Amaura)
+            var legendary = SpeciesCategory.IsLegendary(pk.Species) || SpeciesCategory.IsMythical(pk.Species) || SpeciesCategory.IsSubLegendary(pk.Species);
+            if (legendary)
             {
-                Settings.AddCompletedFossils();
-                return "fossil";
+                Settings.AddCompletedLegends();
+                return "legends";
             }
 
             Settings.AddCompletedEncounters();
