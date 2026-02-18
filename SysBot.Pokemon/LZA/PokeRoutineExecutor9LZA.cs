@@ -265,4 +265,26 @@ public abstract class PokeRoutineExecutor9LZA(PokeBotState Config) : PokeRoutine
         LinkTrade = 3,
         InBox = 4,
     }
+
+    // Used for manually following a pointer, in case ValidatePointerAll is insufficient for some reason.
+    // Returns 0 on failure (if a read is invalid), otherwise the final address.
+    public async Task<ulong> FollowPointer(IReadOnlyList<long> jumps, CancellationToken token)
+    {
+        // The first jump is the base address, so read it with ReadBytesMainAsync.
+        var (success, address) = await SwitchConnection.TryReadMain<ulong>((ulong)jumps[0], token).ConfigureAwait(false);
+        if (!success || address == 0)
+            return 0;
+
+        for (int i = 1; i < jumps.Count - 1; i++)
+        {
+            var next = unchecked(address + (ulong)jumps[i]);
+            // Subsequent jumps need to be read with ReadBytesAbsoluteAsync.
+            (success, address) = await SwitchConnection.TryReadAbsolute<ulong>(next, token).ConfigureAwait(false);
+            if (!success || address == 0)
+                return 0;
+        }
+
+        // The last jump simply needs to be added to the result.
+        return unchecked(address + (ulong)jumps[jumps.Count - 1]);
+    }
 }
