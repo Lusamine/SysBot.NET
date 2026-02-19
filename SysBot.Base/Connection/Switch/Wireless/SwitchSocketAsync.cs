@@ -93,7 +93,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"ReadBytesFromCmdAsync failed: {ex.Message}");
+            Log($"{nameof(ReadBytesFromCmdAsync)} failed: {ex.Message}");
             return [];
         }
     }
@@ -134,7 +134,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             byte[] baseBytes = await ReadBytesFromCmdAsync(SwitchCommand.GetMainNsoBase(), sizeof(ulong), token).ConfigureAwait(false);
             if (baseBytes.Length < sizeof(ulong))
             {
-                Log("GetMainNsoBase: Invalid response length");
+                Log($"{nameof(GetMainNsoBaseAsync)}: Invalid response length");
                 return 0;
             }
             Array.Reverse(baseBytes, 0, sizeof(ulong));
@@ -142,7 +142,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"GetMainNsoBase failed: {ex.Message}");
+            Log($"{nameof(GetMainNsoBaseAsync)} failed: {ex.Message}");
             return 0;
         }
     }
@@ -154,7 +154,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var baseBytes = await ReadBytesFromCmdAsync(SwitchCommand.GetHeapBase(), sizeof(ulong), token).ConfigureAwait(false);
             if (baseBytes.Length < sizeof(ulong))
             {
-                Log("GetHeapBase: Invalid response length");
+                Log($"{nameof(GetHeapBaseAsync)}: Invalid response length");
                 return 0;
             }
             Array.Reverse(baseBytes, 0, sizeof(ulong));
@@ -162,7 +162,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"GetHeapBase failed: {ex.Message}");
+            Log($"{nameof(GetHeapBaseAsync)} failed: {ex.Message}");
             return 0;
         }
     }
@@ -174,14 +174,14 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var bytes = await ReadRaw(SwitchCommand.GetTitleID(), 17, token).ConfigureAwait(false);
             if (bytes.Length == 0)
             {
-                Log("GetTitleID: Invalid response");
+                Log($"{nameof(GetTitleID)}: Invalid response");
                 return string.Empty;
             }
             return Encoding.ASCII.GetString(bytes).Trim();
         }
         catch (Exception ex)
         {
-            Log($"GetTitleID failed: {ex.Message}");
+            Log($"{nameof(GetTitleID)} failed: {ex.Message}");
             return string.Empty;
         }
     }
@@ -194,14 +194,14 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var bytes = await ReadRaw(SwitchCommand.GetBotbaseVersion(), 10, token).ConfigureAwait(false);
             if (bytes.Length == 0)
             {
-                Log("GetBotbaseVersion: Invalid response");
+                Log($"{nameof(GetBotbaseVersion)}: Invalid response");
                 return string.Empty;
             }
             return Encoding.ASCII.GetString(bytes).Trim('\0');
         }
         catch (Exception ex)
         {
-            Log($"GetBotbaseVersion failed: {ex.Message}");
+            Log($"{nameof(GetBotbaseVersion)} failed: {ex.Message}");
             return string.Empty;
         }
     }
@@ -213,14 +213,14 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var bytes = await ReadRaw(SwitchCommand.GetGameInfo(info), 17, token).ConfigureAwait(false);
             if (bytes.Length == 0)
             {
-                Log("GetGameInfo: Invalid response");
+                Log($"{nameof(GetGameInfo)}: Invalid response");
                 return string.Empty;
             }
             return Encoding.ASCII.GetString(bytes).Trim('\0', '\n');
         }
         catch (Exception ex)
         {
-            Log($"GetGameInfo failed: {ex.Message}");
+            Log($"{nameof(GetGameInfo)} failed: {ex.Message}");
             return string.Empty;
         }
     }
@@ -232,14 +232,14 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var bytes = await ReadRaw(SwitchCommand.IsProgramRunning(pid), 17, token).ConfigureAwait(false);
             if (bytes.Length == 0)
             {
-                Log("IsProgramRunning: Invalid response");
+                Log($"{nameof(IsProgramRunning)}: Invalid response");
                 return false;
             }
             return ulong.TryParse(Encoding.ASCII.GetString(bytes).Trim(), out var value) && value == 1;
         }
         catch (Exception ex)
         {
-            Log($"IsProgramRunning failed: {ex.Message}");
+            Log($"{nameof(IsProgramRunning)} failed: {ex.Message}");
             return false;
         }
     }
@@ -312,7 +312,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"ReadRaw failed: {ex.Message}");
+            Log($"{nameof(ReadRaw)} failed: {ex.Message}");
             return [];
         }
     }
@@ -325,7 +325,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"SendRaw failed: {ex.Message}");
+            Log($"{nameof(SendRaw)} failed: {ex.Message}");
         }
     }
 
@@ -346,7 +346,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var offsetBytes = await ReadBytesFromCmdAsync(SwitchCommand.PointerAll(jumps), sizeof(ulong), token).ConfigureAwait(false);
             if (offsetBytes.Length < sizeof(ulong))
             {
-                Log($"PointerAll: Invalid response length {offsetBytes?.Length ?? 0}");
+                Log($"{nameof(PointerAll)}: Invalid response length {offsetBytes?.Length ?? 0}");
                 return 0;
             }
             Array.Reverse(offsetBytes, 0, sizeof(ulong));
@@ -354,7 +354,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"PointerAll failed: {ex.Message}");
+            Log($"{nameof(PointerAll)} failed: {ex.Message}");
             return 0;
         }
     }
@@ -366,7 +366,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
             var offsetBytes = await ReadBytesFromCmdAsync(SwitchCommand.PointerRelative(jumps), sizeof(ulong), token).ConfigureAwait(false);
             if (offsetBytes.Length < sizeof(ulong))
             {
-                Log($"PointerRelative: Invalid response length {offsetBytes?.Length ?? 0}");
+                Log($"{nameof(PointerRelative)}: Invalid response length {offsetBytes?.Length ?? 0}");
                 return 0;
             }
             Array.Reverse(offsetBytes, 0, sizeof(ulong));
@@ -374,7 +374,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"PointerRelative failed: {ex.Message}");
+            Log($"{nameof(PointerRelative)} failed: {ex.Message}");
             return 0;
         }
     }
@@ -396,7 +396,7 @@ public sealed class SwitchSocketAsync : SwitchSocket, ISwitchConnectionAsync
         }
         catch (Exception ex)
         {
-            Log($"TryReadInternal<{typeof(T).Name}> failed: {ex.Message}");
+            Log($"{nameof(TryReadInternal)}<{typeof(T).Name}> failed: {ex.Message}");
             return (false, default);
         }
     }
