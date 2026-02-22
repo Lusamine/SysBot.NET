@@ -12,7 +12,7 @@ namespace SysBot.Pokemon
         public override string ToString() => "Encounter RNG BS Bot Settings";
 
         [Category(EncounterRNGBS), Description("The style to export the global RNG state.")]
-        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit32;
+        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
 
         [Category(EncounterRNGBS), Description("Number of advances the bot will make for TID RNG in BDSP.")]
         public int MaxTIDAdvances { get; set; }
@@ -21,7 +21,7 @@ namespace SysBot.Pokemon
         public bool TIDAdvanceOnly { get; set; } = false;
 
         [Category(EncounterRNGBS), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
-        public int MonitorRefreshRate { get; set; } = 500;
+        public int MonitorRefreshRate { get; set; }
 
         [Category(EncounterRNGBS), Description("Maximum total advances before the RNG monitor pauses the game by clicking HOME. Set to 0 to disable.")]
         public int MaxTotalAdvances { get; set; }
