@@ -21,10 +21,10 @@ namespace SysBot.Pokemon
         public bool CheckAllPhioneLayers { get; set; } = true;
 
         [Category(EncounterLA), Description("The style to export the global RNG state.")]
-        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit32;
+        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit128;
 
         [Category(EncounterLA), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
-        public int MonitorRefreshRate { get; set; } = 500;
+        public int MonitorRefreshRate { get; set; }
 
         [Category(EncounterLA), Description("Maximum total advances before the RNG monitor pauses the game by clicking HOME. Set to 0 to disable.")]
         public int MaxTotalAdvances { get; set; }
