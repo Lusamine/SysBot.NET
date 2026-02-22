@@ -32,10 +32,10 @@ public class EncounterSettings : IBotStateSettings, ICountSettings
     public int MaxLairRentalToPick { get; set; } = 1;
 
     [Category(Encounter), Description("The style to export the global RNG state.")]
-    public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit32;
+    public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
 
     [Category(Encounter), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
-    public int MonitorRefreshRate { get; set; } = 500;
+    public int MonitorRefreshRate { get; set; }
 
     [Category(Encounter), Description("Maximum total advances before the RNG monitor pauses the game by clicking X. Set to 0 to disable.")]
     public int MaxTotalAdvances { get; set; }
