@@ -21,6 +21,9 @@ namespace SysBot.Pokemon
             Log("Initial RNG state copied to the clipboard.");
             Log($"Start: {output}");
 
+            if (Hub.Config.EncounterSWSH.ResetRNGMonitorAdvances)
+                TotalAdvances = 0;
+
             while (!token.IsCancellationRequested)
             {
                 var wait = Hub.Config.EncounterSWSH.MonitorRefreshRate;
