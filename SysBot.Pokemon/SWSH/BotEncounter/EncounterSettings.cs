@@ -34,6 +34,9 @@ public class EncounterSettings : IBotStateSettings, ICountSettings
     [Category(Encounter), Description("The style to export the global RNG state.")]
     public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
 
+    [Category(Encounter), Description("Whether to reset the RNG monitor's counter to 0 when the bot is restarted.")]
+    public bool ResetRNGMonitorAdvances { get; set; }
+
     [Category(Encounter), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
     public int MonitorRefreshRate { get; set; }
 
