@@ -23,6 +23,9 @@ namespace SysBot.Pokemon
         [Category(EncounterLA), Description("The style to export the global RNG state.")]
         public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit128;
 
+        [Category(EncounterLA), Description("Whether to reset the RNG monitor's counter to 0 when the bot is restarted.")]
+        public bool ResetRNGMonitorAdvances { get; set; }
+
         [Category(EncounterLA), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
         public int MonitorRefreshRate { get; set; }
 

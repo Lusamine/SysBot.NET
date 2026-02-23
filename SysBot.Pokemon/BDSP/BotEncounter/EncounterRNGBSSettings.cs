@@ -11,14 +11,17 @@ namespace SysBot.Pokemon
         private const string EncounterRNGBS = nameof(EncounterRNGBS);
         public override string ToString() => "Encounter RNG BS Bot Settings";
 
-        [Category(EncounterRNGBS), Description("The style to export the global RNG state.")]
-        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
-
         [Category(EncounterRNGBS), Description("Number of advances the bot will make for TID RNG in BDSP.")]
         public int MaxTIDAdvances { get; set; }
 
         [Category(EncounterRNGBS), Description("Set this to \"True\" if you already have a target, and advancing was previously interrupted.")]
-        public bool TIDAdvanceOnly { get; set; } = false;
+        public bool TIDAdvanceOnly { get; set; }
+
+        [Category(EncounterRNGBS), Description("The style to export the global RNG state.")]
+        public DisplaySeedMode DisplaySeedMode { get; set; } = DisplaySeedMode.Bit64;
+
+        [Category(EncounterRNGBS), Description("Whether to reset the RNG monitor's counter to 0 when the bot is restarted.")]
+        public bool ResetRNGMonitorAdvances { get; set; }
 
         [Category(EncounterRNGBS), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
         public int MonitorRefreshRate { get; set; }
