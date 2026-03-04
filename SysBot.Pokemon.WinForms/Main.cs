@@ -65,6 +65,7 @@ public sealed partial class Main : Form
         ProgramMode.SV   => new PokeBotRunnerImpl<PK9>(cfg.Hub, new BotFactory9SV()),
         ProgramMode.LZA  => new PokeBotRunnerImpl<PA9>(cfg.Hub, new BotFactory9LZA()),
         ProgramMode.LGPE => new PokeBotRunnerImpl<PB7>(cfg.Hub, new BotFactory7LGPE()),
+        ProgramMode.FRLG => new PokeBotRunnerImpl<PK3>(cfg.Hub, new BotFactory3FRLG()),
         _ => throw new IndexOutOfRangeException("Unsupported mode."),
     };
 

@@ -67,6 +67,10 @@ public sealed class PokeTradeHubConfig : BaseConfig
 
     [Category(BotEncounter)]
     [TypeConverter(typeof(ExpandableObjectConverter))]
+    public EncounterSettingsFRLG EncounterFRLG { get; set; } = new();
+
+    [Category(BotEncounter)]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public RaidSettings RaidSWSH { get; set; } = new();
 
     [Category(BotEncounter), Description("Stop conditions for EncounterBot.")]
