@@ -33,7 +33,11 @@ public abstract class PokeRoutineExecutorBase(IConsoleBotManaged<IConsoleConnect
         Version = sav.Version;
         InGameName = sav.OT;
         Context = sav.Context;
-        Connection.Label = $"{InGameName}-{sav.DisplayTID:000000}";
+
+        // If sav is a SAV3FRLG, the DisplayTID should be padded to 5 digits. Otherwise it should be padded to 6 digits.
+        var tidPadding = sav is SAV3FRLG ? 5 : 6;
+        Connection.Label = $"{InGameName}-{sav.DisplayTID.ToString().PadLeft(tidPadding, '0')}";
+
         Log($"{Connection.Name} identified as {Connection.Label}, using {GameLang}.");
     }
 
