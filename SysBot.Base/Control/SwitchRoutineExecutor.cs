@@ -35,6 +35,16 @@ public abstract class SwitchRoutineExecutor<T> : RoutineExecutor<T> where T : cl
         await Task.Delay(delay, token).ConfigureAwait(false);
     }
 
+    public async Task PressAndHold(IEnumerable<SwitchButton> b, int hold, int delay, CancellationToken token)
+    {
+        foreach (var key in b)
+            await Connection.SendAsync(SwitchCommand.Hold(key, UseCRLF), token).ConfigureAwait(false);
+        await Task.Delay(hold, token).ConfigureAwait(false);
+        foreach (var key in b)
+            await Connection.SendAsync(SwitchCommand.Release(key, UseCRLF), token).ConfigureAwait(false);
+        await Task.Delay(delay, token).ConfigureAwait(false);
+    }
+
     public async Task DaisyChainCommands(int delay, IEnumerable<SwitchButton> buttons, CancellationToken token)
     {
         SwitchCommand.Configure(SwitchConfigureParameter.mainLoopSleepTime, delay, UseCRLF);
