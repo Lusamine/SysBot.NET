@@ -93,47 +93,56 @@ public enum PokeRoutineType
 
     // Add your own custom bots here so they don't clash for future main-branch bot releases.
 
-    /// <summary> Triggers encounters until the criteria is satisfied. </summary>
-    EncBotResetLGPE = 10_000,
-
     /// <summary> Checks overworld spawns until the criteria is satisfied. </summary>
-    EncBotRadarLGPE = 10_001,
+    EncBotRadarLGPE = 10_000,
 
     /// <summary> Uses RNG state to hunt for legendary birds in overworld. </summary>
-    EncBotBirdWatchLGPE = 10_002,
+    EncBotBirdWatchLGPE = 10_001,
 
     /// <summary> Prints float coordinates. </summary>
-    EncBotCoordinatesLGPE = 10_003,
+    EncBotCoordinatesLGPE = 10_002,
 
     /// <summary> Resets gifts and in-game trades. </summary>
-    EncBotGiftLGPE = 10_004,
+    EncBotGiftLGPE = 10_003,
 
     /// <summary> Copies out the current global RNG state in the specified format. </summary>
-    EncBotCopySeedLGPE = 10_005,
+    EncBotCopySeedLGPE = 10_004,
 
     /// <summary> Watch general RNG state. </summary>
-    EncBotRNGMonitorLGPE = 10_006,
+    EncBotRNGMonitorLGPE = 10_005,
 
     /// <summary> Rolls dates and searches for outbreaks. </summary>
-    EncBotOutbreakFinderSV = 10_007,
+    EncBotOutbreakFinderSV = 11_000,
 
     /// <summary> Exports overworld blocks named as current coordinates. </summary>
-    EncBotOWDumpSV = 10_008,
+    EncBotOWDumpSV = 11_001,
 
     /// <summary> Endlessly kills time at a bench. </summary>
-    EncBotBenchLZA = 10_009,
+    EncBotBenchLZA = 12_000,
 
     /// <summary> Assortment of simple macros for flying into Wild Zones. </summary>
-    EncBotSimpleTricksLZA = 10_010,
+    EncBotSimpleTricksLZA = 12_001,
 
     /// <summary> Presses A. </summary>
-    EncBotASpamLZA = 10_011,
+    EncBotASpamLZA = 12_002,
 
     /// <summary> Cycles the Pumpkaboo in Wild Zone 15. </summary>
-    EncBotPumpkabooLZA = 10_012,
+    EncBotPumpkabooLZA = 12_003,
 
     /// <summary> Walk cycle for Virizion Special Scan. </summary>
-    EncBotVirizionLZA = 10_013,
+    EncBotVirizionLZA = 12_004,
+
+    /// <summary> Prints out the global RNG state and information on advances passed. </summary>
+    EncBotRNGMonitorFRLG = 13_000,
+
+    /// <summary> Buys 1-5 prizes from the Game Corner. </summary>
+    EncBotGCPrizeResetFRLG = 13_001,
+
+    /// <summary> Wiggles in place to encounter wild Pokémon. </summary>
+    EncBotWildFRLG = 13_002,
+
+    /// <summary> Runs a Pickup party in Lavender Tower. </summary>
+    EncBotPickupFRLG = 13_003,
 }
 
 public static class PokeRoutineTypeExtensions

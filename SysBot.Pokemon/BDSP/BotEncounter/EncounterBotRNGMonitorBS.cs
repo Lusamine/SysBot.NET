@@ -1,4 +1,5 @@
 using PKHeX.Core;
+using SysBot.Base;
 using System.Threading;
 using System.Threading.Tasks;
 using static SysBot.Base.SwitchButton;
@@ -12,6 +13,10 @@ namespace SysBot.Pokemon
 
         protected override async Task EncounterLoop(SAV8BS sav, CancellationToken token)
         {
+            // Reducing sys-botbase's sleep time can allow for faster sending of commands.
+            var cmd = SwitchCommand.Configure(SwitchConfigureParameter.mainLoopSleepTime, 15, UseCRLF);
+            await Connection.SendAsync(cmd, token).ConfigureAwait(false);
+
             MainRNGOffset = await SwitchConnection.PointerAll(Offsets.MainRNGPointer, token).ConfigureAwait(false);
             var (s0, s1) = await GetGlobalRNGState(MainRNGOffset, false, token).ConfigureAwait(false);
             var output = GetSeedMonitorOutput(s0, s1, Hub.Config.EncounterRNGBS.DisplaySeedMode);

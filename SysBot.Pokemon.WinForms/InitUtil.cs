@@ -19,6 +19,7 @@ public static class InitUtil
         ProgramMode.SV   => new SAV9SV(),
         ProgramMode.LZA  => new SAV9ZA(),
         ProgramMode.LGPE => new SAV7b(),
+        ProgramMode.FRLG => new SAV3FRLG(),
         _                => throw new System.ArgumentOutOfRangeException(nameof(mode)),
     };
 

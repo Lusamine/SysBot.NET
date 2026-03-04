@@ -7,7 +7,7 @@ namespace SysBot.Pokemon
     {
         public override PokeRoutineExecutorBase CreateBot(PokeTradeHub<PB7> Hub, PokeBotState cfg) => cfg.NextRoutineType switch
         {
-            PokeRoutineType.EncBotResetLGPE => new EncounterBotResetLGPE(cfg, Hub),
+            PokeRoutineType.EncBotReset => new EncounterBotResetLGPE(cfg, Hub),
             PokeRoutineType.EncBotRadarLGPE => new EncounterBotRadarLGPE(cfg, Hub),
             PokeRoutineType.EncBotGiftLGPE => new EncounterBotGiftLGPE(cfg, Hub),
             PokeRoutineType.EncBotBirdWatchLGPE => new EncounterBotBirdWatchLGPE(cfg, Hub),
@@ -21,7 +21,7 @@ namespace SysBot.Pokemon
 
         public override bool SupportsRoutine(PokeRoutineType type) => type switch
         {
-            PokeRoutineType.EncBotResetLGPE or PokeRoutineType.EncBotRadarLGPE
+            PokeRoutineType.EncBotReset or PokeRoutineType.EncBotRadarLGPE
                 or PokeRoutineType.EncBotGiftLGPE
                 or PokeRoutineType.EncBotBirdWatchLGPE
                 or PokeRoutineType.EncBotCoordinatesLGPE
