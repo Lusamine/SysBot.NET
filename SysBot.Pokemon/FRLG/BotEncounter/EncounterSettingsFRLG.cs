@@ -26,6 +26,9 @@ public class EncounterSettingsFRLG : IBotStateSettings, ICountSettings
     [Category(EncounterFRLG), Description("Adds up to this many milliseconds before an encounter. Increases the number of potential Pokémon encountered due to FRLG's initial seeding.")]
     public int RandomTimeBeforeEncounter { get; set; } = 5000;
 
+    [Category(EncounterFRLG), Description("Logs the initial seed in reset bots to track variability.")]
+    public bool LogInitialSeed { get; set; }
+
     [Category(EncounterFRLG), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
     public int MonitorRefreshRate { get; set; }
 

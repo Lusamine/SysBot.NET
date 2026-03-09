@@ -21,6 +21,13 @@ namespace SysBot.Pokemon
 
             while (!token.IsCancellationRequested)
             {
+                if (Hub.Config.EncounterFRLG.LogInitialSeed)
+                {
+                    // Log the initial seed.
+                    var seed = await GetInitialRNGState(false, token).ConfigureAwait(false);
+                    Log($"Initial seed: {seed:x4}");
+                }
+
                 Log("Looking for a Pokémon...");
                 var tries = 0;
 
