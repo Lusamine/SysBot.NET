@@ -20,8 +20,11 @@ public class EncounterSettingsFRLG : IBotStateSettings, ICountSettings
     [Category(EncounterFRLG), Description("The number of Pokémon to purchase from the Game Corner each reset.")]
     public int GameCornerNumberToPurchase { get; set; } = 1;
 
+    [Category(EncounterFRLG), Description("Adds up to this many milliseconds after a soft reset and before starting the game. Increases the number of potential Pokémon encountered due to FRLG's initial seeding.")]
+    public int RandomTimeSoftReset { get; set; } = 5000;
+
     [Category(EncounterFRLG), Description("Adds up to this many milliseconds before an encounter. Increases the number of potential Pokémon encountered due to FRLG's initial seeding.")]
-    public int RandomTimeBeforeEncounter { get; set; } = 1000;
+    public int RandomTimeBeforeEncounter { get; set; } = 5000;
 
     [Category(EncounterFRLG), Description("Interval in milliseconds for the monitor to check the Main RNG state.")]
     public int MonitorRefreshRate { get; set; }
