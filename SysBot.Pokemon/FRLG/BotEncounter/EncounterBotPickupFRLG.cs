@@ -27,6 +27,11 @@ namespace SysBot.Pokemon
 
             while (!token.IsCancellationRequested)
             {
+                // If the attacking move runs out of PP, heal the party.
+                // This will also correct the value of Horizontal after we walk off the array.
+                if (--CurrentPP <= 0)
+                    await HealParty(token).ConfigureAwait(false);
+
                 Log("Looking for a Pokémon...");
                 var tries = 0;
 
@@ -59,11 +64,6 @@ namespace SysBot.Pokemon
                 }
 
                 Horizontal = !Horizontal;
-
-                // If the attacking move runs out of PP, heal the party.
-                // This will also correct the value of Horizontal after we walk off the array.
-                if (--CurrentPP <= 0)
-                    await HealParty(token).ConfigureAwait(false);
             }
         }
 
