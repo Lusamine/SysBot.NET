@@ -14,7 +14,8 @@ namespace SysBot.Pokemon
         private int PartyCount;
         private int PrizesToBuy;
         private int Displacement;
-        private int ExtraTime;
+        private int ExtraTimeReset;
+        private int ExtraTimeEncounter;
         private uint OverworldOffset;
 
         protected override async Task EncounterLoop(SAV3FRLG sav, CancellationToken token)
@@ -29,8 +30,12 @@ namespace SysBot.Pokemon
                 PK3? pknew;
 
                 // Waits a random number of milliseconds to increase the number of possible RNG states.
-                if (ExtraTime > 0)
-                    await Task.Delay(Util.Rand.Next(0, ExtraTime), token).ConfigureAwait(false);
+                if (ExtraTimeEncounter > 0)
+                {
+                    var extra = Util.Rand.Next(0, ExtraTimeEncounter);
+                    await Task.Delay(extra, token).ConfigureAwait(false);
+                    Log($"Waiting an extra {extra}ms before purchasing prizes to increase RNG variability.");
+                }
 
                 await SelectPrize(token).ConfigureAwait(false);
 
@@ -56,7 +61,7 @@ namespace SysBot.Pokemon
                 }
 
                 Log("No match, resetting the game...");
-                await SoftResetGame(OverworldOffset, token).ConfigureAwait(false);
+                await SoftResetGame(OverworldOffset, ExtraTimeReset, token).ConfigureAwait(false);
                 await Task.Delay(2_000, token).ConfigureAwait(false);
             }
         }
@@ -80,7 +85,8 @@ namespace SysBot.Pokemon
             Displacement = GetPrizeDisplacement(sav.Version);
             if (Displacement == -1)
                 throw new Exception("Invalid prize selection. Check the GameCornerPrizeToPurchase before restarting the bot.");
-            ExtraTime = Hub.Config.EncounterFRLG.RandomTimeBeforeEncounter;
+            ExtraTimeEncounter = Hub.Config.EncounterFRLG.RandomTimeBeforeEncounter;
+            ExtraTimeReset = Hub.Config.EncounterFRLG.RandomTimeSoftReset;
         }
 
         private async Task SelectPrize(CancellationToken token)

@@ -151,9 +151,17 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
         return InitialSeed + (box_start_offset - 0x02020000); // Convert to absolute offset in the heap.
     }
 
-    public async Task SoftResetGame(uint offset, CancellationToken token)
+    public async Task SoftResetGame(uint offset, int extratime, CancellationToken token)
     {
         await PressAndHold([A, B, X, Y], 0_500, 0_500, token).ConfigureAwait(false);
+
+        // Wait random amount of additional time before hitting any buttons.
+        if (extratime > 0)
+        {
+            var extra = Util.Rand.Next(0, extratime);
+            await Task.Delay(extra, token).ConfigureAwait(false);
+            Log($"Waiting an extra {extra}ms before encountering to increase RNG variability.");
+        }
 
         while (!await IsOnOverworld(offset, token).ConfigureAwait(false))
             await Click(A, 0_200, token).ConfigureAwait(false);
