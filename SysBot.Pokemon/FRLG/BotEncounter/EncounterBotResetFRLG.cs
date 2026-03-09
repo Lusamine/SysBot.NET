@@ -12,7 +12,8 @@ namespace SysBot.Pokemon
         private uint EncounterOffset;
         private int PartyCount;
         private uint OverworldOffset;
-        private int ExtraTime;
+        private int ExtraTimeReset;
+        private int ExtraTimeEncounter;
 
         protected override async Task EncounterLoop(SAV3FRLG sav, CancellationToken token)
         {
@@ -26,8 +27,12 @@ namespace SysBot.Pokemon
                 PK3? pknew;
 
                 // Waits a random number of milliseconds to increase the number of possible RNG states.
-                if (ExtraTime > 0)
-                    await Task.Delay(Util.Rand.Next(0, ExtraTime), token).ConfigureAwait(false);
+                if (ExtraTimeEncounter > 0)
+                {
+                    var extra = Util.Rand.Next(0, ExtraTimeEncounter);
+                    await Task.Delay(extra, token).ConfigureAwait(false);
+                    Log($"Waiting an extra {extra}ms before encountering to increase RNG variability.");
+                }
 
                 do
                 {
@@ -42,7 +47,7 @@ namespace SysBot.Pokemon
                     return;
 
                 Log("No match, resetting the game...");
-                await SoftResetGame(OverworldOffset, token).ConfigureAwait(false);
+                await SoftResetGame(OverworldOffset, ExtraTimeReset, token).ConfigureAwait(false);
             }
         }
 
@@ -73,7 +78,8 @@ namespace SysBot.Pokemon
                     throw new System.Exception("Encountering type is not handled. Select from Static, Starter, or Gift.");
             }
 
-            ExtraTime = Hub.Config.EncounterFRLG.RandomTimeBeforeEncounter;
+            ExtraTimeEncounter = Hub.Config.EncounterFRLG.RandomTimeBeforeEncounter;
+            ExtraTimeReset = Hub.Config.EncounterFRLG.RandomTimeSoftReset;
         }
     }
 }
