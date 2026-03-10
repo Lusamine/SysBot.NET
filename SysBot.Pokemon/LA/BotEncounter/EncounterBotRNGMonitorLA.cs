@@ -13,7 +13,7 @@ namespace SysBot.Pokemon
 
         protected override async Task EncounterLoop(SAV8LA sav, CancellationToken token)
         {
-            // Reducing sys-botbase's sleep time can allow for faster sending of commands.
+            // Reducing sys-botbase's sleep time lets us more finely read advances.
             var cmd = SwitchCommand.Configure(SwitchConfigureParameter.mainLoopSleepTime, 15, UseCRLF);
             await Connection.SendAsync(cmd, token).ConfigureAwait(false);
 
