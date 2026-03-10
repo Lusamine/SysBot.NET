@@ -55,11 +55,11 @@ namespace SysBot.Pokemon
                     await Click(A, 0_200, token).ConfigureAwait(false);
                 await Task.Delay(0_800, token).ConfigureAwait(false);
 
-                // If we have at least 2 items among our Pickup members, collect them.
-                if (await CountPartyItems(token).ConfigureAwait(false) >= 2)
+                // It's most efficient to remove items whenever we see at least 1 item among our Pickup members.
+                // The effect is better if you have 6 Meowth.
+                if (await CountPartyItems(token).ConfigureAwait(false) >= 1)
                 {
                     Log("Collecting Pickup items...");
-                    await Task.Delay(1_000, token).ConfigureAwait(false);
                     await CollectPartyItems(token).ConfigureAwait(false);
                 }
 
@@ -182,7 +182,7 @@ namespace SysBot.Pokemon
             await Click(A, 0_200, token).ConfigureAwait(false);
             await Click(DDOWN, 0_200, token).ConfigureAwait(false);
             await Click(A, 0_800, token).ConfigureAwait(false);
-            await Click(A, 0_800, token).ConfigureAwait(false);
+            await Click(A, 0_900, token).ConfigureAwait(false);
         }
 
         private async Task WiggleInPlace(CancellationToken token)
