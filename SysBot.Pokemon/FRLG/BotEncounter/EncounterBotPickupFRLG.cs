@@ -143,7 +143,7 @@ namespace SysBot.Pokemon
                 await TakeItem(token).ConfigureAwait(false);
 
             // Selects the 2nd member of the party.
-            await Click(DRIGHT, 0_500, token).ConfigureAwait(false);
+            await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
 
             for (var i = 1; i <= LastPickupIndex;)
             {
@@ -193,20 +193,20 @@ namespace SysBot.Pokemon
                 {
                     for (var i = 0; i < 5; i++)
                     {
-                        await SetStick(LEFT, -30000, 0, 0_050, token).ConfigureAwait(false);
-                        await SetStick(LEFT, 0, 0, 0_200, token).ConfigureAwait(false); // reset
-                        await SetStick(LEFT, 30000, 0, 0_050, token).ConfigureAwait(false);
-                        await SetStick(LEFT, 0, 0, 0_200, token).ConfigureAwait(false); // reset
+                        await Click(DRIGHT, 0_050, token).ConfigureAwait(false);
+                        await Task.Delay(0_100, token).ConfigureAwait(false);
+                        await Click(DLEFT, 0_050, token).ConfigureAwait(false);
+                        await Task.Delay(0_100, token).ConfigureAwait(false);
                     }
                 }
                 else
                 {
                     for (var i = 0; i < 5; i++)
                     {
-                        await SetStick(LEFT, 0, -30000, 0_050, token).ConfigureAwait(false);
-                        await SetStick(LEFT, 0, 0, 0_200, token).ConfigureAwait(false); // reset
-                        await SetStick(LEFT, 0, 30000, 0_050, token).ConfigureAwait(false);
-                        await SetStick(LEFT, 0, 0, 0_200, token).ConfigureAwait(false); // reset
+                        await Click(DUP, 0_050, token).ConfigureAwait(false);
+                        await Task.Delay(0_100, token).ConfigureAwait(false);
+                        await Click(DDOWN, 0_050, token).ConfigureAwait(false);
+                        await Task.Delay(0_100, token).ConfigureAwait(false);
                     }
                 }
             }
