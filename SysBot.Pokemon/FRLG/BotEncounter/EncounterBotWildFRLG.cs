@@ -56,7 +56,7 @@ namespace SysBot.Pokemon
             {
                 if (Horizontal)
                 {
-                    for (var i = 0; i < 5; i++)
+                    for (var i = 0; i < 4; i++)
                     {
                         await Click(DRIGHT, 0_050, token).ConfigureAwait(false);
                         await Task.Delay(0_100, token).ConfigureAwait(false);
@@ -66,7 +66,7 @@ namespace SysBot.Pokemon
                 }
                 else
                 {
-                    for (var i = 0; i < 5; i++)
+                    for (var i = 0; i < 4; i++)
                     {
                         await Click(DUP, 0_050, token).ConfigureAwait(false);
                         await Task.Delay(0_100, token).ConfigureAwait(false);
@@ -75,6 +75,7 @@ namespace SysBot.Pokemon
                     }
                 }
             }
+            await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.
         }
 
         // Eventually replace this with a check for whether the battle menu has loaded.
