@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using static SysBot.Base.SwitchButton;
 
 namespace SysBot.Pokemon;
@@ -117,12 +116,7 @@ public abstract class PokeRoutineExecutor<T>(IConsoleBotManaged<IConsoleConnecti
     {
         try
         {
-            Thread thread = new(() => Clipboard.SetText(output));
-#pragma warning disable CA1416 // Validate platform compatibility
-            thread.SetApartmentState(ApartmentState.STA);
-#pragma warning restore CA1416 // Validate platform compatibility
-            thread.Start();
-            thread.Join();
+            TextCopy.ClipboardService.SetText(output);
         }
         catch (Exception ex)
         {
