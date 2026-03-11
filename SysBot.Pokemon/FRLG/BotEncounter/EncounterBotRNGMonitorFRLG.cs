@@ -36,7 +36,7 @@ namespace SysBot.Pokemon
             InitialRNGSeed = await GetInitialRNGState(false, token).ConfigureAwait(false);
 
             // Attempt to copy initial state to clipboard.
-            CopyToClipboard(InitialRNGSeed.ToString());
+            CopyToClipboard(InitialRNGSeed.ToString("x4"));
             Log("Initial RNG state copied to the clipboard.");
             Log($"Start: {InitialRNGSeed:x4}");
             PrevRNGState = InitialRNGSeed;
