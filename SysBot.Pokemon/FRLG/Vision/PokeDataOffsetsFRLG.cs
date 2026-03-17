@@ -17,7 +17,7 @@ public class PokeDataOffsetsFRLG
 
     // For detecting when we're in a battle.
     public const uint InBattleOffset = 0x6D9C91; // 02 in battle, 01 outside battle
-    public const uint BattleMenuOffset = 0;
+    public const uint BattleMenuOffset = 0x11F6FF7; // 01 in battle menu and immediately after fleeing, 00 while battle is loading
 
     public const int BoxFormatSlotSize = 0x50;
 }
