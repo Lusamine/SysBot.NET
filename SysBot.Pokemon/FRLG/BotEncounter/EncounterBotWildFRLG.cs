@@ -56,23 +56,17 @@ namespace SysBot.Pokemon
             {
                 if (Horizontal)
                 {
-                    for (var i = 0; i < 4; i++)
-                    {
-                        await Click(DRIGHT, 0_050, token).ConfigureAwait(false);
-                        await Task.Delay(0_100, token).ConfigureAwait(false);
-                        await Click(DLEFT, 0_050, token).ConfigureAwait(false);
-                        await Task.Delay(0_100, token).ConfigureAwait(false);
-                    }
+                    await Click(DRIGHT, 0_050, token).ConfigureAwait(false);
+                    await Task.Delay(0_120, token).ConfigureAwait(false);
+                    await Click(DLEFT, 0_050, token).ConfigureAwait(false);
+                    await Task.Delay(0_120, token).ConfigureAwait(false);
                 }
                 else
                 {
-                    for (var i = 0; i < 4; i++)
-                    {
-                        await Click(DUP, 0_050, token).ConfigureAwait(false);
-                        await Task.Delay(0_100, token).ConfigureAwait(false);
-                        await Click(DDOWN, 0_050, token).ConfigureAwait(false);
-                        await Task.Delay(0_100, token).ConfigureAwait(false);
-                    }
+                    await Click(DUP, 0_050, token).ConfigureAwait(false);
+                    await Task.Delay(0_120, token).ConfigureAwait(false);
+                    await Click(DDOWN, 0_050, token).ConfigureAwait(false);
+                    await Task.Delay(0_120, token).ConfigureAwait(false);
                 }
             }
             await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.

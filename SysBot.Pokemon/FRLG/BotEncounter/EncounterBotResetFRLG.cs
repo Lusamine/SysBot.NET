@@ -43,7 +43,7 @@ namespace SysBot.Pokemon
 
                 do
                 {
-                    await Click(A, 0_500, token).ConfigureAwait(false);
+                    await Click(A, Util.Rand.Next(0_200, 0_800), token).ConfigureAwait(false);
                     pknew = await ReadUntilPresent(EncounterOffset, 0_050, 0_050, BoxFormatSlotSize, token).ConfigureAwait(false);
                     if (++tries > 1000)
                         break;

@@ -44,13 +44,13 @@ namespace SysBot.Pokemon
                     Log($"Waiting an extra {extra}ms before purchasing prizes to increase RNG variability.");
                 }
 
-                await SelectPrize(token).ConfigureAwait(false);
-
                 for (var purchased = 0; purchased < PrizesToBuy;)
                 {
+                    await SelectPrize(token).ConfigureAwait(false);
+
                     do
                     {
-                        await Click(A, 0_500, token).ConfigureAwait(false);
+                        await Click(A, Util.Rand.Next(0_200, 0_800), token).ConfigureAwait(false);
                         pknew = await ReadUntilPresent(FirstEmptySlotOffset + ((ulong)purchased * 0x64), 0_050, 0_050, BoxFormatSlotSize, token).ConfigureAwait(false);
                         if (++tries > 1000)
                             break;
@@ -64,7 +64,7 @@ namespace SysBot.Pokemon
                         break;
 
                     for (int i = 0; i < 15; i++)
-                        await Click(B, 0_200, token).ConfigureAwait(false);
+                        await Click(B, Util.Rand.Next(0_200, 0_400), token).ConfigureAwait(false);
                 }
 
                 Log("No match, resetting the game...");
@@ -82,7 +82,7 @@ namespace SysBot.Pokemon
             // This will let us know how many empty slots we have for gift encounters. Ideally, PartyCount is 1.
             PartyCount = await GetPartyCount(token).ConfigureAwait(false);
             if (PartyCount == 6)
-                throw new System.Exception("All 6 party slots are full. Clear out at least one empty slot for gift encounters.");
+                throw new Exception("All 6 party slots are full. Clear out at least one empty slot for gift encounters.");
 
             // Set the starting party offset to check gifts at.
             FirstEmptySlotOffset = LanguageVersionOffsetsFRLG.GetPartyStartOffsetFromLanguageAndVersion((LanguageID)sav.Language, sav.Version);
@@ -98,19 +98,19 @@ namespace SysBot.Pokemon
 
         private async Task SelectPrize(CancellationToken token)
         {
-            await Click(A, 1_000, token).ConfigureAwait(false);
-            await Click(A, 1_000, token).ConfigureAwait(false);
+            await Click(A, Util.Rand.Next(1_000, 1_300), token).ConfigureAwait(false);
+            await Click(A, Util.Rand.Next(1_000, 1_300), token).ConfigureAwait(false);
 
             // Fewest button presses to get to the prize.
             if (Displacement <= 3)
             {
                 for (var clicks = 0; clicks < Displacement; clicks++)
-                    await Click(DDOWN, 0_200, token).ConfigureAwait(false);
+                    await Click(DDOWN, Util.Rand.Next(0_200, 0_400), token).ConfigureAwait(false);
             }
             else if (Displacement == 4)
             {
-                await Click(DUP, 0_200, token).ConfigureAwait(false);
-                await Click(DUP, 0_200, token).ConfigureAwait(false);
+                await Click(DUP, Util.Rand.Next(0_200, 0_400), token).ConfigureAwait(false);
+                await Click(DUP, Util.Rand.Next(0_200, 0_400), token).ConfigureAwait(false);
             }
         }
 
