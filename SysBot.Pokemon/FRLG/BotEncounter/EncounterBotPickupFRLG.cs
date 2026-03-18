@@ -208,26 +208,6 @@ namespace SysBot.Pokemon
             await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.
         }
 
-        // Eventually replace this with a check for whether the battle menu has loaded.
-        private async Task EscapeBattle(CancellationToken token)
-        {
-            for (var i = 0; i < 12; i++)
-                await Click(B, 0_500, token).ConfigureAwait(false);
-
-            Log("Initiating run routine.");
-            while (await IsInBattle(token).ConfigureAwait(false))
-            {
-                await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
-                await Click(DDOWN, 0_200, token).ConfigureAwait(false);
-                await Click(A, 0_500, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-            }
-            await Task.Delay(0_500, token).ConfigureAwait(false);
-        }
-
         private async Task HealParty(CancellationToken token)
         {
             Log("Healing the party.");
@@ -248,6 +228,19 @@ namespace SysBot.Pokemon
             await SetStick(LEFT, 0, 0, 0_150, token).ConfigureAwait(false); // reset
             Horizontal = false; // Character will be facing right so we want to start wiggling up/down.
             CurrentPP = MaxPP; // Reset our PP counter.
+        }
+
+        private async Task EscapeBattle(CancellationToken token)
+        {
+            while (!await IsOnBattleMenu(token).ConfigureAwait(false))
+                await Click(B, 0_200, token).ConfigureAwait(false);
+
+            Log("Initiating run routine.");
+            await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
+            await Click(DDOWN, 0_200, token).ConfigureAwait(false);
+            while (await IsInBattle(token).ConfigureAwait(false))
+                await Click(A, 0_200, token).ConfigureAwait(false);
+            await Task.Delay(0_800, token).ConfigureAwait(false);
         }
     }
 }

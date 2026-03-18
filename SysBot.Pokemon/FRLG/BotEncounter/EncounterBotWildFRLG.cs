@@ -72,24 +72,17 @@ namespace SysBot.Pokemon
             await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.
         }
 
-        // Eventually replace this with a check for whether the battle menu has loaded.
         private async Task EscapeBattle(CancellationToken token)
         {
-            for (var i = 0; i < 12; i++)
-                await Click(B, 0_500, token).ConfigureAwait(false);
+            while (!await IsOnBattleMenu(token).ConfigureAwait(false))
+                await Click(B, 0_200, token).ConfigureAwait(false);
 
             Log("Initiating run routine.");
+            await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
+            await Click(DDOWN, 0_200, token).ConfigureAwait(false);
             while (await IsInBattle(token).ConfigureAwait(false))
-            {
-                await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
-                await Click(DDOWN, 0_200, token).ConfigureAwait(false);
-                await Click(A, 0_500, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-                await Click(B, 0_200, token).ConfigureAwait(false);
-            }
-            await Task.Delay(0_500, token).ConfigureAwait(false);
+                await Click(A, 0_200, token).ConfigureAwait(false);
+            await Task.Delay(0_800, token).ConfigureAwait(false);
         }
     }
 }
