@@ -164,7 +164,7 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
         }
 
         while (!await IsOnOverworld(offset, token).ConfigureAwait(false))
-            await Click(A, 0_200, token).ConfigureAwait(false);
+            await Click(A, Util.Rand.Next(0_200, 0_500), token).ConfigureAwait(false);
         // The overworld check becomes 0xFF while showing the journal replays, so press B to speed it up.
         for (int i = 0; i < 5; i++)
             await Click(B, 0_200, token).ConfigureAwait(false);
@@ -185,11 +185,11 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
     }
 
     // Used to check if the battle menu has loaded, so we can attempt to flee.
-    // This value starts at 1 and goes up each time a menu is opened.
+    // This value becomes 0 as a battle starts and becomes 1 once the menu is loaded.
     public async Task<bool> IsOnBattleMenu(CancellationToken token)
     {
         var data = await Connection.ReadBytesAsync(BattleMenuOffset, 1, token).ConfigureAwait(false);
-        return data[0] >= 1;
+        return data[0] == 1;
     }
 
     public async Task<int> GetPartyCount(CancellationToken token)
