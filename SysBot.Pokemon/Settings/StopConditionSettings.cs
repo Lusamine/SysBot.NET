@@ -38,6 +38,9 @@ public class StopConditionSettings
     [Category(StopConditions), Description("List of marks to ignore separated by commas. Use the full name, e.g. \"Uncommon Mark, Dawn Mark, Prideful Mark\".")]
     public string UnwantedMarks { get; set; } = "";
 
+    [Category(StopConditions), Description("Stop only on Pokémon that have an item.")]
+    public bool ItemOnly { get; set; }
+
     [Category(StopConditions), Description("List of TIDs to look for separated by commas. Use the full 6-digit G8TID, e.g. \"010101, 000666, 987354\".")]
     public string TargetTIDBS { get; set; } = "";
 
@@ -53,11 +56,17 @@ public class StopConditionSettings
     [Category(StopConditions), Description("If set to TRUE, matches both ShinyTarget and TargetIVs settings. Otherwise, looks for either ShinyTarget or TargetIVs match.")]
     public bool MatchShinyAndIV { get; set; } = true;
 
+    [Category(StopConditions), Description("If set to TRUE, any shiny Pokémon is accepted regardless of whether it matches other criteria.")]
+    public bool AcceptAllShiny { get; set; }
+
     [Category(StopConditions), Description("If not empty, the provided string will be prepended to the result found log message to Echo alerts for whomever you specify. For Discord, use <@userIDnumber> to mention.")]
     public string MatchFoundEchoMention { get; set; } = string.Empty;
 
     public static bool EncounterFound<T>(T pk, int[] targetminIVs, int[] targetmaxIVs, StopConditionSettings settings, IReadOnlyList<string>? marklist) where T : PKM
     {
+        if (settings.AcceptAllShiny && pk.IsShiny)
+            return true;
+
         // Match Nature and Species if they were specified.
         if (settings.StopOnSpecies != Species.None && settings.StopOnSpecies != (Species)pk.Species)
             return false;
@@ -72,6 +81,9 @@ public class StopConditionSettings
         var unmarked = pk is IRibbonIndex m && !HasMark(m);
         var unwanted = marklist is not null && pk is IRibbonIndex m2 && settings.IsUnwantedMark(GetMarkName(m2), marklist);
         if (settings.MarkOnly && (unmarked || unwanted))
+            return false;
+
+        if (settings.ItemOnly && pk.HeldItem == 0)
             return false;
 
         if (settings.ShinyTarget != TargetShinyType.DisableOption)
