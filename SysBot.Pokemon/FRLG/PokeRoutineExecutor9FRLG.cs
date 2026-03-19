@@ -164,7 +164,12 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
         }
 
         while (!await IsOnOverworld(offset, token).ConfigureAwait(false))
-            await Click(A, Util.Rand.Next(0_200, 0_500), token).ConfigureAwait(false);
+        {
+            var button = Util.Rand.Next(2) == 0 ? A : X;
+            var delay = Util.Rand.Next(0_200, 0_500);
+            await Click(button, delay, token).ConfigureAwait(false);
+        }
+
         // The overworld check becomes 0xFF while showing the journal replays, so press B to speed it up.
         for (int i = 0; i < 5; i++)
             await Click(B, 0_200, token).ConfigureAwait(false);
