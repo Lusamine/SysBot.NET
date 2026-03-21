@@ -28,8 +28,6 @@ namespace SysBot.Pokemon
             StopConditionSettings.ReadUnwantedMarks(Hub.Config.StopConditions, out UnwantedMarks);
         }
 
-        private int encounterCount;
-
         public override async Task MainLoop(CancellationToken token)
         {
             Log("Identifying trainer data of the host console.");
@@ -63,57 +61,7 @@ namespace SysBot.Pokemon
 
         protected abstract Task EncounterLoop(SAV9SV sav, CancellationToken token);
 
-        // return true if breaking loop
-        protected async Task<bool> HandleEncounter(PK9 pk, CancellationToken token)
-        {
-            encounterCount++;
-            var print = StopConditionSettings.GetPrintName(pk);
-            Log($"Encounter: {encounterCount}{Environment.NewLine}{print}{Environment.NewLine}");
-
-            var legendary = SpeciesCategory.IsLegendary(pk.Species) || SpeciesCategory.IsMythical(pk.Species) || SpeciesCategory.IsSubLegendary(pk.Species);
-            if (legendary)
-                Settings.AddCompletedLegends();
-            else
-                Settings.AddCompletedEncounters();
-
-            if (DumpSetting.Dump && !string.IsNullOrEmpty(DumpSetting.DumpFolder))
-                DumpPokemon(DumpSetting.DumpFolder, legendary ? "legends" : "encounters", pk);
-
-            if (!StopConditionSettings.EncounterFound(pk, DesiredMinIVs, DesiredMaxIVs, Hub.Config.StopConditions, UnwantedMarks))
-                return false;
-
-            if (Hub.Config.StopConditions.CaptureVideoClip)
-            {
-                await Task.Delay(Hub.Config.StopConditions.ExtraTimeWaitCaptureVideo, token).ConfigureAwait(false);
-                await PressAndHold(CAPTURE, 2_000, 0, token).ConfigureAwait(false);
-            }
-
-            var mode = Settings.ContinueAfterMatch;
-            var msg = $"Result found!\n{print}\n" + mode switch
-            {
-                ContinueAfterMatch.Continue => "Continuing...",
-                ContinueAfterMatch.PauseWaitAcknowledge => "Waiting for instructions to continue.",
-                ContinueAfterMatch.StopExit => "Stopping routine execution; restart the bot to search again.",
-                _ => throw new ArgumentOutOfRangeException(),
-            };
-
-            if (!string.IsNullOrWhiteSpace(Hub.Config.StopConditions.MatchFoundEchoMention))
-                msg = $"{Hub.Config.StopConditions.MatchFoundEchoMention} {msg}";
-            EchoUtil.Echo(msg);
-
-            if (mode == ContinueAfterMatch.StopExit)
-                return true;
-            if (mode == ContinueAfterMatch.Continue)
-                return false;
-
-            IsWaiting = true;
-            while (IsWaiting)
-                await Task.Delay(1_000, token).ConfigureAwait(false);
-            return false;
-        }
-
-        private bool IsWaiting;
-        public void Acknowledge() => IsWaiting = false;
+        public void Acknowledge() => throw new NotImplementedException();
 
         protected async Task ResetStick(CancellationToken token)
         {
