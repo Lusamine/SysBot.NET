@@ -10,7 +10,8 @@ namespace SysBot.Pokemon
     {
         // Cached offsets that stay the same per session.
         private uint EncounterOffset;
-        private bool Horizontal;
+        private bool Horizontal; // Used for regular wild encounter slots only.
+        private EncounterModeFRLG EncounterMode = EncounterModeFRLG.SlotsFRLG;
 
         protected override async Task EncounterLoop(SAV3FRLG sav, CancellationToken token)
         {
@@ -25,7 +26,12 @@ namespace SysBot.Pokemon
 
                 do
                 {
-                    await WiggleInPlace(token).ConfigureAwait(false);
+                    // Use the correct method to trigger a battle.
+                    if (EncounterMode == EncounterModeFRLG.FishingFRLG)
+                        await TryFish(token).ConfigureAwait(false);
+                    else
+                        await WiggleInPlace(token).ConfigureAwait(false);
+
                     pknew = await ReadUntilPresent(EncounterOffset, 0_050, 0_050, BoxFormatSlotSize, token).ConfigureAwait(false);
                     if (++tries > 1000)
                         break;
@@ -46,6 +52,11 @@ namespace SysBot.Pokemon
         private async Task InitializeSessionValues(SAV3FRLG sav)
         {
             Log("Initializing session constants...");
+
+            EncounterMode = Hub.Config.EncounterFRLG.EncounteringType;
+            if (EncounterMode != EncounterModeFRLG.SlotsFRLG && EncounterMode != EncounterModeFRLG.FishingFRLG)
+                throw new System.Exception("Encountering type is not handled. Select from Slots or Fishing.");
+
             EncounterOffset = LanguageVersionOffsetsFRLG.GetWildPokemonOffsetFromLanguageAndVersion((LanguageID)sav.Language, sav.Version);
             Horizontal = true; // Always assume the user starts the bot facing up/down, and our first wiggles are left/right.
         }
@@ -68,6 +79,16 @@ namespace SysBot.Pokemon
                     await Click(DDOWN, 0_050, token).ConfigureAwait(false);
                     await Task.Delay(0_120, token).ConfigureAwait(false);
                 }
+            }
+            await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.
+        }
+
+        private async Task TryFish(CancellationToken token)
+        {
+            while (!await IsInBattle(token).ConfigureAwait(false))
+            {
+                await Click(Y, 0_100, token).ConfigureAwait(false);
+                await Click(A, 0_100, token).ConfigureAwait(false);
             }
             await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.
         }
