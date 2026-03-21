@@ -128,6 +128,43 @@ public class StopConditionSettings
         return MatchesTargetIVs(pkIVList, targetminIVs, targetmaxIVs);
     }
 
+    public static bool EncounterFoundRoamer(Roamer3 roamer, SAV3 save, int[] targetminIVs, int[] targetmaxIVs, StopConditionSettings settings)
+    {
+        if (settings.AcceptAllShiny && Roamer3.IsShiny(roamer.PID, save))
+            return true;
+
+        // Match Nature and Species if they were specified.
+        if (settings.StopOnSpecies != Species.None && settings.StopOnSpecies != (Species)roamer.Species)
+            return false;
+
+        if (settings.TargetNature != Nature.Random && roamer.PID % 25 != (int)settings.TargetNature)
+            return false;
+
+        if (settings.ShinyTarget != TargetShinyType.DisableOption)
+        {
+            var xor = ShinyUtil.GetShinyXor(roamer.PID, save.ID32);
+            bool shinymatch = settings.ShinyTarget switch
+            {
+                TargetShinyType.AnyShiny => xor < 8,
+                TargetShinyType.NonShiny => xor >= 8,
+                TargetShinyType.StarOnly => xor < 8 && xor != 0,
+                TargetShinyType.SquareOnly => xor == 0,
+                TargetShinyType.DisableOption => true,
+                _ => throw new ArgumentException(nameof(TargetShinyType)),
+            };
+
+            // If we only needed to match one of the criteria and it shiny match'd, return true.
+            // If we needed to match both criteria, and it didn't shiny match, return false.
+            if (!settings.MatchShinyAndIV && shinymatch)
+                return true;
+            if (settings.MatchShinyAndIV && !shinymatch)
+                return false;
+        }
+
+        var ivs = roamer.IsGlitched ? roamer.IVsGlitch : roamer.IVs;
+        return MatchesTargetIVs(ivs, targetminIVs, targetmaxIVs);
+    }
+
     public static void InitializeTargetIVs(PokeTradeHubConfig config, out int[] min, out int[] max)
     {
         min = ReadTargetIVs(config.StopConditions, true);
