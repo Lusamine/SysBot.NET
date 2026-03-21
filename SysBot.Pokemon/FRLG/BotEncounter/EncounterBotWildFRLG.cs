@@ -54,6 +54,7 @@ namespace SysBot.Pokemon
             Log("Initializing session constants...");
 
             EncounterMode = Hub.Config.EncounterFRLG.EncounteringType;
+            Log($"Encountering type is set to {EncounterMode}.");
             if (EncounterMode != EncounterModeFRLG.SlotsFRLG && EncounterMode != EncounterModeFRLG.FishingFRLG)
                 throw new System.Exception("Encountering type is not handled. Select from Slots or Fishing.");
 
