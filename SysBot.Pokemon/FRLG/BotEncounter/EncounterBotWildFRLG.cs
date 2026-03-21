@@ -15,7 +15,7 @@ namespace SysBot.Pokemon
 
         protected override async Task EncounterLoop(SAV3FRLG sav, CancellationToken token)
         {
-            await InitializeSessionValues(sav).ConfigureAwait(false);
+            InitializeSessionValues(sav);
 
             while (!token.IsCancellationRequested)
             {
@@ -49,7 +49,7 @@ namespace SysBot.Pokemon
         }
 
         // These don't change per session, and we access them frequently, so set these each time we start.
-        private async Task InitializeSessionValues(SAV3FRLG sav)
+        private void InitializeSessionValues(SAV3FRLG sav)
         {
             Log("Initializing session constants...");
 
