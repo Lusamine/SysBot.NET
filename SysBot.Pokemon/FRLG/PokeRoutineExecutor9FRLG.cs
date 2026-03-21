@@ -72,7 +72,7 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
             throw new Exception("Refer to the SysBot.NET wiki (https://github.com/kwsch/SysBot.NET/wiki/Troubleshooting) for more information.");
         }
 
-        if ((TextSpeedOption)sav.TextSpeed < TextSpeedOption.Fast)
+        if ((TextSpeedOption)sav.SmallBlock.TextSpeed < TextSpeedOption.Fast)
             throw new Exception("Text speed should be set to FAST. Fix this for correct operation.");
 
         return sav;
