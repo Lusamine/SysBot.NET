@@ -151,6 +151,13 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
         return InitialSeed + (box_start_offset - 0x02020000); // Convert to absolute offset in the heap.
     }
 
+    public async Task<Roamer3> GetRoamerData(string titleID, CancellationToken token)
+    {
+        var roamer_offset = await GetLargeOffset(titleID, token).ConfigureAwait(false) + 0x30D0;
+        var data = await Connection.ReadBytesAsync(roamer_offset, 0x14, token).ConfigureAwait(false);
+        return new Roamer3(data, IsGlitched: true);
+    }
+
     public async Task SoftResetGame(uint offset, int extratime, CancellationToken token)
     {
         await PressAndHold([A, B, X, Y], 0_500, 0_500, token).ConfigureAwait(false);

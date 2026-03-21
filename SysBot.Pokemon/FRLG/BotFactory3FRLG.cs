@@ -11,6 +11,7 @@ public sealed class BotFactory3FRLG : BotFactory<PK3>
         PokeRoutineType.EncBotGCPrizeResetFRLG => new EncounterBotGCPrizeResetFRLG(cfg, Hub),
         PokeRoutineType.EncBotWildFRLG => new EncounterBotWildFRLG(cfg, Hub),
         PokeRoutineType.EncBotPickupFRLG => new EncounterBotPickupFRLG(cfg, Hub),
+        PokeRoutineType.EncBotRoamerFRLG => new EncounterBotRoamerFRLG(cfg, Hub),
         PokeRoutineType.EncBotRNGMonitorFRLG => new EncounterBotRNGMonitorFRLG(cfg, Hub),
 
         PokeRoutineType.RemoteControl => new RemoteControlBotFRLG(cfg),
@@ -23,6 +24,7 @@ public sealed class BotFactory3FRLG : BotFactory<PK3>
         PokeRoutineType.EncBotReset => true,
         PokeRoutineType.EncBotGCPrizeResetFRLG => true,
         PokeRoutineType.EncBotWildFRLG => true,
+        PokeRoutineType.EncBotRoamerFRLG => true,
         PokeRoutineType.EncBotPickupFRLG => true,
         PokeRoutineType.EncBotRNGMonitorFRLG => true,
 

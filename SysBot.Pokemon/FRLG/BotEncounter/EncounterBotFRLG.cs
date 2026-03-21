@@ -16,6 +16,7 @@ namespace SysBot.Pokemon
         public readonly int[] DesiredMinIVs;
         public readonly int[] DesiredMaxIVs;
         public ICountSettings Counts => Settings;
+        public SAV3FRLG SaveFile = null!;
 
         protected EncounterBotFRLG(PokeBotState cfg, PokeTradeHub<PK3> hub) : base(cfg)
         {
@@ -31,7 +32,7 @@ namespace SysBot.Pokemon
         {
             var settings = Hub.Config.EncounterFRLG;
             Log("Identifying trainer data of the host console.");
-            var sav = await IdentifyTrainer(token).ConfigureAwait(false);
+            var sav = SaveFile = await IdentifyTrainer(token).ConfigureAwait(false);
             await InitializeHardware(settings, token).ConfigureAwait(false);
 
             try
@@ -97,6 +98,34 @@ namespace SysBot.Pokemon
             return false;
         }
 
+        protected async Task<bool> HandleEncounter(Roamer3 roamer, CancellationToken token)
+        {
+            encounterCount++;
+            var print = GetRoamerName(roamer);
+            Log($"Encounter: {encounterCount}{Environment.NewLine}{print}{Environment.NewLine}");
+            Settings.AddCompletedLegends();
+
+            if (!StopConditionSettings.EncounterFoundRoamer(roamer, SaveFile, DesiredMinIVs, DesiredMaxIVs, Hub.Config.StopConditions))
+                return false;
+
+            var mode = Settings.ContinueAfterMatch;
+            var msg = $"Result found!\n{print}\n" + GetModeMessage(mode);
+
+            if (!string.IsNullOrWhiteSpace(Hub.Config.StopConditions.MatchFoundEchoMention))
+                msg = $"{Hub.Config.StopConditions.MatchFoundEchoMention} {msg}";
+            EchoUtil.Echo(msg);
+
+            if (mode == ContinueAfterMatch.StopExit)
+                return true;
+            if (mode == ContinueAfterMatch.Continue)
+                return false;
+
+            IsWaiting = true;
+            while (IsWaiting)
+                await Task.Delay(1_000, token).ConfigureAwait(false);
+            return false;
+        }
+
         private static string GetModeMessage(ContinueAfterMatch mode) => mode switch
         {
             ContinueAfterMatch.Continue => "Continuing...",
@@ -126,6 +155,21 @@ namespace SysBot.Pokemon
         {
             // If aborting the sequence, we might have the stick set at some position. Clear it just in case.
             await SetStick(LEFT, 0, 0, 0_500, token).ConfigureAwait(false); // reset
+        }
+
+        public string GetRoamerName(Roamer3 roamer)
+        {
+            var strings = GameInfo.GetStrings("en");
+            string report = $"{strings.Species[roamer.Species]}{Environment.NewLine}";
+            report += $"PID: 0x{roamer.PID:x4}{Environment.NewLine}";
+
+            if (Roamer3.IsShiny(roamer.PID, SaveFile))
+                report += $"Shiny: Yes{Environment.NewLine}";
+            report += $"Nature: {(Nature)(roamer.PID % 25)}{Environment.NewLine}";
+
+            var ivs = roamer.IsGlitched ? roamer.IVsGlitch : roamer.IVs;
+            report += $"IVs: {ivs[0]}/{ivs[1]}/{ivs[2]}/{ivs[3]}/{ivs[4]}/{ivs[5]}";
+            return report;
         }
     }
 }

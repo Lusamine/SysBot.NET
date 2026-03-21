@@ -141,8 +141,11 @@ public enum PokeRoutineType
     /// <summary> Wiggles in place to encounter wild Pokémon. </summary>
     EncBotWildFRLG = 13_002,
 
+    /// <summary> Resets a roaming Pokémon. </summary>
+    EncBotRoamerFRLG = 13_003,
+
     /// <summary> Runs a Pickup party in Lavender Tower. </summary>
-    EncBotPickupFRLG = 13_003,
+    EncBotPickupFRLG = 13_004,
 }
 
 public static class PokeRoutineTypeExtensions
