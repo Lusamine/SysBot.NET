@@ -64,6 +64,7 @@ namespace SysBot.Pokemon
             Log("Initializing session constants...");
             OverworldOffset = LanguageVersionOffsetsFRLG.GetOverworldOffsetFromLanguageAndVersion((LanguageID)sav.Language, sav.Version);
 
+            Log($"Encountering type is set to {Hub.Config.EncounterFRLG.EncounteringType}.");
             switch (Hub.Config.EncounterFRLG.EncounteringType)
             {
                 case EncounterModeFRLG.StaticFRLG:
