@@ -16,4 +16,14 @@ public enum EncounterModeFRLG
     /// Bot will reset a wild static encounter Pokémon.
     /// </summary>
     StaticFRLG,
+
+    /// <summary>
+    /// Bot will hunt for a wild encounter slot Pokémon.
+    /// </summary>
+    SlotsFRLG,
+
+    /// <summary>
+    /// Bot will hunt for a fishing encounter slot Pokémon.
+    /// </summary>
+    FishingFRLG,
 }
