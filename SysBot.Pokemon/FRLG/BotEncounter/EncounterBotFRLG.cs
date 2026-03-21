@@ -143,7 +143,19 @@ namespace SysBot.Pokemon
                 return "legends";
             }
 
-            Settings.AddCompletedEncounters();
+            var routine = GetType().Name;
+            if (routine.Contains("Wild"))
+            {
+                Settings.AddCompletedEncounters();
+                return "encounters";
+            }
+
+            // Game Corner bot or Reset (Gifts)
+            if (routine.Contains("EncBotGCPrizeReset") || (routine.Contains("EncBotReset") && Hub.Config.EncounterFRLG.EncounteringType == EncounterModeFRLG.GiftFRLG))
+            {
+                Settings.AddCompletedGifts();
+                return "gifts";
+            }
             return "encounters";
         }
 
