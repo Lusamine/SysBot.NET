@@ -17,37 +17,26 @@ namespace SysBot.Pokemon
         [Category(Encounter), Description("When enabled, the screen will be turned off during normal bot loop operation to save power.")]
         public bool ScreenOff { get; set; }
 
-        private int _completedWild;
-        private int _completedLegend;
+        private int _completedOutbreaks;
 
-        [Category(Counts), Description("Encountered Wild Pokémon")]
-        public int CompletedEncounters
+        [Category(Counts), Description("Outbreaks checked.")]
+        public int CompletedOutbreaks
         {
-            get => _completedWild;
-            set => _completedWild = value;
-        }
-
-        [Category(Counts), Description("Encountered Legendary Pokémon")]
-        public int CompletedLegends
-        {
-            get => _completedLegend;
-            set => _completedLegend = value;
+            get => _completedOutbreaks;
+            set => _completedOutbreaks = value;
         }
 
         [Category(Counts), Description("When enabled, the counts will be emitted when a status check is requested.")]
         public bool EmitCountsOnStatusCheck { get; set; }
 
-        public int AddCompletedEncounters() => Interlocked.Increment(ref _completedWild);
-        public int AddCompletedLegends() => Interlocked.Increment(ref _completedLegend);
+        public int AddCompletedOutbreaks(int count) => Interlocked.Add(ref _completedOutbreaks, count);
 
         public IEnumerable<string> GetNonZeroCounts()
         {
             if (!EmitCountsOnStatusCheck)
                 yield break;
-            if (CompletedEncounters != 0)
-                yield return $"Wild Encounters: {CompletedEncounters}";
-            if (CompletedLegends != 0)
-                yield return $"Legendary Encounters: {CompletedLegends}";
+            if (CompletedOutbreaks != 0)
+                yield return $"Outbreaks Checked: {CompletedOutbreaks}";
         }
     }
 }
