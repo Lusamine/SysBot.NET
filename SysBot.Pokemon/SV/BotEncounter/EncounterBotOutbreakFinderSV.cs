@@ -119,6 +119,7 @@ namespace SysBot.Pokemon
                                 break;
                             }
                             Log($"P | {outbreak_counter} | {active_cnt} active outbreaks");
+                            Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
                             // Store them for the next pass.
                             (prev_coords[0], prev_coords[1], prev_coords[2]) = (center_coords[0], center_coords[1], center_coords[2]);
                         }
@@ -157,7 +158,10 @@ namespace SysBot.Pokemon
                         var center_coords = FetchCoordinates(center_pos);
 
                         if (i == 0)
+                        {
                             Log($"K | {outbreak_counter} | {active_cnt} active outbreaks");
+                            Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
+                        }
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
                         var output = $"K | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
@@ -193,7 +197,10 @@ namespace SysBot.Pokemon
                         var center_coords = FetchCoordinates(center_pos);
 
                         if (i == 0)
+                        {
                             Log($"B | {outbreak_counter} | {active_cnt} active outbreaks");
+                            Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
+                        }
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
                         var output = $"B | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";

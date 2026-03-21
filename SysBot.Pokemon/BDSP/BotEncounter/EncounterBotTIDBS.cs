@@ -52,6 +52,7 @@ namespace SysBot.Pokemon
                     Log($"No match after {advances} advances, resetting the game...");
                     await CloseGame(Hub.Config, token).ConfigureAwait(false);
                     await StartGame(true, Hub.Config, token).ConfigureAwait(false);
+                    Hub.Config.EncounterRNGBS.AddCompletedResets();
                     continue;
                 }
 
