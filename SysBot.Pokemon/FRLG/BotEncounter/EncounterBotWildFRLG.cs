@@ -89,7 +89,7 @@ namespace SysBot.Pokemon
             while (!await IsInBattle(token).ConfigureAwait(false))
             {
                 await Click(Y, 0_100, token).ConfigureAwait(false);
-                await Click(A, 0_100, token).ConfigureAwait(false);
+                await Click(B, 0_100, token).ConfigureAwait(false);
             }
             await Task.Delay(1_000, token).ConfigureAwait(false); // Extra wait so the encounter is properly loaded.
         }
