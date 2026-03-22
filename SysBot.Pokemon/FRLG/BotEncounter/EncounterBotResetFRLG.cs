@@ -14,6 +14,7 @@ namespace SysBot.Pokemon
         private uint OverworldOffset;
         private int ExtraTimeReset;
         private int ExtraTimeEncounter;
+        private EncounterModeFRLG EncounterMode;
 
         protected override async Task EncounterLoop(SAV3FRLG sav, CancellationToken token)
         {
@@ -43,7 +44,10 @@ namespace SysBot.Pokemon
 
                 do
                 {
-                    await Click(A, Util.Rand.Next(0_200, 0_800), token).ConfigureAwait(false);
+                    if (EncounterMode == EncounterModeFRLG.StaticHoOhFRLG) // Ho-Oh is triggered by pressing Up, not A.
+                        await Click(DUP, Util.Rand.Next(0_200, 0_800), token).ConfigureAwait(false);
+                    else
+                        await Click(A, Util.Rand.Next(0_200, 0_800), token).ConfigureAwait(false);
                     pknew = await ReadUntilPresent(EncounterOffset, 0_050, 0_050, BoxFormatSlotSize, token).ConfigureAwait(false);
                     if (++tries > 1000)
                         break;
@@ -65,9 +69,11 @@ namespace SysBot.Pokemon
             OverworldOffset = LanguageVersionOffsetsFRLG.GetOverworldOffsetFromLanguageAndVersion((LanguageID)sav.Language, sav.Version);
 
             Log($"Encountering type is set to {Hub.Config.EncounterFRLG.EncounteringType}.");
-            switch (Hub.Config.EncounterFRLG.EncounteringType)
+            EncounterMode = Hub.Config.EncounterFRLG.EncounteringType;
+            switch (EncounterMode)
             {
                 case EncounterModeFRLG.StaticFRLG:
+                case EncounterModeFRLG.StaticHoOhFRLG:
                     EncounterOffset = LanguageVersionOffsetsFRLG.GetWildPokemonOffsetFromLanguageAndVersion((LanguageID)sav.Language, sav.Version);
                     break;
                 case EncounterModeFRLG.StarterFRLG:

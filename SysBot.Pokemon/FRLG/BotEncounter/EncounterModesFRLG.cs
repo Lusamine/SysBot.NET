@@ -18,6 +18,11 @@ public enum EncounterModeFRLG
     StaticFRLG,
 
     /// <summary>
+    /// Bot will reset a wild static Ho-Oh (requires Up input).
+    /// </summary>
+    StaticHoOhFRLG,
+
+    /// <summary>
     /// Bot will hunt for a wild encounter slot Pokémon.
     /// </summary>
     SlotsFRLG,
