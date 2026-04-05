@@ -53,7 +53,10 @@ public abstract class PokeRoutineExecutor9LZA(PokeBotState Config) : PokeRoutine
 
         pkm.Heal();
         pkm.RefreshChecksum();
-        return SwitchConnection.WriteBytesAbsoluteAsync(pkm.EncryptedPartyData, offset, token);
+        Span<byte> data = stackalloc byte[pkm.SIZE_PARTY + 1];
+        pkm.WriteEncryptedDataParty(data);
+        data[pkm.SIZE_PARTY] = pkm.Species == 0 ? (byte)0 : (byte)1; // LZA tracks whether the slot is empty or not.
+        return SwitchConnection.WriteBytesAbsoluteAsync(data, offset, token);
     }
 
     public Task SetCurrentBox(byte box, CancellationToken token)
