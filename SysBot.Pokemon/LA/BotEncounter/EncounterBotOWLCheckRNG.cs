@@ -323,7 +323,7 @@ namespace SysBot.Pokemon
                     ivstring += "/";
             }
 
-            if (StopConditionSettings.MatchesTargetIVs(ivs, DesiredMinIVs, DesiredMaxIVs))
+            if (!StopConditionSettings.MatchesTargetIVs(ivs, DesiredMinIVs, DesiredMaxIVs))
                 return false;
 
             // Ability
