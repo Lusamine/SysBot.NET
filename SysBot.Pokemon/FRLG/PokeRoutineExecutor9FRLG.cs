@@ -197,11 +197,11 @@ public abstract class PokeRoutineExecutor3FRLG(PokeBotState Config) : PokeRoutin
     }
 
     // Used to check if the battle menu has loaded, so we can attempt to flee.
-    // This value becomes 0 as a battle starts and becomes 1 once the menu is loaded.
+    // This value is 0 as a battle starts and becomes 2 once the menu is loaded.
     public async Task<bool> IsOnBattleMenu(CancellationToken token)
     {
         var data = await Connection.ReadBytesAsync(BattleMenuOffset, 1, token).ConfigureAwait(false);
-        return data[0] == 1;
+        return data[0] == 2;
     }
 
     public async Task<int> GetPartyCount(CancellationToken token)
