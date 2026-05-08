@@ -75,6 +75,7 @@ namespace SysBot.Pokemon
             const bool mainpaldea = true;
             const bool kitakami = true;
             const bool blueberry = true;
+            bool failed = false;
 
             while (!token.IsCancellationRequested)
             {
@@ -113,6 +114,7 @@ namespace SysBot.Pokemon
                             if (prev_coords[0] == center_coords[0] && prev_coords[1] == center_coords[1] && prev_coords[2] == center_coords[2])
                             {
                                 Log("Coordinates did not change, skipping...");
+                                failed = true;
                                 for (int j = 0; j < 10; j++)
                                     await Click(B, 0_800, token).ConfigureAwait(false);
                                 await Click(X, 1_000, token).ConfigureAwait(false);
@@ -135,6 +137,12 @@ namespace SysBot.Pokemon
                             return;
                         }
                     }
+                }
+
+                if (failed)
+                {
+                    failed = false;
+                    continue;
                 }
 
                 // Kitakami
