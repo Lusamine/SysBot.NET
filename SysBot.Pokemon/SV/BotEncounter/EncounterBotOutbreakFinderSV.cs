@@ -167,8 +167,22 @@ namespace SysBot.Pokemon
 
                         if (i == 0)
                         {
+                            if (!mainpaldea) // This is the first area being checked.
+                            {
+                                if (prev_coords[0] == center_coords[0] && prev_coords[1] == center_coords[1] && prev_coords[2] == center_coords[2])
+                                {
+                                    Log("Coordinates did not change, skipping...");
+                                    failed = true;
+                                    for (int j = 0; j < 10; j++)
+                                        await Click(B, 0_800, token).ConfigureAwait(false);
+                                    await Click(X, 1_000, token).ConfigureAwait(false);
+                                    break;
+                                }
+                                Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
+                                // Store them for the next pass.
+                                (prev_coords[0], prev_coords[1], prev_coords[2]) = (center_coords[0], center_coords[1], center_coords[2]);
+                            }
                             Log($"K | {outbreak_counter} | {active_cnt} active outbreaks");
-                            Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
                         }
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
@@ -206,8 +220,22 @@ namespace SysBot.Pokemon
 
                         if (i == 0)
                         {
+                            if (!mainpaldea && !kitakami) // This is the first area being checked.
+                            {
+                                if (prev_coords[0] == center_coords[0] && prev_coords[1] == center_coords[1] && prev_coords[2] == center_coords[2])
+                                {
+                                    Log("Coordinates did not change, skipping...");
+                                    failed = true;
+                                    for (int j = 0; j < 10; j++)
+                                        await Click(B, 0_800, token).ConfigureAwait(false);
+                                    await Click(X, 1_000, token).ConfigureAwait(false);
+                                    break;
+                                }
+                                Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
+                                // Store them for the next pass.
+                                (prev_coords[0], prev_coords[1], prev_coords[2]) = (center_coords[0], center_coords[1], center_coords[2]);
+                            }
                             Log($"B | {outbreak_counter} | {active_cnt} active outbreaks");
-                            Hub.Config.EncounterSV.AddCompletedOutbreaks(active_cnt);
                         }
 
                         //var dummy_coords  = FetchCoordinates(dummy_pos);
