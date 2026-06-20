@@ -72,9 +72,9 @@ namespace SysBot.Pokemon
 
             // Open the X menu since we must save every time.
             await Click(X, 1_000, token).ConfigureAwait(false);
-            const bool mainpaldea = true;
-            const bool kitakami = true;
-            const bool blueberry = true;
+            bool mainpaldea = Hub.Config.EncounterSV.ScanPaldeaOutbreaks;
+            bool kitakami = Hub.Config.EncounterSV.ScanKitakamiOutbreaks;
+            bool blueberry = Hub.Config.EncounterSV.ScanBlueberryOutbreaks;
             bool failed = false;
 
             while (!token.IsCancellationRequested)

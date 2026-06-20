@@ -11,6 +11,15 @@ namespace SysBot.Pokemon
         private const string Encounter = nameof(Encounter);
         public override string ToString() => "Encounter Bot SV Settings";
 
+        [Category(Encounter), Description("When enabled, the bot will check outbreaks in Paldea for a match.")]
+        public bool ScanPaldeaOutbreaks { get; set; } = true;
+
+        [Category(Encounter), Description("When enabled, the bot will check outbreaks in Kitakami for a match.")]
+        public bool ScanKitakamiOutbreaks { get; set; } = true;
+
+        [Category(Encounter), Description("When enabled, the bot will check outbreaks in Blueberry Academy for a match.")]
+        public bool ScanBlueberryOutbreaks { get; set; } = true;
+
         [Category(Encounter), Description("When enabled, the bot will continue after finding a suitable match.")]
         public ContinueAfterMatch ContinueAfterMatch { get; set; } = ContinueAfterMatch.StopExit;
 
