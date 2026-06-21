@@ -130,10 +130,10 @@ namespace SysBot.Pokemon
                         var output = $"P | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
                         Log(output);
 
-                        if (species == target_species && (target_form == null || form == target_form))
+                        if (species_national == target_species && (target_form == null || form == target_form))
                         {
                             var form_string = form == 0 ? "" : $"-{form}";
-                            Log($"Found a {(Species)species}{form_string} outbreak!");
+                            Log($"Found a {(Species)species_national}{form_string} outbreak!");
                             return;
                         }
                     }
@@ -189,10 +189,10 @@ namespace SysBot.Pokemon
                         var output = $"K | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
                         Log(output);
 
-                        if (species == target_species && (target_form == null || form == target_form))
+                        if (species_national == target_species && (target_form == null || form == target_form))
                         {
                             var form_string = form == 0 ? "" : $"-{form}";
-                            Log($"Found a {(Species)species}{form_string} outbreak!");
+                            Log($"Found a {(Species)species_national}{form_string} outbreak!");
                             return;
                         }
                     }
@@ -242,10 +242,10 @@ namespace SysBot.Pokemon
                         var output = $"B | {outbreak_counter} | {species} | {GameInfo.GetStrings("en").Species[species_national]} | {form} | {center_coords[0]}, {center_coords[1]}, {center_coords[2]}";
                         Log(output);
 
-                        if (species == target_species && (target_form == null || form == target_form))
+                        if (species_national == target_species && (target_form == null || form == target_form))
                         {
                             var form_string = form == 0 ? "" : $"-{form}";
-                            Log($"Found a {(Species)species}{form_string} outbreak!");
+                            Log($"Found a {(Species)species_national}{form_string} outbreak!");
                             return;
                         }
                     }
