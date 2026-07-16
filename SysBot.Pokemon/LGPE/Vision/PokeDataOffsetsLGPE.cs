@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace SysBot.Pokemon
 {
     /// <summary>
-    /// Pokémon Legends: Arceus RAM offsets
+    /// Pokémon: Let's Go, Pikachu! &amp; Pokémon: Let's Go, Eevee! RAM offsets
     /// </summary>
     public static class PokeDataOffsetsLGPE
     {

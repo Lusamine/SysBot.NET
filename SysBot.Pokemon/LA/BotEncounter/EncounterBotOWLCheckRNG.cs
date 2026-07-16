@@ -199,7 +199,7 @@ namespace SysBot.Pokemon
         {
             // Click A to enter the subarea.
             Log("Entering the cave...");
-            await Click(A, 1_800, token).ConfigureAwait(false);
+            await Click(A, 2_000, token).ConfigureAwait(false);
 
             // Check the spawners.
             if (await CheckLegendarySeed(species, spawners, start, token).ConfigureAwait(false))
