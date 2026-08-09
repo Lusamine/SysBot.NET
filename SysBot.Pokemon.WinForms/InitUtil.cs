@@ -1,5 +1,4 @@
 using PKHeX.Core;
-using PKHeX.Drawing.PokeSprite;
 
 namespace SysBot.Pokemon.WinForms;
 
@@ -8,7 +7,6 @@ public static class InitUtil
     public static void InitializeStubs(ProgramMode mode)
     {
         var sav = GetFakeSaveFile(mode);
-        SetUpSpriteCreator(sav);
     }
 
     private static SaveFile GetFakeSaveFile(ProgramMode mode) => mode switch
@@ -22,14 +20,4 @@ public static class InitUtil
         ProgramMode.FRLG => new SAV3FRLG(),
         _                => throw new System.ArgumentOutOfRangeException(nameof(mode)),
     };
-
-    private static void SetUpSpriteCreator(SaveFile sav)
-    {
-        SpriteUtil.Initialize(sav);
-        StreamSettings.CreateSpriteFile = (pk, fn) =>
-        {
-            var png = pk.Sprite();
-            png.Save(fn);
-        };
-    }
 }

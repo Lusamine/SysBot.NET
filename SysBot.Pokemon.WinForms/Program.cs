@@ -1,7 +1,5 @@
 using System;
 using System.Windows.Forms;
-using PKHeX.Core;
-using SysBot.Pokemon.Z3;
 
 namespace SysBot.Pokemon.WinForms;
 
@@ -17,8 +15,6 @@ internal static class Program
         Application.SetCompatibleTextRenderingDefault(false);
         if (cfg.DarkMode)
             Application.SetColorMode(SystemColorMode.Dark);
-
-        PokeTradeBotSWSH.SeedChecker = new Z3SeedSearchHandler<PK8>();
     }
 
     /// <summary>

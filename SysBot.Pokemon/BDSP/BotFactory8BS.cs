@@ -7,11 +7,6 @@ public sealed class BotFactory8BS : BotFactory<PB8>
 {
     public override PokeRoutineExecutorBase CreateBot(PokeTradeHub<PB8> Hub, PokeBotState cfg) => cfg.NextRoutineType switch
     {
-        PokeRoutineType.FlexTrade or PokeRoutineType.Idle
-            or PokeRoutineType.LinkTrade
-            or PokeRoutineType.Dump
-            => new PokeTradeBotBS(Hub, cfg),
-
         PokeRoutineType.EncBotTIDBS => new EncounterBotTIDBS(cfg, Hub),
         PokeRoutineType.EncBotZoneIDBS => new EncounterBotZoneIDBS(cfg, Hub),
         PokeRoutineType.EncBotCopySeedBS => new EncounterBotCopySeedBS(cfg, Hub),
@@ -25,11 +20,6 @@ public sealed class BotFactory8BS : BotFactory<PB8>
 
     public override bool SupportsRoutine(PokeRoutineType type) => type switch
     {
-        PokeRoutineType.FlexTrade or PokeRoutineType.Idle
-            or PokeRoutineType.LinkTrade
-            or PokeRoutineType.Dump
-            => true,
-
         PokeRoutineType.EncBotTIDBS => true,
         PokeRoutineType.EncBotZoneIDBS => true,
         PokeRoutineType.EncBotCopySeedBS => true,

@@ -126,25 +126,6 @@ public abstract class PokeRoutineExecutor9LZA(PokeBotState Config) : PokeRoutine
         await DetachController(token).ConfigureAwait(false);
     }
 
-    protected virtual async Task EnterLinkCode(int code, PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Default implementation to just press directional arrows. Can do via Hid keys, but users are slower than bots at even the default code entry.
-        var keys = TradeUtil.GetPresses(code);
-        foreach (var key in keys)
-        {
-            int delay = config.Timings.KeypressTime;
-            await Click(key, delay, token).ConfigureAwait(false);
-        }
-        // Confirm Code outside of this method (allow synchronization)
-    }
-
-    public async Task ReOpenGame(PokeTradeHubConfig config, CancellationToken token)
-    {
-        Log("Error detected, restarting the game!!");
-        await CloseGame(config, token).ConfigureAwait(false);
-        await StartGame(config, token).ConfigureAwait(false);
-    }
-
     public async Task CloseGame(PokeTradeHubConfig config, CancellationToken token)
     {
         var timing = config.Timings;
@@ -201,12 +182,6 @@ public abstract class PokeRoutineExecutor9LZA(PokeBotState Config) : PokeRoutine
         Log("Back in the overworld!");
     }
 
-    public async Task<ulong> GetTradePartnerNID(CancellationToken token)
-    {
-        var data = await SwitchConnection.PointerPeek(8, Offsets.TradePartnerBackupNIDPointer, token).ConfigureAwait(false);
-        return BitConverter.ToUInt64(data, 0);
-    }
-
     public async Task<bool> IsOnOverworld(CancellationToken token)
     {
         var data = await SwitchConnection.ReadBytesMainAsync(OverworldOffset, 1, token).ConfigureAwait(false);
@@ -217,34 +192,6 @@ public abstract class PokeRoutineExecutor9LZA(PokeBotState Config) : PokeRoutine
     {
         var data = await SwitchConnection.PointerPeek(1, Offsets.TextSpeedPointer, token).ConfigureAwait(false);
         return (TextSpeedOption)((data[0] & 7) >> 1);
-    }
-
-    public async Task<bool> IsConnected(CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesMainAsync(ConnectedOffset, 1, token).ConfigureAwait(false);
-        return data[0] == 1;
-    }
-
-    public async Task<byte> GetStoredLinkTradeCodeLength(CancellationToken token)
-    {
-        var data = await SwitchConnection.PointerPeek(1, Offsets.LinkTradeCodeLengthPointer, token).ConfigureAwait(false);
-        return data[0];
-    }
-
-    public async Task<int> GetStoredLinkTradeCode(CancellationToken token)
-    {
-        var data = await SwitchConnection.PointerPeek(16, Offsets.LinkTradeCodePointer, token).ConfigureAwait(false);
-        var raw = StringConverter8.GetString(data);
-
-        // Trim nulls and whitespace
-        var trimmed = raw.Trim();
-        if (trimmed.Length == 0)
-            return 0;
-
-        if (int.TryParse(trimmed, out int value))
-            return value;
-
-        return -1;
     }
 
     public async Task<bool> IsOnMenu(MenuState state, CancellationToken token)

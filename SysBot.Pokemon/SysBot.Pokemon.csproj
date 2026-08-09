@@ -6,13 +6,4 @@
     <ProjectReference Include="..\SysBot.Base\SysBot.Base.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="deps\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PKHeX.Core.AutoMod">
-      <HintPath>deps\PKHeX.Core.AutoMod.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.IO;
 
 namespace SysBot.Pokemon;
@@ -12,9 +12,6 @@ public class FolderSettings : IDumper
     [Category(FeatureToggle), Description("When enabled, dumps any received PKM files (trade results) to the DumpFolder.")]
     public bool Dump { get; set; }
 
-    [Category(Files), Description("Source folder: where PKM files to distribute are selected from.")]
-    public string DistributeFolder { get; set; } = string.Empty;
-
     [Category(Files), Description("Destination folder: where all received PKM files are dumped to.")]
     public string DumpFolder { get; set; } = string.Empty;
 
@@ -24,9 +21,5 @@ public class FolderSettings : IDumper
         Directory.CreateDirectory(dump);
         DumpFolder = dump;
         Dump = true;
-
-        var distribute = Path.Combine(path, "distribute");
-        Directory.CreateDirectory(distribute);
-        DistributeFolder = distribute;
     }
 }

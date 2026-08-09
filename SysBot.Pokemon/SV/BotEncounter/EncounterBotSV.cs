@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using SysBot.Base;
-using static SysBot.Base.SwitchButton;
 using static SysBot.Base.SwitchStick;
 
 namespace SysBot.Pokemon

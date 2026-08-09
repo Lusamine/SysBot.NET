@@ -186,23 +186,6 @@ public sealed class SysCord<T> where T : PKM, new()
             if (handled)
                 return;
         }
-
-        await TryHandleMessageAsync(msg).ConfigureAwait(false);
-    }
-
-    private async Task TryHandleMessageAsync(SocketMessage msg)
-    {
-        // should this be a service?
-        if (msg.Attachments.Count > 0)
-        {
-            var mgr = Manager;
-            var cfg = mgr.Config;
-            if (cfg.ConvertPKMToShowdownSet && (cfg.ConvertPKMReplyAnyChannel || mgr.CanUseCommandChannel(msg.Channel.Id)))
-            {
-                foreach (var att in msg.Attachments)
-                    await msg.Channel.RepostPKMAsShowdownAsync(att).ConfigureAwait(false);
-            }
-        }
     }
 
     private async Task<bool> TryHandleCommandAsync(SocketUserMessage msg, int pos)
@@ -212,11 +195,6 @@ public sealed class SysCord<T> where T : PKM, new()
 
         // Check Permission
         var mgr = Manager;
-        if (!mgr.CanUseCommandUser(msg.Author.Id))
-        {
-            await msg.Channel.SendMessageAsync("You are not permitted to use this command.").ConfigureAwait(false);
-            return true;
-        }
         if (!mgr.CanUseCommandChannel(msg.Channel.Id) && msg.Author.Id != mgr.Owner)
         {
             if (Hub.Config.Discord.ReplyCannotUseCommandInChannel)
@@ -251,33 +229,24 @@ public sealed class SysCord<T> where T : PKM, new()
         {
             var time = DateTime.Now;
             var lastLogged = LogUtil.LastLogged;
-            if (Hub.Config.Discord.BotColorStatusTradeOnly)
-            {
-                var recent = Hub.Bots.ToArray()
-                    .Where(z => z.Config.InitialRoutine.IsTradeBot())
-                    .MaxBy(z => z.LastTime);
-                lastLogged = recent?.LastTime ?? time;
-            }
+
             var delta = time - lastLogged;
             var gap = TimeSpan.FromSeconds(Interval) - delta;
 
-            bool noQueue = !Hub.Queues.Info.GetCanQueue();
             if (gap <= TimeSpan.Zero)
             {
-                var idle = noQueue ? UserStatus.DoNotDisturb : UserStatus.Idle;
-                if (idle != state)
+                if (UserStatus.Idle != state)
                 {
-                    state = idle;
+                    state = UserStatus.Idle;
                     await _client.SetStatusAsync(state).ConfigureAwait(false);
                 }
                 await Task.Delay(2_000, token).ConfigureAwait(false);
                 continue;
             }
 
-            var active = noQueue ? UserStatus.DoNotDisturb : UserStatus.Online;
-            if (active != state)
+            if (UserStatus.Online != state)
             {
-                state = active;
+                state = UserStatus.Online;
                 await _client.SetStatusAsync(state).ConfigureAwait(false);
             }
             await Task.Delay(gap, token).ConfigureAwait(false);
@@ -294,7 +263,6 @@ public sealed class SysCord<T> where T : PKM, new()
 
         // Restore Logging
         LogModule.RestoreLogging(_client, Hub.Config.Discord);
-        TradeStartModule<T>.RestoreTradeStarting(_client);
 
         // Don't let it load more than once in case of Discord hiccups.
         await Log(new LogMessage(LogSeverity.Info, "LoadLoggingAndEcho()", "Logging and Echo channels loaded!")).ConfigureAwait(false);

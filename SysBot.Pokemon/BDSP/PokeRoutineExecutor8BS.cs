@@ -1,5 +1,6 @@
 using PKHeX.Core;
 using SysBot.Base;
+using SysBot.Pokemon.BDSP.Vision;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,39 +140,6 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
         await DetachController(token).ConfigureAwait(false);
     }
 
-    protected virtual async Task EnterLinkCode(int code, PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Default implementation to just press directional arrows. Can do via Hid keys, but users are slower than bots at even the default code entry.
-        var keys = TradeUtil.GetPresses(code);
-        foreach (var key in keys)
-        {
-            int delay = config.Timings.KeypressTime;
-            await Click(key, delay, token).ConfigureAwait(false);
-        }
-        // Confirm Code outside of this method (allow synchronization)
-    }
-
-    public async Task ReOpenGame(PokeTradeHubConfig config, CancellationToken token)
-    {
-        Log("Error detected, restarting the game!!");
-        await CloseGame(config, token).ConfigureAwait(false);
-        await StartGame(false, config, token).ConfigureAwait(false);
-    }
-
-    public Task UnSoftBan(CancellationToken token)
-    {
-        Log("Soft ban detected, unbanning.");
-        // Write the float value to 0.
-        var data = BitConverter.GetBytes(0);
-        return SwitchConnection.PointerPoke(data, Offsets.UnionWorkPenaltyPointer, token);
-    }
-
-    public async Task<bool> CheckIfSoftBanned(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 4, token).ConfigureAwait(false);
-        return BitConverter.ToUInt32(data, 0) != 0;
-    }
-
     public async Task CloseGame(PokeTradeHubConfig config, CancellationToken token)
     {
         var timing = config.Timings;
@@ -248,22 +216,6 @@ public abstract class PokeRoutineExecutor8BS(PokeBotState Config) : PokeRoutineE
         var byt = await SwitchConnection.PointerPeek(1, Offsets.SceneIDPointer, token).ConfigureAwait(false);
         return byt[0] == expected;
     }
-
-    // Uses absolute offset which is set each session. Checks for IsGaming or IsTalking.
-    public async Task<bool> IsUnionWork(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 1, token).ConfigureAwait(false);
-        return data[0] == 1;
-    }
-
-    // Whenever we're in a trade, this pointer will be loaded, otherwise 0
-    public async Task<bool> IsPartnerParamLoaded(CancellationToken token)
-    {
-        var byt = await SwitchConnection.PointerPeek(8, Offsets.LinkTradePartnerParamPointer, token).ConfigureAwait(false);
-        return BitConverter.ToUInt64(byt, 0) != 0;
-    }
-
-    public async Task<ulong> GetTradePartnerNID(CancellationToken token) => BitConverter.ToUInt64(await SwitchConnection.PointerPeek(sizeof(ulong), Offsets.LinkTradePartnerNIDPointer, token).ConfigureAwait(false), 0);
 
     public async Task<TextSpeedOption> GetTextSpeed(CancellationToken token)
     {

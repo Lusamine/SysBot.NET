@@ -1,6 +1,5 @@
 using PKHeX.Core;
 using SysBot.Base;
-using SysBot.Pokemon.Z3;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -27,7 +26,6 @@ public static class Program
         {
             var lines = File.ReadAllText(ConfigPath);
             var cfg = JsonSerializer.Deserialize(lines, ProgramConfigContext.Default.ProgramConfig) ?? new ProgramConfig();
-            PokeTradeBotSWSH.SeedChecker = new Z3SeedSearchHandler<PK8>();
             BotContainer.RunBots(cfg);
         }
         catch (Exception)
@@ -39,7 +37,7 @@ public static class Program
 
     private static void ExitNoConfig()
     {
-        var bot = new PokeBotState { Connection = new SwitchConnectionConfig { IP = "192.168.0.1", Port = 6000 }, InitialRoutine = PokeRoutineType.FlexTrade };
+        var bot = new PokeBotState { Connection = new SwitchConnectionConfig { IP = "192.168.0.1", Port = 6000 }, InitialRoutine = PokeRoutineType.RemoteControl };
         var cfg = new ProgramConfig { Bots = [bot] };
         var created = JsonSerializer.Serialize(cfg, ProgramConfigContext.Default.ProgramConfig);
         File.WriteAllText(ConfigPath, created);

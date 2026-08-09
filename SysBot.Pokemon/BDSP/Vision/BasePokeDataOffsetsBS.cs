@@ -9,17 +9,7 @@ public abstract class BasePokeDataOffsetsBS : IPokeDataOffsetsBS
     public const string BrilliantDiamondID = "0100000011D90000";
 
     public abstract IReadOnlyList<long> BoxStartPokemonPointer { get; }
-    public abstract IReadOnlyList<long> LinkTradePartnerPokemonPointer { get; }
-    public abstract IReadOnlyList<long> LinkTradePartnerNamePointer { get; }
-    public abstract IReadOnlyList<long> LinkTradePartnerIDPointer { get; }
-    public abstract IReadOnlyList<long> LinkTradePartnerParamPointer { get; }
-    public abstract IReadOnlyList<long> LinkTradePartnerNIDPointer { get; }
     public abstract IReadOnlyList<long> SceneIDPointer { get; }
-
-    // Union Work - Detects states in the Union Room
-    public abstract IReadOnlyList<long> UnionWorkIsGamingPointer { get; }
-    public abstract IReadOnlyList<long> UnionWorkIsTalkingPointer { get; }
-    public abstract IReadOnlyList<long> UnionWorkPenaltyPointer { get; }
     public abstract IReadOnlyList<long> MyStatusTrainerPointer { get; }
     public abstract IReadOnlyList<long> MyStatusTIDPointer { get; }
     public abstract IReadOnlyList<long> ConfigTextSpeedPointer { get; }

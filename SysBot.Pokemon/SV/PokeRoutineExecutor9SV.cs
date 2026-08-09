@@ -108,14 +108,6 @@ public abstract class PokeRoutineExecutor9SV(PokeBotState Config) : PokeRoutineE
         return sav;
     }
 
-    public async Task<TradeMyStatus> GetTradePartnerMyStatus(IReadOnlyList<long> pointer, CancellationToken token)
-    {
-        var info = new TradeMyStatus();
-        var read = await SwitchConnection.PointerPeek(info.Data.Length, pointer, token).ConfigureAwait(false);
-        read.CopyTo(info.Data, 0);
-        return info;
-    }
-
     public async Task InitializeHardware(IBotStateSettings settings, CancellationToken token)
     {
         Log("Detaching on startup.");
@@ -132,25 +124,6 @@ public abstract class PokeRoutineExecutor9SV(PokeBotState Config) : PokeRoutineE
         await SetScreen(ScreenState.On, token).ConfigureAwait(false);
         Log("Detaching controllers on routine exit.");
         await DetachController(token).ConfigureAwait(false);
-    }
-
-    protected virtual async Task EnterLinkCode(int code, PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Default implementation to just press directional arrows. Can do via Hid keys, but users are slower than bots at even the default code entry.
-        var keys = TradeUtil.GetPresses(code);
-        foreach (var key in keys)
-        {
-            int delay = config.Timings.KeypressTime;
-            await Click(key, delay, token).ConfigureAwait(false);
-        }
-        // Confirm Code outside of this method (allow synchronization)
-    }
-
-    public async Task ReOpenGame(PokeTradeHubConfig config, CancellationToken token)
-    {
-        Log("Error detected, restarting the game!!");
-        await CloseGame(config, token).ConfigureAwait(false);
-        await StartGame(config, token).ConfigureAwait(false);
     }
 
     public async Task CloseGame(PokeTradeHubConfig config, CancellationToken token)
@@ -212,24 +185,6 @@ public abstract class PokeRoutineExecutor9SV(PokeBotState Config) : PokeRoutineE
         Log("Back in the overworld!");
     }
 
-    public async Task<bool> IsConnectedOnline(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 1, token).ConfigureAwait(false);
-        return data[0] == 1;
-    }
-
-    public async Task<ulong> GetTradePartnerNID(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 8, token).ConfigureAwait(false);
-        return BitConverter.ToUInt64(data, 0);
-    }
-
-    public Task ClearTradePartnerNID(ulong offset, CancellationToken token)
-    {
-        var data = new byte[8];
-        return SwitchConnection.WriteBytesAbsoluteAsync(data, offset, token);
-    }
-
     public async Task<bool> IsOnOverworld(ulong offset, CancellationToken token)
     {
         var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 1, token).ConfigureAwait(false);
@@ -243,20 +198,6 @@ public abstract class PokeRoutineExecutor9SV(PokeBotState Config) : PokeRoutineE
         if (!valid)
             return false;
         return await IsOnOverworld(offset, token).ConfigureAwait(false);
-    }
-
-    // 0x10 if fully loaded into Poké Portal.
-    public async Task<bool> IsInPokePortal(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 1, token).ConfigureAwait(false);
-        return data[0] == 0x10;
-    }
-
-    // 0x14 in a box and during trades, trade evolutions, and move learning.
-    public async Task<bool> IsInBox(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 1, token).ConfigureAwait(false);
-        return data[0] == 0x14;
     }
 
     public async Task<TextSpeedOption> GetTextSpeed(CancellationToken token)

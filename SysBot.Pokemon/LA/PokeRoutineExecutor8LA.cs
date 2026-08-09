@@ -126,37 +126,11 @@ public abstract class PokeRoutineExecutor8LA(PokeBotState Config) : PokeRoutineE
         await DetachController(token).ConfigureAwait(false);
     }
 
-    protected virtual async Task EnterLinkCode(int code, PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Default implementation to just press directional arrows. Can do via Hid keys, but users are slower than bots at even the default code entry.
-        var keys = TradeUtil.GetPresses(code);
-        foreach (var key in keys)
-        {
-            int delay = config.Timings.KeypressTime;
-            await Click(key, delay, token).ConfigureAwait(false);
-        }
-        // Confirm Code outside of this method (allow synchronization)
-    }
-
     public async Task ReOpenGame(PokeTradeHubConfig config, CancellationToken token)
     {
         Log("Error detected, restarting the game!!");
         await CloseGame(config, token).ConfigureAwait(false);
         await StartGame(config, token).ConfigureAwait(false);
-    }
-
-    public Task UnSoftBan(CancellationToken token)
-    {
-        Log("Soft ban detected, unbanning.");
-        // Write the value to 0.
-        var data = BitConverter.GetBytes(0);
-        return SwitchConnection.PointerPoke(data, Offsets.SoftbanPointer, token);
-    }
-
-    public async Task<bool> CheckIfSoftBanned(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 4, token).ConfigureAwait(false);
-        return BitConverter.ToUInt32(data, 0) != 0;
     }
 
     public async Task CloseGame(PokeTradeHubConfig config, CancellationToken token)
@@ -213,12 +187,6 @@ public abstract class PokeRoutineExecutor8LA(PokeBotState Config) : PokeRoutineE
 
         await Task.Delay(timing.ExtraTimeLoadOverworld, token).ConfigureAwait(false);
         Log("Back in the overworld!");
-    }
-
-    public async Task<ulong> GetTradePartnerNID(ulong offset, CancellationToken token)
-    {
-        var data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, 8, token).ConfigureAwait(false);
-        return BitConverter.ToUInt64(data, 0);
     }
 
     public async Task<bool> IsOnOverworld(ulong offset, CancellationToken token)

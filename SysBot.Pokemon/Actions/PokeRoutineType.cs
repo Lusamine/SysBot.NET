@@ -8,23 +8,6 @@ public enum PokeRoutineType
     /// <summary> Sits idle waiting to be re-tasked. </summary>
     Idle = 0,
 
-    /// <summary> Performs random trades using a predetermined pool of data. </summary>
-    SurpriseTrade = 1,
-
-    /// <summary> Performs the behavior of all trade bots. </summary>
-    FlexTrade = 2,
-    /// <summary> Performs only P2P Link Trades of specific data. </summary>
-    LinkTrade = 3,
-    /// <summary> Performs a seed check without transferring data from the bot. </summary>
-    SeedCheck = 4,
-    /// <summary> Performs a clone operation on the partner's data, sending them a copy of what they show. </summary>
-    Clone = 5,
-    /// <summary> Exports files for all data shown to the bot. </summary>
-    Dump = 6,
-
-    /// <summary> Performs group battles as a host. </summary>
-    RaidBot = 7,
-
     /// <summary> Triggers walking encounters until the criteria is satisfied. </summary>
     EncBotLine = 1_000,
 
@@ -150,7 +133,6 @@ public enum PokeRoutineType
 
 public static class PokeRoutineTypeExtensions
 {
-    public static bool IsTradeBot(this PokeRoutineType type) => type is >= PokeRoutineType.FlexTrade and <= PokeRoutineType.Dump;
     public static bool IsMonitorTool(this PokeRoutineType type) =>
         type is PokeRoutineType.EncBotCopySeed or PokeRoutineType.EncBotRNGMonitor
         or PokeRoutineType.EncBotCopySeedLGPE or PokeRoutineType.EncBotRNGMonitorLGPE

@@ -41,12 +41,6 @@ public abstract class PokeRoutineExecutor8SWSH(PokeBotState Config) : PokeRoutin
         return await ReadPokemonAbsolute(offset, size, token).ConfigureAwait(false);
     }
 
-    public async Task<PK8> ReadSurpriseTradePokemon(CancellationToken token)
-    {
-        var data = await Connection.ReadBytesAsync(SurpriseTradePartnerPokemonOffset, BoxFormatSlotSize, token).ConfigureAwait(false);
-        return new PK8(data);
-    }
-
     public Task SetBoxPokemon(PK8 pkm, int box, int slot, CancellationToken token, ITrainerInfo? sav = null)
     {
         if (sav != null)
@@ -146,88 +140,6 @@ public abstract class PokeRoutineExecutor8SWSH(PokeBotState Config) : PokeRoutin
         return sav;
     }
 
-    protected virtual async Task EnterLinkCode(int code, PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Default implementation to just press directional arrows. Can do via Hid keys, but users are slower than bots at even the default code entry.
-        var keys = TradeUtil.GetPresses(code);
-        foreach (var key in keys)
-        {
-            int delay = config.Timings.KeypressTime;
-            await Click(key, delay, token).ConfigureAwait(false);
-        }
-        // Confirm Code outside of this method (allow synchronization)
-    }
-
-    public async Task EnsureConnectedToYComm(ulong overworldOffset, PokeTradeHubConfig config, CancellationToken token)
-    {
-        if (!await IsGameConnectedToYComm(token).ConfigureAwait(false))
-        {
-            Log("Reconnecting to Y-Comm...");
-            await ReconnectToYComm(overworldOffset, config, token).ConfigureAwait(false);
-        }
-    }
-
-    public async Task<bool> IsGameConnectedToYComm(CancellationToken token)
-    {
-        // Reads the Y-Comm Flag to check if the game is connected online
-        var data = await Connection.ReadBytesAsync(IsConnectedOffset, 1, token).ConfigureAwait(false);
-        return data[0] == 1;
-    }
-
-    public async Task ReconnectToYComm(ulong overworldOffset, PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Press B in case an Error Message is Present
-        await Click(B, 2000, token).ConfigureAwait(false);
-
-        // Return to Overworld
-        if (!await IsOnOverworld(overworldOffset, token).ConfigureAwait(false))
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                await Click(B, 500, token).ConfigureAwait(false);
-            }
-        }
-
-        await Click(Y, 1000, token).ConfigureAwait(false);
-
-        // Press it twice for safety -- sometimes misses it the first time.
-        await Click(PLUS, 2_000, token).ConfigureAwait(false);
-        await Click(PLUS, 5_000 + config.Timings.ExtraTimeConnectOnline, token).ConfigureAwait(false);
-
-        for (int i = 0; i < 5; i++)
-        {
-            await Click(B, 500, token).ConfigureAwait(false);
-        }
-    }
-
-    public async Task ReOpenGame(PokeTradeHubConfig config, CancellationToken token)
-    {
-        // Reopen the game if we get soft-banned
-        Log("Potential soft ban detected, reopening game just in case!");
-        await CloseGame(config, token).ConfigureAwait(false);
-        await StartGame(config, token).ConfigureAwait(false);
-
-        // In case we are soft-banned, reset the timestamp
-        await UnSoftBan(token).ConfigureAwait(false);
-    }
-
-    public Task UnSoftBan(CancellationToken token)
-    {
-        // Like previous generations, the game uses a Unix timestamp for 
-        // how long we are soft banned and once the soft ban is lifted
-        // the game sets the value back to 0 (1970/01/01 12:00 AM (UTC))
-        Log("Soft ban detected, unbanning.");
-        var data = BitConverter.GetBytes(0);
-        return Connection.WriteBytesAsync(data, SoftBanUnixTimespanOffset, token);
-    }
-
-    public async Task<bool> CheckIfSoftBanned(CancellationToken token)
-    {
-        // Check if the Unix Timestamp isn't zero, if so we are soft-banned.
-        var data = await Connection.ReadBytesAsync(SoftBanUnixTimespanOffset, 1, token).ConfigureAwait(false);
-        return data[0] > 1;
-    }
-
     public async Task CloseGame(PokeTradeHubConfig config, CancellationToken token)
     {
         var timing = config.Timings;
@@ -282,29 +194,10 @@ public abstract class PokeRoutineExecutor8SWSH(PokeBotState Config) : PokeRoutin
         Log("Back in the overworld!");
     }
 
-    public async Task<bool> IsCorrectScreen(uint expectedScreen, CancellationToken token)
-    {
-        var data = await Connection.ReadBytesAsync(CurrentScreenOffset, 4, token).ConfigureAwait(false);
-        return BitConverter.ToUInt32(data, 0) == expectedScreen;
-    }
-
-    public async Task<uint> GetCurrentScreen(CancellationToken token)
-    {
-        var data = await Connection.ReadBytesAsync(CurrentScreenOffset, 4, token).ConfigureAwait(false);
-        return BitConverter.ToUInt32(data, 0);
-    }
-
     public async Task<bool> IsInBattle(CancellationToken token)
     {
         var data = await Connection.ReadBytesAsync(Version == GameVersion.SH ? InBattleRaidOffsetSH : InBattleRaidOffsetSW, 1, token).ConfigureAwait(false);
         return data[0] == (Version == GameVersion.SH ? 0x40 : 0x41);
-    }
-
-    public async Task<bool> IsInBox(CancellationToken token)
-    {
-        var data = await Connection.ReadBytesAsync(CurrentScreenOffset, 4, token).ConfigureAwait(false);
-        var dataint = BitConverter.ToUInt32(data, 0);
-        return dataint is CurrentScreen_Box1 or CurrentScreen_Box2;
     }
 
     // Only used to check if we made it off the title screen.

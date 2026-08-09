@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SysBot.Pokemon.Discord;
 
-public class OwnerModule<T> : SudoModule<T> where T : PKM, new()
+public class OwnerModule<T> : ModuleBase<SocketCommandContext> where T : PKM, new()
 {
     [Command("addSudo")]
     [Summary("Adds mentioned user to global sudo")]
