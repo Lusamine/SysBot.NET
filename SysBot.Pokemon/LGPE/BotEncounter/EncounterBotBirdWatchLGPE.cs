@@ -210,8 +210,13 @@ namespace SysBot.Pokemon
         {
             await SetMainLoopSleepTime(50, token).ConfigureAwait(false);
             bool valid = false;
+            var tries = 0;
             while (!valid)
+            {
                 (valid, BirdRNGOffset) = await ValidatePointerAll(LGPEBirdRNGPointer, token).ConfigureAwait(false);
+                if (++tries >= 20)
+                    break;
+            }
             await SetMainLoopSleepTime(35, token).ConfigureAwait(false);
             await Task.Delay(1_700, token).ConfigureAwait(false);
         }
