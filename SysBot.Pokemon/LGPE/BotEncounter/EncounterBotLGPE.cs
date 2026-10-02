@@ -180,10 +180,12 @@ namespace SysBot.Pokemon
         public static bool RadarMatch(int species, bool shiny, StopConditionSettings settings)
         {
             var match_target_species = settings.StopOnSpecies == Species.None || (int)settings.StopOnSpecies == species;
-            var match_all_birds = settings.StopOnAllBirdsLGPE && species is (144 or 145 or 146);
 
-            // Only reject species if it doesn't match the specified species and isn't a bird.
-            if (!match_target_species && !match_all_birds)
+            // If we're matching all birds, then don't check the target species.
+            if (settings.StopOnAllBirdsLGPE && species is not (144 or 145 or 146))
+                return false;
+            // Only reject species if it doesn't match the specified species and we're not matching all birds.
+            if (!settings.StopOnAllBirdsLGPE && !match_target_species)
                 return false;
 
             if (settings.ShinyTarget != TargetShinyType.DisableOption)
