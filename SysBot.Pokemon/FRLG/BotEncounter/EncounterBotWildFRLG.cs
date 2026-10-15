@@ -98,6 +98,7 @@ namespace SysBot.Pokemon
         {
             while (!await IsOnBattleMenu(token).ConfigureAwait(false))
                 await Click(B, 0_200, token).ConfigureAwait(false);
+            await Task.Delay(0_200, token).ConfigureAwait(false);
 
             Log("Initiating run routine.");
             await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
